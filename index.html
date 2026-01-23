@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<div id="container"></div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script type="module">
+  const penglingsData = await d3.csv("/penglings.csv", d3.autoType);
+  const width = 700;
+  const height = 500;
+  const margin = { top: 40, right: 100, bottom: 60, left: 70 };
+
+  const chartSvg = d3.select("#container")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .style("border", "1px solid black");
+
+  const colorScale = d3.scaleOrdinal()
+    .domain([...new Set(penglingsData.map(d => d.species))])
+    .range(d3.schemeCategory10);
+
+  const x = d3.scaleLinear()
+    .domain(d3.extent(penglingsData, d => d.flipper_length_mm))
+    .nice()
+    .range([margin.left, width - margin.right]);
+
+  const y = d3.scaleLinear()
+    .domain(d3.extent(penglingsData, d => d.body_mass_g))
+    .nice()
+    .range([height - margin.bottom, margin.top]);
+
+  const r = d3.scaleLinear()
+    .domain(d3.extent(penglingsData, d => d.bill_length_mm))
+    .range([4, 12]);
+
+  chartSvg.selectAll("circle")
+    .data(penglingsData)
+    .enter()
+    .append("circle")
+    .attr("cx", d => x(d.flipper_length_mm))
+    .attr("cy", d => y(d.body_mass_g))
+    .attr("r", d => r(d.bill_length_mm))
+    .attr("fill", d => colorScale(d.species))
+    .attr("opacity", 0.7);
+
+  chartSvg.append("g")
+    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .call(d3.axisBottom(x));
+
+  chartSvg.append("g")
+    .attr("transform", `translate(${margin.left},0)`)
+    .call(d3.axisLeft(y));
+
+  chartSvg.append("text")
+    .attr("x", width / 2)
+    .attr("y", height - 15)
+    .attr("text-anchor", "middle")
+    .attr("font-weight", "bold")
+    .text("Flipper Length (mm)");
+
+  chartSvg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", 20)
+    .attr("text-anchor", "middle")
+    .attr("font-weight", "bold")
+    .text("Body Mass (g)");
+
+  const legend = chartSvg.append("g")
+    .attr("class", "legend")
+    .attr("transform", `translate(${width - margin.right},${margin.top})`);
+
+  const species = colorScale.domain();
+
+  species.forEach((specie, i) => {
+    const legendRow = legend.append("g")
+      .attr("transform", `translate(0, ${i * 20})`);
+
+    legendRow.append("rect")
+      .attr("width", 12)
+      .attr("height", 12)
+      .attr("fill", colorScale(specie));
+
+    legendRow.append("text")
+      .attr("x", 18)
+      .attr("y", 10)
+      .text(specie);
+  });
+</script>
