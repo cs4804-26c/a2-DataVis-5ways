@@ -37,6 +37,7 @@
     .append("path")
     .attr("d", d => {
       const radius = r(d.bill_length_mm);
+      // Here is my bill-like shape, syntax provided by ChatGPT after I described what I wanted and the points I wanted the path to pass through.
       return `
         M 0 ${-radius}
         C ${radius} ${-radius},
@@ -54,7 +55,7 @@
     .attr("fill", d => colorScale(d.species))
     .attr("opacity", 0.7)
     .attr("data-species", d => d.species)
-    .on("mouseover", function (event, d) {
+    .on("mouseover", function (event, d) { // Hover effect isolating selected species
       const hoveredSpecies = d.species;
 
       points
@@ -87,7 +88,7 @@
     .text("Flipper Length (mm)");
 
   chartSvg.append("text")
-    .attr("transform", "rotate(-90)")
+    .attr("transform", "rotate(-90)") // Written by ChatGPT, didn't know how to do this, now I do! Rotatets the text 90 degrees counterclockwise.
     .attr("x", -height / 2)
     .attr("y", 20)
     .attr("text-anchor", "middle")
@@ -100,6 +101,7 @@
 
   const species = colorScale.domain();
 
+  // The legendary addition of a legendary legend, or so the legends says
   species.forEach((specie, i) => {
     const legendRow = legend.append("g")
       .attr("transform", `translate(0, ${i * 20})`);
