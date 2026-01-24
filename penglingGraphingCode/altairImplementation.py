@@ -2,7 +2,7 @@ import altair as alt
 import pandas as pd
 import numpy as np
 
-penglings = pd.read_csv("penglings.csv")
+penglings = pd.read_csv("../penglings.csv")
 
 x_nice_min = np.floor(penglings['flipper_length_mm'].min() / 10) * 10
 x_nice_max = np.ceil(penglings['flipper_length_mm'].max() / 10) * 10
