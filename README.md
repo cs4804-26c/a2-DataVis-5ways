@@ -1,148 +1,97 @@
 
 ![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
 
-# 02-DataVis-5ways
-
-Assignment 2 - Data Visualization, 5 Ways  
+# 02-DataVis-5Ways
+Assignment 2 – Data Visualization, 5 Ways  
+Apologies to whoever is grading this assignment for our class
 ===
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
+This project explores five different tools and libraries for data visualization by recreating the same scatterplot using the `penglings.csv` dataset. Each visualization maps:
 
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
+- **X-axis:** Flipper Length  
+- **Y-axis:** Body Mass  
+- **Color:** Species  
+- **Point Size:** Bill Length (Unfortunately the sizing difference in the DataWrapper implementation can not be seen despite my tinkering)  
+- **Opacity:** ~0.8 (Not possible in DataWrapper or MatLab from what I could see) 
 
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
+All source files can be found in the `penglingGraphingCode/` directory, and screenshots are stored in `img/`.
 
-Your goal is to use 5 different tools to make the following chart:
-
-![](img/ggplot2.png)
-
-These features should be preserved as much as possible in your replication:
-
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
-
-Other features are not required. This includes:
-
-- The background grid.
-- The legends.
-
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
-
-Improvements are also welcome as part of Technical and Design achievements.
-
-Libraries, Tools, Languages
 ---
 
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
+# R + ggplot2
 
-Otherwise, you should seek tools and libraries to fill out your 5.
+R is a language focused on statistical computing, and `ggplot2` is a powerful grammar-of-graphics library that makes mapping data to visual attributes very expressive. ggplot also lowered the lines of code I needed to usse to replicate the graph significantly, as I attempted that prior to the ggplot version. 
 
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
+For this visualization, I used `geom_point()` with aesthetic mappings for color (species), size (bill length), and alpha (opacity). Setting custom axis limits was kind of straightforward, which made it easy to match the reference chart where the scales do not start at zero.
 
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
+This was the best tool (in my opinion) to closely replicate the original visualization with minimal effort. Most of the challenge came from learning the syntax rather than fighting the tool itself. ggplot2 feels especially well-suited for exploratory data analysis and publication-quality charts. It gets 5 stars from me.
 
-I have marked a few that are strongly suggested.
+![ggplot](img/r-ggplot-graph.png)
 
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
-
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
-
-Tips
 ---
 
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
+# d3.js
 
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
+d3.js is a low-level JavaScript visualization library that provides complete control over every visual element, but requires significantly more code than higher-level tools. Like a lot more code.
 
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
+I loaded the dataset using `d3.csv()` and manually created scales for position, color, and size. Axes were constructed using `d3.axisBottom()` and `d3.axisLeft()`, and circles were appended individually with mapped attributes. Honestly the logic wasn't hard to think through; especially after Project 1. 
 
-Readme Requirements
+The hardest part of using d3 was making and using the legend. First of all, this was the first program I wrote for this assignment and thought the "legend" was going to be called a "key" in the API (as that is what I knew it as). It wasn't, which slowed me down more than I'd like to admit. Afterwards, the legend element was just wierd to position. I got the hang of it in the end though.
+
+![d3](img/d3-graph.png)
+
 ---
 
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
+# Altair (Python)
 
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
+Altair is a declarative visualization library for Python built on top of Vega-Lite. Instead of manually drawing elements, you describe what you want to visualize and let the library handle the rendering (which was pretty cool).
 
-Other Requirements
+Using Altair, I mapped flipper length and body mass to the axes, species to color, and bill length to size using a single chart definition. Adjusting opacity and scales was simple, though some fine-grained layout control is more limited compared to d3, and honestly the graph didn't come out perfectly. The size scale was super funky in particular, which you can likely pick out from the image.
+
+Altair is very effective for quickly generating clean, readable visualizations with minimal code. It feels like a strong middle ground between ease of use and expressive power.
+
+![altair](img/altair-graph.png)
+
 ---
 
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
+# Datawrapper
 
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
+Datawrapper is a web-based visualization tool that emphasizes accessibility, speed, and polish over deep customization. It was by far the easiest to use.
 
-GitHub Details
+I uploaded the `penglings.csv` dataset directly through the interface and configured the scatterplot using the built-in UI controls. Color and size encodings were easy to assign, though precise control over scale limits and styling was more constrained compared to code-based tools, and I honestly can not see the size difference in the dots. The hover feature that isolates data of the same color as the selected point was super cool though.
+
+Datawrapper would be especially useful in journalism or public-facing dashboards where fast turnaround and clean presentation matter more than full control.
+
+![datawrapper](img/datawrapper-graph.png)
+
 ---
 
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
+# Matlab
 
-Grading
+Matlab is a numerical computing environment commonly used in engineering and scientific fields. Its plotting tools are powerful but less specialized for modern data visualization.
+
+I used Matlab’s `scatter()` function, manually mapping color, size, and opacity. Customizing legends and axis scales required more trial-and-error than in ggplot2 or Altair, and aesthetic defaults are less visually polished in my eyes.
+
+Despite this, Matlab performs well when visualizations are part of a larger numerical or simulation-based workflow, especially when the data is already being processed in Matlab.
+
+![matlab](img/matlab-graph.png)
+
 ---
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
-
 
 ## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
 
-### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+- Added a hover feature to only show data with the same species as the hovered over point, like in the DataWrapper version (d3-version exclusive)
+- Successfully recreated the same visualization across five different tools
+- Loaded and processed CSV data in multiple environments (R, Python, JavaScript, Matlab)
+- Implemented custom scale limits that do not start at zero
+- Mapped multiple visual encodings simultaneously (position, color, size, opacity)
+- Worked with asynchronous data loading in d3
+
+## Design Achievements
+
+- Added a penguin bill like shape to the plotted points to help with the bill-length sizing visual and theming (d3-veresion exclusive)
+- Maintained consistent visual mappings across all tools
+- Used semi-transparent points to improve readability in dense regions
+- Chose color schemes that clearly distinguish species
+- Adjusted point sizing to reflect bill length without overwhelming the chart
+- Preserved readability through clear axis labels and tick spacing

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<div id="container"></div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script type="module">
+  const penglingsData = await d3.csv("../penglings.csv", d3.autoType);
+  const width = 700;
+  const height = 500;
+  const margin = { top: 40, right: 100, bottom: 60, left: 70 };
+
+  const chartSvg = d3.select("#container")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .style("border", "1px solid black");
+
+  const colorScale = d3.scaleOrdinal()
+    .domain([...new Set(penglingsData.map(d => d.species))])
+    .range(d3.schemeCategory10);
+
+  const x = d3.scaleLinear()
+    .domain(d3.extent(penglingsData, d => d.flipper_length_mm))
+    .nice()
+    .range([margin.left, width - margin.right]);
+
+  const y = d3.scaleLinear()
+    .domain(d3.extent(penglingsData, d => d.body_mass_g))
+    .nice()
+    .range([height - margin.bottom, margin.top]);
+
+  const r = d3.scaleLinear()
+    .domain(d3.extent(penglingsData, d => d.bill_length_mm))
+    .range([4, 12]);
+
+  const points = chartSvg.selectAll("path")
+    .data(penglingsData)
+    .enter()
+    .append("path")
+    .attr("d", d => {
+      const radius = r(d.bill_length_mm);
+      // Here is my bill-like shape, syntax provided by ChatGPT after I described what I wanted and the points I wanted the path to pass through.
+      return `
+        M 0 ${-radius}
+        C ${radius} ${-radius},
+          ${radius} ${radius},
+          0 ${radius * 1.6}
+        C ${-radius} ${radius},
+          ${-radius} ${-radius},
+          0 ${-radius}
+        Z
+      `;
+    })
+    .attr("transform", d =>
+      `translate(${x(d.flipper_length_mm)}, ${y(d.body_mass_g)})`
+    )
+    .attr("fill", d => colorScale(d.species))
+    .attr("opacity", 0.7)
+    .attr("data-species", d => d.species)
+    .on("mouseover", function (event, d) { // Hover effect isolating selected species
+      const hoveredSpecies = d.species;
+
+      points
+        .transition()
+        .duration(150)
+        .attr("opacity", p =>
+          p.species === hoveredSpecies ? 0.9 : 0.1
+        );
+    })
+    .on("mouseout", function () {
+      points
+        .transition()
+        .duration(150)
+        .attr("opacity", 0.7);
+    });
+
+  chartSvg.append("g")
+    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .call(d3.axisBottom(x));
+
+  chartSvg.append("g")
+    .attr("transform", `translate(${margin.left},0)`)
+    .call(d3.axisLeft(y));
+
+  chartSvg.append("text")
+    .attr("x", width / 2)
+    .attr("y", height - 15)
+    .attr("text-anchor", "middle")
+    .attr("font-weight", "bold")
+    .text("Flipper Length (mm)");
+
+  chartSvg.append("text")
+    .attr("transform", "rotate(-90)") // Written by ChatGPT, didn't know how to do this, now I do! Rotatets the text 90 degrees counterclockwise.
+    .attr("x", -height / 2)
+    .attr("y", 20)
+    .attr("text-anchor", "middle")
+    .attr("font-weight", "bold")
+    .text("Body Mass (g)");
+
+  const legend = chartSvg.append("g")
+    .attr("class", "legend")
+    .attr("transform", `translate(${width - margin.right},${margin.top})`);
+
+  const species = colorScale.domain();
+
+  // The legendary addition of a legendary legend, or so the legends says
+  species.forEach((specie, i) => {
+    const legendRow = legend.append("g")
+      .attr("transform", `translate(0, ${i * 20})`);
+
+    legendRow.append("rect")
+      .attr("width", 12)
+      .attr("height", 12)
+      .attr("fill", colorScale(specie));
+
+    legendRow.append("text")
+      .attr("x", 18)
+      .attr("y", 10)
+      .text(specie);
+  });
+</script>
