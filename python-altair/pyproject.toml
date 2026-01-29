@@ -1,0 +1,11 @@
+[project]
+name = "python-altair"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "altair>=6.0.0",
+    "pandas>=2.3.3",
+    "vl-convert-python>=1.9.0.post1",
+]
