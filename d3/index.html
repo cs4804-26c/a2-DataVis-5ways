@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scatter Plot.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+<canvas id="scatterplot" width="900" height="450"></canvas>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    d3.csv("../penglings.csv", function(d) {
+      //convert data to numerical values
+      return {
+        species: d.species,
+        flipper_length_mm: +d.flipper_length_mm,
+        body_mass_g: +d.body_mass_g,
+        bill_length_mm: +d.bill_length_mm
+      };
+    }).then(function(data) {
+      //filter valid data and create a map of species to colors
+      const speciesColors = {
+        'Adelie': 'orange',
+        'Chinstrap': 'purple',
+        'Gentoo': 'teal'
+      };
+
+      //group data by species
+      const groupedData = Array.from(d3.group(data, d => d.species), ([species, data]) => ({ species, data }));
+
+      //prepare the dataset for Chart.js
+      const scatterData = {
+        datasets: groupedData.map(group => ({
+          label: group.species,
+          data: group.data.map(item => ({
+            x: item.flipper_length_mm,
+            y: item.body_mass_g
+          })),
+          backgroundColor: speciesColors[group.species],
+          pointRadius: group.data.map(item => item.bill_length_mm / 10) // Scale the bill length appropriately
+        }))
+      };
+
+      //get context and create the chart
+      const ctx = document.getElementById('scatterplot').getContext('2d');
+      const scatChart = new Chart(ctx, {
+        type: 'scatter',
+        data: scatterData,
+        options: {
+          scales: {
+            x: {
+              type: 'linear',
+              position: 'bottom',
+              title: {
+                display: true,
+                text: 'Flipper Length (mm)'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Body Mass (g)'
+              }
+            }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: 'Penguin Size by Species'
+            },
+            legend: {
+              display: true,
+              labels: {
+                generateLabels: function(chart) {
+                  return chart.data.datasets.map((dataset, i) => ({
+                    text: dataset.label,
+                    fillStyle: dataset.backgroundColor,
+                  }));
+                }
+              }
+            }
+          }
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
