@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!-- D3.js Scatter Plot of Penguins Dataset -->
+<html lang="en">
+<head>
+    // Metadata
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Penguins - d3 scatter (A2)</title>
+  <!-- d3.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <!-- Styling -->
+  <style>
+    /* Basic page styling */
+    body { font-family: Arial, sans-serif; background: #fafafa; }
+    .wrap { width: 900px; margin: 30px auto; background: #fff; padding: 16px; border-radius: 10px; }
+    .title { margin: 0 0 6px 0; }
+    .subtitle { margin: 0 0 14px 0; color: #444; }
+    .axis-label { font-size: 12px; fill: #111; }
+    .tick text { font-size: 11px; }
+  </style>
+</head>
+<!-- Body Content -->
+<body>
+  <div class="wrap">
+    <h2 class="title">Penguins (d3.js)</h2>
+    <p class="subtitle">x = flipper length, y = body mass, color = species, size = bill length</p>
+    <div id="viz"></div>
+  </div>
+<!-- D3.js Script -->
+  <script>
+    
+    const DATA_PATH = "../data/penglings.csv"; // path to data
+
+<!-- set up svg and margins -->
+// dimensions
+    const margin = { top: 20, right: 20, bottom: 55, left: 70 };
+    const width = 860 - margin.left - margin.right;
+    const height = 460 - margin.top - margin.bottom;
+// svg container
+    const svg = d3.select("#viz")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom);
+// main group
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // load csv
+    d3.csv(DATA_PATH, d => {
+      // slow / explicit parsing on purpose (more human, less "magic")
+      const flipper = +d.flipper_length_mm;
+      const mass = +d.body_mass_g;
+      const bill = +d.bill_length_mm;
+
+      return {
+        species: d.species,
+        flipper_length_mm: flipper,
+        body_mass_g: mass,
+        bill_length_mm: bill
+      };
+    }).then(raw => {
+      
+      // filter out missing values (NA turns into NaN)
+      
+      const data = raw.filter(d =>
+        !Number.isNaN(d.flipper_length_mm) &&
+        !Number.isNaN(d.body_mass_g) &&
+        !Number.isNaN(d.bill_length_mm) &&
+        d.species && d.species !== "NA"
+      );
+
+      // domains (not starting at 0)
+      const xExtent = d3.extent(data, d => d.flipper_length_mm);
+      const yExtent = d3.extent(data, d => d.body_mass_g);
+      const sizeExtent = d3.extent(data, d => d.bill_length_mm);
+
+      // add a little padding so dots don't hug edges
+      const xPad = 2;
+      const yPad = 150;
+      // scales
+      const x = d3.scaleLinear()
+        .domain([xExtent[0] - xPad, xExtent[1] + xPad])
+        .range([0, width]);
+        // y scale
+      const y = d3.scaleLinear()
+        .domain([yExtent[0] - yPad, yExtent[1] + yPad])
+        .range([height, 0]);
+
+      // bubble size mapping (bill length -> radius)
+      const r = d3.scaleSqrt()
+        .domain(sizeExtent)
+        .range([3, 10]);
+
+      // color mapping to species
+      const speciesList = Array.from(new Set(data.map(d => d.species)));
+      const color = d3.scaleOrdinal()
+        .domain(speciesList)
+        .range(["#1f77b4", "#ff7f0e", "#2ca02c"]); // simple + readable
+
+      // axes
+      const xAxis = d3.axisBottom(x).ticks(7);
+      const yAxis = d3.axisLeft(y).ticks(7);
+
+      g.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(xAxis);
+
+      g.append("g")
+        .call(yAxis);
+
+      // axis labels
+      g.append("text")
+        .attr("class", "axis-label")
+        .attr("x", width / 2)
+        .attr("y", height + 45)
+        .attr("text-anchor", "middle")
+        .text("Flipper Length (mm)");
+
+      g.append("text")
+        .attr("class", "axis-label")
+        .attr("x", -height / 2)
+        .attr("y", -50)
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "middle")
+        .text("Body Mass (g)");
+
+      // points
+      g.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => x(d.flipper_length_mm))
+        .attr("cy", d => y(d.body_mass_g))
+        .attr("r", d => r(d.bill_length_mm))
+        .attr("fill", d => color(d.species))
+        .attr("opacity", 0.8)
+        .attr("stroke", "#222")
+        .attr("stroke-width", 0.3);
+
+      // LEGEND FOR SPECIES
+      const legend = g.append("g")
+        .attr("transform", `translate(${width - 140}, 10)`);
+// legend title
+      speciesList.forEach((sp, i) => {
+        const row = legend.append("g").attr("transform", `translate(0, ${i * 18})`);
+        row.append("rect")
+          .attr("width", 12)
+          .attr("height", 12)
+          .attr("fill", color(sp))
+          .attr("opacity", 0.8);
+        row.append("text")
+          .attr("x", 18)
+          .attr("y", 10)
+          .style("font-size", "12px")
+          .text(sp);
+      });
+ // end of data then
+    }).catch(err => {
+      console.error("CSV load failed:", err);
+      d3.select("#viz").append("p").text("Could not load CSV. Check DATA_PATH and run a local server.");
+    });
+  </script>
+</body>
+</html>
