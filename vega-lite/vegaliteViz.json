@@ -1,0 +1,85 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 600,
+  "height": 400,
+  "data": {
+    "url": "penglings.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.body_mass_g != null && datum.flipper_length_mm != null && datum.bill_length_mm != null"
+    }
+  ],
+  "mark": {
+    "type": "circle",
+    "opacity": 0.8
+  },
+  "encoding": {
+    "x": {
+      "field": "flipper_length_mm",
+      "type": "quantitative",
+      "title": "Flipper Length (mm)",
+      "scale": {
+        "zero": false,
+        "padding": 5
+      }
+    },
+    "y": {
+      "field": "body_mass_g",
+      "type": "quantitative",
+      "title": "Body Mass (g)",
+      "scale": {
+        "zero": false,
+        "padding": 5
+      }
+    },
+    "color": {
+      "field": "species",
+      "type": "nominal",
+      "title": "species",
+      "scale": {
+        "domain": ["Adelie", "Chinstrap", "Gentoo"],
+        "range": ["#E28A37", "#AF58BA", "#008080"]
+      }
+    },
+    "size": {
+      "field": "bill_length_mm",
+      "type": "quantitative",
+      "title": "bill_length_mm",
+      "scale": {
+        "range": [50, 500],
+        "zero": false
+      },
+      "legend": {
+        "values": [40, 50]
+      }
+    },
+    "tooltip": [
+      {"field": "species", "type": "nominal"},
+      {"field": "bill_length_mm", "title": "Bill Length"},
+      {"field": "body_mass_g", "title": "Body Mass"},
+      {"field": "flipper_length_mm", "title": "Flipper Length"}
+    ]
+  },
+  "config": {
+    "view": {
+      "stroke": "transparent",
+      "fill": "#EBEBEB"
+    },
+    "axis": {
+      "domain": false,
+      "grid": true,
+      "gridColor": "white",
+      "gridWidth": 1.2,
+      "tickColor": "white",
+      "ticks": false,
+      "labelFontSize": 12,
+      "titleFontSize": 14
+    },
+    "legend": {
+      "fillColor": "white",
+      "padding": 10,
+      "cornerRadius": 0
+    }
+  }
+}

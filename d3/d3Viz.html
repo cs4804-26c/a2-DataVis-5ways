@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Penguins Scatter Plot (D3)</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+
+    .chart-bg {
+      fill: #EBEBEB;
+    }
+
+    .grid line {
+      stroke: white;
+      stroke-width: 1.2;
+    }
+
+    .axis path,
+    .axis line {
+      display: none;
+    }
+
+    .legend text {
+      font-size: 14px;
+      dominant-baseline: middle;
+    }
+  </style>
+</head>
+<body>
+
+<svg width="1100" height="650"></svg>
+
+<script>
+const svg = d3.select("svg");
+const width = +svg.attr("width");
+const height = +svg.attr("height");
+
+const margin = { top: 40, right: 260, bottom: 70, left: 90 };
+const innerWidth = width - margin.left - margin.right;
+const innerHeight = height - margin.top - margin.bottom;
+
+const g = svg.append("g")
+  .attr("transform", `translate(${margin.left},${margin.top})`);
+
+g.append("rect")
+  .attr("class", "chart-bg")
+  .attr("width", innerWidth)
+  .attr("height", innerHeight);
+
+d3.csv("penglings.csv", d => ({
+  species: d.species,
+  bill_length_mm: +d.bill_length_mm,
+  flipper_length_mm: +d.flipper_length_mm,
+  body_mass_g: +d.body_mass_g
+})).then(data => {
+
+  data = data.filter(d =>
+    !isNaN(d.bill_length_mm) &&
+    !isNaN(d.flipper_length_mm) &&
+    !isNaN(d.body_mass_g)
+  );
+
+  // Scales
+  const x = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.flipper_length_mm))
+    .nice()
+    .range([0, innerWidth]);
+
+  const y = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.body_mass_g))
+    .nice()
+    .range([innerHeight, 0]);
+
+  const r = d3.scaleSqrt()
+    .domain(d3.extent(data, d => d.bill_length_mm))
+    .range([5, 12]);
+
+  const color = d3.scaleOrdinal()
+    .domain(["Adelie", "Chinstrap", "Gentoo"])
+    .range(["#E28A37", "#7B2CBF", "#00A5A8"]);
+
+  g.append("g")
+    .attr("class", "grid")
+    .call(d3.axisLeft(y).tickSize(-innerWidth).tickFormat(""));
+
+  g.append("g")
+    .attr("class", "grid")
+    .attr("transform", `translate(0,${innerHeight})`)
+    .call(d3.axisBottom(x).tickSize(-innerHeight).tickFormat(""));
+
+  g.append("g")
+    .attr("class", "axis")
+    .call(d3.axisLeft(y));
+
+  g.append("g")
+    .attr("class", "axis")
+    .attr("transform", `translate(0,${innerHeight})`)
+    .call(d3.axisBottom(x));
+
+  svg.append("text")
+    .attr("x", margin.left + innerWidth / 2)
+    .attr("y", height - 20)
+    .attr("text-anchor", "middle")
+    .attr("font-size", 20)
+    .text("Flipper Length (mm)");
+
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", - (margin.top + innerHeight / 2))
+    .attr("y", 25)
+    .attr("text-anchor", "middle")
+    .attr("font-size", 20)
+    .text("Body Mass (g)");
+
+  g.selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("cx", d => x(d.flipper_length_mm))
+    .attr("cy", d => y(d.body_mass_g))
+    .attr("r", d => r(d.bill_length_mm))
+    .attr("fill", d => color(d.species))
+    .attr("opacity", 0.85);
+
+  const sizeLegend = svg.append("g")
+    .attr("class", "legend")
+    .attr("transform", `translate(${width - 210}, 60)`);
+
+  sizeLegend.append("text")
+    .attr("font-size", 18)
+    .text("bill_length_mm");
+
+  [40, 50].forEach((v, i) => {
+    const row = sizeLegend.append("g")
+      .attr("transform", `translate(0, ${30 + i * 35})`);
+
+    row.append("circle")
+      .attr("r", r(v))
+      .attr("fill", "#444");
+
+    row.append("text")
+      .attr("x", 30)
+      .text(v);
+  });
+
+  const speciesLegend = svg.append("g")
+    .attr("class", "legend")
+    .attr("transform", `translate(${width - 210}, 220)`);
+
+  speciesLegend.append("text")
+    .attr("y", -30)
+    .attr("font-size", 18)
+    .text("species");
+
+  ["Adelie", "Chinstrap", "Gentoo"].forEach((s, i) => {
+    const row = speciesLegend.append("g")
+      .attr("transform", `translate(0, ${i * 30})`);
+
+    row.append("circle")
+      .attr("r", 7)
+      .attr("fill", color(s));
+
+    row.append("text")
+      .attr("x", 18)
+      .text(s);
+  });
+
+});
+</script>
+</body>
+</html>
