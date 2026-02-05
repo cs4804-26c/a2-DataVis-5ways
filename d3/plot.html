@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Penguins Scatter (d3)</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: #fff;
+    }
+    .wrap {
+      position: relative;
+      width: 1000px;
+      margin: 20px auto;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .title {
+      font-weight: 600;
+      margin-right: 14px;
+    }
+    button {
+      border: 1px solid #ccc;
+      background: #fff;
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover { background: #f5f5f5; }
+    .spacer { flex: 1; }
+    .tooltip {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+  </style>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="controls">
+      <div class="title">Penguins Scatter (d3)</div>
+      <button id="btnAll">All</button>
+      <button id="btnAdelie">Adelie</button>
+      <button id="btnChinstrap">Chinstrap</button>
+      <button id="btnGentoo">Gentoo</button>
+      <div class="spacer"></div>
+      <button id="btnDownload">Download SVG</button>
+    </div>
+
+    <svg id="chart" width="1000" height="600"></svg>
+    <div id="tooltip" class="tooltip"></div>
+  </div>
+
+  <script>
+    const CSV_PATH = "../penglings.csv";
+
+    const speciesOrder = ["Adelie", "Chinstrap", "Gentoo"];
+    const colorMap = new Map([
+      ["Adelie", "#F28E2B"],
+      ["Chinstrap", "#8E44AD"],
+      ["Gentoo", "#1F9E89"],
+    ]);
+
+    const svg = d3.select("#chart");
+    const tooltip = d3.select("#tooltip");
+
+    const margin = { top: 30, right: 220, bottom: 70, left: 90 };
+    const width = +svg.attr("width") - margin.left - margin.right;
+    const height = +svg.attr("height") - margin.top - margin.bottom;
+
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const xDomain = [170, 232];
+    const yDomain = [2600, 6400];
+
+    const x = d3.scaleLinear().domain(xDomain).range([0, width]);
+    const y = d3.scaleLinear().domain(yDomain).range([height, 0]);
+
+    const xAxis = d3.axisBottom(x)
+      .tickValues(d3.range(170, 231, 10))
+      .tickSizeOuter(0);
+
+    const yAxis = d3.axisLeft(y)
+      .tickValues([3000, 4000, 5000, 6000])
+      .tickSizeOuter(0);
+
+    g.append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(xAxis);
+
+    g.append("g").call(yAxis);
+
+    g.append("text")
+      .attr("x", width / 2)
+      .attr("y", height + 55)
+      .attr("text-anchor", "middle")
+      .attr("font-size", 22)
+      .text("Flipper Length (mm)");
+
+    g.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -height / 2)
+      .attr("y", -60)
+      .attr("text-anchor", "middle")
+      .attr("font-size", 22)
+      .text("Body Mass (g)");
+
+    const sizeLegend = svg.append("g")
+      .attr("transform", `translate(${margin.left + width + 30}, ${margin.top + 40})`);
+
+    sizeLegend.append("text")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("font-weight", 700)
+      .attr("font-size", 18)
+      .text("bill_length_mm");
+
+    const sizeLegendVals = [40, 50];
+    const rScale = d3.scaleSqrt().domain([35, 55]).range([4, 14]);
+
+    const sizeItems = sizeLegend.selectAll("g.s")
+      .data(sizeLegendVals)
+      .join("g")
+      .attr("class", "s")
+      .attr("transform", (d, i) => `translate(0, ${28 + i * 38})`);
+
+    sizeItems.append("circle")
+      .attr("cx", 12)
+      .attr("cy", 0)
+      .attr("r", d => rScale(d))
+      .attr("fill", "#999")
+      .attr("opacity", 0.8);
+
+    sizeItems.append("text")
+      .attr("x", 32)
+      .attr("y", 5)
+      .attr("font-size", 16)
+      .text(d => d);
+
+    const colorLegend = svg.append("g")
+      .attr("transform", `translate(${margin.left + width + 30}, ${margin.top + 165})`);
+
+    colorLegend.append("text")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("font-weight", 700)
+      .attr("font-size", 18)
+      .text("species");
+
+    const legendItems = colorLegend.selectAll("g.item")
+      .data(speciesOrder)
+      .join("g")
+      .attr("class", "item")
+      .attr("transform", (d, i) => `translate(0, ${28 + i * 28})`);
+
+    legendItems.append("circle")
+      .attr("r", 6)
+      .attr("cx", 10)
+      .attr("cy", 0)
+      .attr("fill", d => colorMap.get(d))
+      .attr("opacity", 0.8);
+
+    legendItems.append("text")
+      .attr("x", 26)
+      .attr("y", 5)
+      .attr("font-size", 16)
+      .text(d => d);
+
+    let allData = [];
+    let currentFilter = null;
+
+    function renderPoints(data) {
+      const r = d3.scaleSqrt()
+        .domain(d3.extent(allData, d => d.bill_length_mm))
+        .range([4, 14]);
+
+      const pts = g.selectAll("circle.point")
+        .data(data, (d, i) => d._id ?? (d._id = i));
+
+      pts.join(
+        enter => enter.append("circle")
+          .attr("class", "point")
+          .attr("cx", d => x(d.flipper_length_mm))
+          .attr("cy", d => y(d.body_mass_g))
+          .attr("r", d => r(d.bill_length_mm))
+          .attr("fill", d => colorMap.get(d.species) || "#999")
+          .attr("opacity", 0.8)
+          .on("mousemove", (event, d) => {
+            const wrapRect = document.querySelector(".wrap").getBoundingClientRect();
+            tooltip
+              .style("opacity", 1)
+              .html(
+                `<b>${d.species}</b><br/>
+                 Flipper: ${d.flipper_length_mm} mm<br/>
+                 Body: ${d.body_mass_g} g<br/>
+                 Bill: ${d.bill_length_mm} mm`
+              )
+              .style("left", (event.clientX - wrapRect.left + 16) + "px")
+              .style("top", (event.clientY - wrapRect.top + 16) + "px");
+          })
+          .on("mouseleave", () => tooltip.style("opacity", 0)),
+        update => update
+          .transition().duration(200)
+          .attr("cx", d => x(d.flipper_length_mm))
+          .attr("cy", d => y(d.body_mass_g))
+          .attr("r", d => r(d.bill_length_mm))
+          .attr("fill", d => colorMap.get(d.species) || "#999"),
+        exit => exit
+          .transition().duration(150)
+          .style("opacity", 0)
+          .remove()
+      );
+    }
+
+    function applyFilter(species) {
+      currentFilter = species;
+      const data = species ? allData.filter(d => d.species === species) : allData;
+      renderPoints(data);
+    }
+
+    function downloadSVG() {
+      const node = document.getElementById("chart");
+      const serializer = new XMLSerializer();
+      const source = serializer.serializeToString(node);
+
+      const blob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "d3_penguins.svg";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("btnAll").addEventListener("click", () => applyFilter(null));
+    document.getElementById("btnAdelie").addEventListener("click", () => applyFilter("Adelie"));
+    document.getElementById("btnChinstrap").addEventListener("click", () => applyFilter("Chinstrap"));
+    document.getElementById("btnGentoo").addEventListener("click", () => applyFilter("Gentoo"));
+    document.getElementById("btnDownload").addEventListener("click", downloadSVG);
+
+    d3.csv(CSV_PATH, d => ({
+      species: d.species,
+      bill_length_mm: +d.bill_length_mm,
+      flipper_length_mm: +d.flipper_length_mm,
+      body_mass_g: +d.body_mass_g,
+    })).then(data => {
+      allData = data.filter(d =>
+        d.species &&
+        Number.isFinite(d.bill_length_mm) &&
+        Number.isFinite(d.flipper_length_mm) &&
+        Number.isFinite(d.body_mass_g)
+      );
+
+      renderPoints(allData);
+    });
+  </script>
+</body>
+</html>

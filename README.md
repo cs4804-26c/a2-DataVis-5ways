@@ -1,148 +1,62 @@
-
-![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
-
 # 02-DataVis-5ways
 
-Assignment 2 - Data Visualization, 5 Ways  
-===
+# Assignment 2 - Data Visualization, 5 Ways
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
+- Joel Indipiginja
 
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
+- Code lives in its own tool folders (`/r-ggplot/`, `/py-altair/`, `/d3/`, `/Excel/`, `/Datawrapper/`)
 
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
+# Notes:
 
-Your goal is to use 5 different tools to make the following chart:
+- I mainly used ChatGPT when I got stuck on things that weren’t really chart making but were still blocking me, like installing R packages on my Mac and getting everything to run in VSCode without random errors. I am not that familiar with R so I had ChatGPT help me debug all my R code aswell. It also helped me with Altair because I thought it was broken when the HTML wasn’t showing data, but the fix was just viewing it through a local server. And for d3, it helped me clean up the layout and scaling the bubbles and then push it further with the filter buttons and the download option.
 
-![](img/ggplot2.png)
+# Libraries I used(3) + Tools I Used(2):
 
-These features should be preserved as much as possible in your replication:
+- R + ggplot2
+- Python + Altair
+- JavaScript + d3.js
 
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
+- Microsoft Excel
+- Datawrapper
 
-Other features are not required. This includes:
+## R + ggplot2
 
-- The background grid.
-- The legends.
+- ![R + ggplot2](output/ggplot2.png)
 
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
+- R + ggplot2 was the easiest one for me because this is basically the original software that the reference plot came from, so it naturally matches what the assignment wants. Once I figured out how to write and run the R code in VSCode, it was super straightforward, especially because ggplot already supports mapping color and size in a simple way. The main thing I needed help with was getting the color palette to match the reference better, and ChatGPT helped me choose colors that were consistent with my other tools. Overall, ggplot2 felt very simple as long as I knew the syntax, and it was the cleanest way to get something that looked correct fast.
 
-Improvements are also welcome as part of Technical and Design achievements.
+## Python + Altair
 
-Libraries, Tools, Languages
----
+- ![Python + Altair](output/altairplot.png)
 
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
+- Altair was really easy to set up and the chart itself didn’t take much work since it’s clear how you map x/y/color/size. The part that messed me up was the exporting: it looked like it was broken because it saved as an empty output at first, and I wasn’t seeing the data show up the way I expected. Once I served it through Live Server and opened the HTML properly, the plot populated correctly and everything was there. That honestly threw me off because I spent time thinking my code was wrong when the issue was really just how it was being viewed. Tooltips were also super easy to implement, and Altair feels like a good option if you want something that’s interactive without having to build all the interaction logic yourself.
 
-Otherwise, you should seek tools and libraries to fill out your 5.
+## d3.js
 
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
+- ![d3.js](output/D3plot.png)
 
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
+- d3 was by far the hardest one to set up and it took the most thinking to understand what I was even doing. The biggest struggle for me was getting the scales correct and then making the layout look right (especially spacing, axes placement, and the overall structure of the chart). I had to look at examples and go back and forth with ChatGPT a lot to get it clean. Once it finally clicked, d3 was the tool that gave me the most control, and it’s also where I could add the most technical work. I added buttons to filter by species (All / Adelie / Chinstrap / Gentoo) and also added a way to download the visualization as an SVG. It was the most work, but it also felt like the most “real” programming and I can see why people use it when they want full customization.
 
-I have marked a few that are strongly suggested.
+## Microsoft Excel
 
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
+- ![Excel](output/Excelplot.png)
 
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
+- Excel took the most time mostly because I started on the web version, and the web version was missing chart options that I needed (like bubble chart controls and scaling). Once I switched to the desktop app, everything got easier, but it still took a while because it’s basically all manual labor. Adelie worked early on, but I kept running into issues getting Chinstrap and Gentoo to behave correctly until I fixed the formulas and ranges, and I had to make sure Excel was filtering out the N/A values properly. It’s definitely one of the simplest tools in terms of “no coding,” but it was much slower than writing code, and I also felt limited when trying to get the bubble sizing to look exactly how I wanted. The colors were also an issue to me, as well as getting the size of the bubbles to change based on the bill length. I eventually got it to work, but the scaling is off and the legend for the Bill size was not able to populate.
 
-Tips
----
+## Datawrapper
 
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
+- ![Datawrapper](output/Datawrapperplot.png)
 
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
+- Datawrapper was the easiest to use in the moment because it’s all GUI-based and you can get a chart made quickly. The downside is it came out the worst compared to my other versions because it doesn’t give enough customization to really match the reference. I ran into issues where the bubbles didn’t reflect size the way I wanted, and making specific changes was harder than I expected because you’re limited to whatever options Datawrapper gives you. For instance, I wasn't able to move the legends from the top of the graph to the right side like the demo graph suggested.Overall, Datawrapper is good if you need a fast chart that looks clean for publishing, but if you’re trying to replicate a reference very closely, it feels clunky and not that intuitive.
 
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
+# Technical Achievements
 
-Readme Requirements
----
+- Interactivity: Added species filter buttons (All / Adelie / Chinstrap / Gentoo) so the d3 visualization can be explored by group without regenerating the chart.
+- Export Feature : Implemented a Download SVG button so the d3 visualization can be saved as a high-quality vector graphic.
+- Altair Web Output: Exported the visualization as an interactive HTML file (output/altair.html) and served it locally on Vscode Live Server / local HTTP server.
 
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
+# Design Achievements
 
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
-
-Other Requirements
----
-
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
-
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
-
-GitHub Details
----
-
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
-
-
-## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
-
-### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+- Consistent color mapping across tools: Adelie = orange, Chinstrap = purple, Gentoo = teal and kept it consistent across ggplot2/Altair/d3/Excel/DataWrapper.
+- Readable axis formatting: Axes do not start at 0, with clean tick spacing and clear labels.
+- Used all reccommended softwares and tools from the original readme
