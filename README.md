@@ -1,5 +1,6 @@
 ## Assignment 2 - Data Visualization, 5 Ways
 **Peter Czepiel**
+A small note for anyone grading this, I moved all code into their own folders (as instructed in the assignment details) after obtaining the png files, so they may have issues finding the "penglings.csv" file because the path is now incorrect.
 
 ## Here is the visualization I was asked to recreate:
 
