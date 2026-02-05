@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <meta charset="UTF-8">
+    <title>A2 d3 Graph</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 5px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chart"></div>
+<div id="tooltip" class="tooltip"></div>
+
+<script>
+    const margin = {top: 50, right: 150, bottom: 60, left: 70},
+        width = 800 - margin.left - margin.right,
+        height = 600 - margin.top - margin.bottom;
+
+    const svg = d3.select('#chart')
+        .append('svg')
+         .attr('width', width + margin.left + margin.right)
+         .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    d3.csv('penglings.csv').then(function(data) {
+
+        data.forEach((d) => {
+            d.flipper_length = +d.flipper_length;
+            d.body_length = +d.body_length;
+            d.bill_length_mm = +d.bill_length_mm;
+        });
+
+        const x = d3.scaleLinear()
+            .domain([170, 240])
+            .range([0, width]);
+
+        const y = d3.scaleLinear()
+            .domain([2500, 6500])
+            .range([height, 0]);
+
+        const z = d3.scaleLinear()
+            .domain([30, 60])
+            .range([4, 12]);
+
+        const color = d3.scaleOrdinal()
+            .domain(["Adelie", "Gentoo", "Chinstrap"])
+            .range(["#017339", "#e8ac0e", "#e25501"]);
+
+        svg.append('g')
+            .attr('transform', 'translate(0,' + height + ')')
+            .call(d3.axisBottom(x));
+
+        svg.append('g')
+            .call(d3.axisLeft(y));
+
+        svg.append('text')
+            .attr('x', width/2)
+            .attr('y', height+40)
+            .attr('text-anchor', 'middle')
+            .attr('Flipper Length (mm)');
+
+        svg.append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('x', -50)
+            .attr('y', -height/2)
+            .attr('text-anchor', 'middle')
+            .attr('Body Mass (g)');
+
+        const tooltip = d3.select('#tooltip');
+
+        svg.append('g')
+            .selectAll('circle')
+            .data(data)
+            .join('circle')
+            .attr('cx', d => x(d.flipper_length_mm))
+            .attr('cy', d => y(d.body_mass_g))
+            .attr('r', d => z(d.bill_length_mm))
+            .style('fill', d => color(d.species))
+            .style('opacity', 0.8)
+            .style('stroke', 'black')
+            .on('mouseover', function(event, d) { //tooltip implementation
+                d3.select(this).style('stroke-width', 3);
+                tooltip.style('opacity', 1)
+                    .html('Species: ' + d.species + '<br>Mass: ' + d.body_mass_g + 'g');
+            })
+            .on('mousemove', function(event) {
+                tooltip.style('left', (d3.event.pageX + 10) + 'px')
+                       .style('left', (d3.event.pageY - 10) + 'px')
+            })
+            .on('mouseout', function() {
+                d3.select(this).style('stroke-width', 1);
+                tooltip.style('opacity', 0);
+            });
+
+        svg.append('text')
+            .attr('x', width/2)
+            .attr('y', 0)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '20px')
+            .text('Penguin Size vs Mass (d3)');
+
+        const keys = ["Adelie", "Gentoo", "Chinstrap"];
+        const legend = svg.append("g")
+            .attr("transform", `translate(${width + 20}, 0)`); //right margin
+
+        legend.selectAll("legendDots")
+            .data(keys)
+            .enter()
+            .append("circle")
+            .attr("cx", 0)
+            .attr("cy", (d, i) => i * 25)
+            .attr("r", 7)
+            .style("fill", d => color(d))
+            .style("stroke", "black");
+
+        legend.selectAll("legendLabels")
+            .data(keys)
+            .enter()
+            .append("text")
+            .attr("x", 15)
+            .attr("y", (d, i) => i * 25)
+            .attr("dy", 5) //makes sure text lines up with circles
+            .style("fill", "black")
+            .text(d => d)
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
+            .style("font-size", "14px");
+
+    });
+
+
+</script>
+</body>
+</html>
+
+
