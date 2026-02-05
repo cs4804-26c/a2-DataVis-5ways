@@ -1,0 +1,61 @@
+<!DOCTYPE html> 
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Assignment 2 - Vega-Lite</title>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    </head>
+
+    <body>
+        <div id="vis"></div>
+        <script>
+            const spec = {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+               
+                "data":{
+                    "url": "../data/penglings.csv"
+                },
+
+            "mark":{
+                "type":"circle",
+                "opacity":0.7,
+            },
+            "encoding":{
+                "x":{
+                    "field":"flipper_length_mm",
+                    "type":"quantitative",
+                    "title":"Flipper Length (mm)",
+                    "scale":{"domain":[170,230]}
+                },
+
+                "y":{
+                    "field":"body_mass_g",
+                    "type":"quantitative",
+                    "title":"Body Mass (g)",
+                    "scale":{"domain":[3000,6500]}  
+                },
+
+                "color":{
+                    "field":"species",
+                    "type":"nominal",
+                    "title":"Species"
+                },
+
+                "size":{
+                    "field":"bill_length_mm",
+                    "type":"quantitative",
+                    "title":"Bill Length (mm)",
+                    "scale":{"range":[20,80]}
+                },
+              
+
+            }
+        };
+
+            vegaEmbed('#vis', spec);
+        </script>
+    </body>
+</html>
