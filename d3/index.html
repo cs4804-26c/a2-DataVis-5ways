@@ -5,6 +5,7 @@
 </head>
 <body>
     <div id="container"></div>
+    <div id="info_panel"></div>
 
     <script type="module">
         const HEIGHT = 600;
@@ -72,18 +73,28 @@
             .join("circle")
                 .attr("r", d => billScale(d.bill_length_mm))
                 .attr("fill", d => {
-                    if (d.species === "Adelie") return "orange";
+                    if (d.species === "Adelie") return "darkorange";
                     if (d.species === "Chinstrap") return "magenta";
-                    if (d.species === "Gentoo") return "cyan";
+                    if (d.species === "Gentoo") return "teal";
                 })
                 .attr("stroke", d => {
                     if (d.species === "Adelie") return "darkorange";
-                    if (d.species === "Chinstrap") return "purple";
+                    if (d.species === "Chinstrap") return "magenta";
                     if (d.species === "Gentoo") return "teal";
                 })
                 .attr("fill-opacity", 0.8)
                 .attr("cx", d => x(d.flipper_length_mm))
                 .attr("cy", d => y(d.body_mass_g))
+                .on("mouseover", (event, d) => {
+                    document.getElementById("info_panel").innerText = 
+                    `Species: ${d.species}
+                    Flipper Length (mm): ${d.flipper_length_mm}
+                    Bill Length (mm): ${d.bill_length_mm}
+                    Body Mass (g): ${d.body_mass_g}`
+                })
+                .on("mouseout", (event, d) => {
+                    document.getElementById("info_panel").innerText = ``
+                })
 
         // Attach axes labels
         svg.append("text")

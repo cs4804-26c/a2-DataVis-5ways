@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+    <title>Vega-Lite Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@6.2.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@6.4.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@7.1.0"></script>
+</head>
+<body>
+    <div id="container"></div>
+
+    <script type="text/javascript">
+
+
+        // Create chart
+        var yourVlSpec = {
+            $schema: 'https://vega.github.io/schema/vega-lite/v6.json',
+            description: 'Penguin scatterplot',
+            width: 800,
+            height: 600,
+            data: {"url": "../penglings.csv" },
+            mark: {
+                type: 'point',
+                filled: true
+            },
+            encoding: {
+                x: {
+                    field: 'flipper_length_mm', 
+                    type: 'quantitative',
+                    scale: {zero: false},
+                    title: "Flipper Length (mm)"
+                },
+                y: {
+                    field: 'body_mass_g', 
+                    type: 'quantitative',
+                    scale: {zero: false},
+                    title: "Body Mass (g)"
+                },
+                color: {
+                    field: "species",
+                    type: "nominal",
+                    scale: {
+                        range: ["darkorange", "magenta", "teal"]
+                    }
+                },
+                size: {
+                    field: 'bill_length_mm',
+                    scale: "linear",
+                    legend: false
+                }
+            },
+        };
+        vegaEmbed('#container', yourVlSpec);
+    </script>
+</body>
