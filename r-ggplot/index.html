@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>R & ggplot2 Visualization</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: rgb(254, 252, 247);
+      }
+
+      nav {
+        padding: 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background: white;
+      }
+
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: left;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        display: block;
+        padding: 15px 20px;
+        color: #000000;
+        text-decoration: none;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+        font-weight: 500;
+      }
+
+      nav a:hover {
+        background-color: #dbf3fa;
+      }
+
+      nav a.active {
+        background-color: #7ad7f0;
+        color: #fff;
+        font-weight: 600;
+      }
+
+      main {
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        color: #333;
+      }
+
+      p {
+        font-size: 1.2em;
+        color: #555;
+        text-align: justify;
+        max-width: 75%;
+        margin: 0 auto 30px;
+      }
+
+      .viz-wrap {
+        max-width: 75%;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 18px;
+      }
+
+      .viz-frame {
+        width: 100%;
+        height: min(80vh, 850px);
+      }
+
+      .viz-frame iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../d3/index.html">d3.js</a></li>
+        <li><a href="./index.html" class="active">R & ggplot2</a></li>
+        <li><a href="../altair/index.html">Altair</a></li>
+        <li><a href="../flourish/index.html">Flourish</a></li>
+        <li><a href="../dataWrapper/index.html">DataWrapper</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <h1>R &amp; ggplot2</h1>
+      <p>
+        R and ggplot2 are widely used statistical analysis anddata visalization
+        tools. ggplot2 allows complex visualizations to be constructed by
+        combining simple, consistent, components, such as scales, aesthetics,
+        and geometric marks. This chart shows the relationship between flipper
+        length and body mass for different penguin species with color and size
+        encoding multiple measurements. Unlike the other visalizations, this
+        visualization is static and does not have interactivity.
+      </p>
+
+      <div class="viz-wrap">
+        <div class="viz-frame">
+          <iframe src="penguins.html" title="Penguin plot"></iframe>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

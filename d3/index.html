@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>d3.js Visualization</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: rgb(254, 252, 247);
+      }
+
+      nav {
+        padding: 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background: white;
+      }
+
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: left;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        display: block;
+        padding: 15px 20px;
+        color: #000000;
+        text-decoration: none;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+        font-weight: 500;
+      }
+
+      nav a:hover {
+        background-color: #dbf3fa;
+      }
+
+      nav a.active {
+        background-color: #7ad7f0;
+        color: #fff;
+        font-weight: 600;
+      }
+
+      main {
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        color: #333;
+      }
+
+      p {
+        font-size: 1.2em;
+        color: #555;
+        text-align: justify;
+        max-width: 75%;
+        margin: 0 auto 30px;
+      }
+
+      .viz-wrap {
+        max-width: 75%;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 18px;
+      }
+
+      .tooltip {
+        position: absolute;
+        pointer-events: none;
+        background: rgba(20, 20, 20, 0.92);
+        color: #fff;
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        line-height: 1.35;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateY(6px);
+        transition:
+          opacity 120ms ease,
+          transform 120ms ease;
+        z-index: 9999;
+        white-space: nowrap;
+      }
+      .tooltip.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .grid line {
+        stroke: #e6e6e6;
+        stroke-width: 0.75;
+      }
+
+      .grid path {
+        display: none;
+      }
+
+      #viz svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="./index.html" class="active">d3.js</a></li>
+        <li><a href="../r-ggplot/index.html">R & ggplot2</a></li>
+        <li><a href="../altair/index.html">Altair</a></li>
+        <li><a href="../flourish/index.html">Flourish</a></li>
+        <li><a href="../dataWrapper/index.html">DataWrapper</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <h1>d3.js</h1>
+      <p>
+        d3.js is a powerful JavaScript library for creating dynamic and
+        interactive data visualizations in web browsers. It leverages web
+        standards such as SVG, HTML, and CSS to bring data to life. In this
+        visualization, we can visualize the relationship between penguin flipper
+        length and body mass, with additional encoding for bill length and
+        species using size and color respectively.
+        <b>Hover over any circle</b> to reveal detailed information such as
+        species, flipper length, body mass, and bill length.
+      </p>
+
+      <div class="viz-wrap">
+        <div id="viz"></div>
+      </div>
+    </main>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+      const tooltip = d3.select("#tooltip");
+
+      d3.csv("../data/penglings.csv").then((data) => {
+        data = data.filter(
+          (d) =>
+            d.bill_length_mm &&
+            d.body_mass_g &&
+            d.flipper_length_mm &&
+            d.species,
+        );
+
+        const container = document.querySelector(".viz-wrap");
+        const svg = d3.select("#viz").append("svg");
+        const aspect = 450 / 900;
+
+        function render() {
+          const width = container.clientWidth;
+          const height = Math.round(width * aspect);
+          const margin = { top: 50, right: 170, bottom: 75, left: 70 };
+
+          svg.attr("width", width).attr("height", height);
+          svg.selectAll("*").remove();
+
+          //Scales
+          const xScale = d3
+            .scaleLinear()
+            .domain(d3.extent(data, (d) => +d.flipper_length_mm))
+            .nice()
+            .range([margin.left, width - margin.right]);
+
+          const yScale = d3
+            .scaleLinear()
+            .domain(d3.extent(data, (d) => +d.body_mass_g))
+            .nice()
+            .range([height - margin.bottom, margin.top]);
+
+          const radiusScale = d3
+            .scaleLinear()
+            .domain(d3.extent(data, (d) => +d.bill_length_mm))
+            .range([3, 12]);
+
+          const colorScale = d3
+            .scaleOrdinal()
+            .domain(["Adelie", "Gentoo", "Chinstrap"])
+            .range(["#FF6B6B", "#4ECDC4", "#45B7D1"]);
+
+          //Layering
+          const gridLayer = svg.append("g").attr("class", "grid-layer");
+          const marksLayer = svg.append("g").attr("class", "marks-layer");
+
+          //Gridlines
+          const xGrid = d3
+            .axisBottom(xScale)
+            .tickSize(-(height - margin.top - margin.bottom))
+            .tickFormat("");
+
+          const yGrid = d3
+            .axisLeft(yScale)
+            .tickSize(-(width - margin.left - margin.right))
+            .tickFormat("");
+
+          //X gridlines
+          gridLayer
+            .append("g")
+            .attr("class", "grid")
+            .attr("transform", `translate(0, ${height - margin.bottom})`)
+            .call(xGrid);
+
+          //Y gridlines
+          gridLayer
+            .append("g")
+            .attr("class", "grid")
+            .attr("transform", `translate(${margin.left}, 0)`)
+            .call(yGrid);
+
+          //Circles and tooltips
+          marksLayer
+            .selectAll("circle")
+            .data(data)
+            .join("circle")
+            .attr("cx", (d) => xScale(+d.flipper_length_mm))
+            .attr("cy", (d) => yScale(+d.body_mass_g))
+            .attr("r", (d) => radiusScale(+d.bill_length_mm))
+            .attr("fill", (d) => colorScale(d.species))
+            .attr("opacity", 0.7)
+            .on("mouseenter", function (event, d) {
+              d3.select(this)
+                .attr("stroke", "#111")
+                .attr("stroke-width", 1.5)
+                .attr("opacity", 1);
+
+              tooltip
+                .html(
+                  `<strong>${d.species}</strong><br/>
+               Flipper: ${(+d.flipper_length_mm).toFixed(0)} mm<br/>
+               Body mass: ${(+d.body_mass_g).toFixed(0)} g<br/>
+               Bill length: ${(+d.bill_length_mm).toFixed(1)} mm`,
+                )
+                .classed("show", true);
+            })
+            .on("mousemove", function (event) {
+              tooltip
+                .style("left", event.pageX + 12 + "px")
+                .style("top", event.pageY - 28 + "px");
+            })
+            .on("mouseleave", function () {
+              d3.select(this)
+                .attr("stroke", null)
+                .attr("stroke-width", null)
+                .attr("opacity", 0.6);
+
+              tooltip.classed("show", false);
+            });
+
+          //Axes
+          svg
+            .append("g")
+            .attr("transform", `translate(0,${height - margin.bottom})`)
+            .call(d3.axisBottom(xScale));
+
+          svg
+            .append("g")
+            .attr("transform", `translate(${margin.left},0)`)
+            .call(d3.axisLeft(yScale));
+
+          //Axis labels
+          svg
+            .append("text")
+            .attr("x", width / 2)
+            .attr("y", height - margin.bottom + 45)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .text("Flipper Length (mm)");
+
+          svg
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 18)
+            .attr("x", -(height / 2))
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .text("Body Mass (g)");
+
+          const legendX = width - margin.right + 20;
+          const legendY = height / 4;
+
+          //Title
+          svg
+            .append("text")
+            .attr("x", width / 2)
+            .attr("y", margin.top - 30)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("font-weight", "600")
+            .text("Penguin Measurements: Flipper Length vs Body Mass");
+
+          //Size legend
+          const sizeLegend = svg
+            .append("g")
+            .attr("transform", `translate(${legendX}, ${legendY})`);
+
+          sizeLegend
+            .append("text")
+            .attr("x", 0)
+            .attr("y", 0)
+            .style("font-weight", 600)
+            .style("font-size", "12px")
+            .text("Bill Length (mm)");
+
+          const rVals = d3.extent(data, (d) => +d.bill_length_mm);
+          const sizeSamples = [rVals[0], (rVals[0] + rVals[1]) / 2, rVals[1]];
+
+          sizeSamples.forEach((v, i) => {
+            sizeLegend
+              .append("circle")
+              .attr("cx", 12)
+              .attr("cy", 20 + i * 26)
+              .attr("r", radiusScale(v))
+              .attr("fill", "#333")
+              .attr("opacity", 0.6);
+
+            sizeLegend
+              .append("text")
+              .attr("x", 36)
+              .attr("y", 24 + i * 26)
+              .style("font-size", "12px")
+              .text(v.toFixed(0));
+          });
+
+          //Color legend
+          const speciesDomain = ["Adelie", "Gentoo", "Chinstrap"];
+          const colorLegend = svg
+            .append("g")
+            .attr("transform", `translate(${legendX}, ${legendY + 110})`);
+
+          colorLegend
+            .append("text")
+            .attr("x", 0)
+            .attr("y", 0)
+            .style("font-weight", 600)
+            .style("font-size", "12px")
+            .text("Species");
+
+          speciesDomain.forEach((sp, i) => {
+            colorLegend
+              .append("circle")
+              .attr("cx", 12)
+              .attr("cy", 20 + i * 22)
+              .attr("r", 5)
+              .attr("fill", colorScale(sp));
+
+            colorLegend
+              .append("text")
+              .attr("x", 28)
+              .attr("y", 24 + i * 22)
+              .style("font-size", "12px")
+              .text(sp);
+          });
+        }
+        render();
+        const ro = new ResizeObserver(() => render());
+        ro.observe(container);
+      });
+    </script>
+  </body>
+</html>

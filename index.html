@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization - 5 Ways</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: rgb(254, 252, 247);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        img {
+            max-width: 600px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 30px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .viz-button {
+            padding: 15px 25px;
+            font-size: 1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .viz-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .altair-btn {
+            background: linear-gradient(135deg, #B7E9F7 0%, #7AD7F0 100%);
+        }
+
+        .d3-btn {
+            background: linear-gradient(135deg, #B7E9F7 0%, #7AD7F0 100%);
+        }
+
+        .flourish-btn {
+            background: linear-gradient(135deg, #B7E9F7 0%, #7AD7F0 100%);
+        }
+
+        .rggplot-btn {
+            background: linear-gradient(135deg, #B7E9F7 0%, #7AD7F0 100%);
+        }
+
+        .vegalite-btn {
+            background: linear-gradient(135deg, #B7E9F7 0%, #7AD7F0 100%);
+        }
+    </style>
+</head>
+<body>
+    <h1>Data Visualization - 5 Ways</h1>
+    <img src="https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af">
+    
+    <div class="buttons-container">
+        <a href="./d3/index.html" class="viz-button d3-btn">d3.js</a>
+        <a href="./r-ggplot/index.html" class="viz-button rggplot-btn">R & ggplot2</a>
+        <a href="./altair/index.html" class="viz-button altair-btn">Altair</a>
+        <a href="./flourish/index.html" class="viz-button flourish-btn">Flourish</a>
+        <a href="./dataWrapper/index.html" class="viz-button vegalite-btn">DataWrapper</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Altair Visualization</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: rgb(254, 252, 247);
+      }
+
+      nav {
+        padding: 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background: white;
+      }
+
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: left;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        display: block;
+        padding: 15px 20px;
+        color: #000000;
+        text-decoration: none;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+        font-weight: 500;
+      }
+
+      nav a:hover {
+        background-color: #dbf3fa;
+      }
+
+      nav a.active {
+        background-color: #7ad7f0;
+        color: #fff;
+        font-weight: 600;
+      }
+
+      main {
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        color: #333;
+      }
+
+      p {
+        font-size: 1.2em;
+        color: #555;
+        text-align: justify;
+        max-width: 75%;
+        margin: 0 auto 30px;
+      }
+
+      .viz-wrap {
+        max-width: 75%;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 18px;
+        min-height: 450px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../d3/index.html">d3.js</a></li>
+        <li><a href="../r-ggplot/index.html">R & ggplot2</a></li>
+        <li><a href="./index.html" class="active">Altair</a></li>
+        <li><a href="../flourish/index.html">Flourish</a></li>
+        <li><a href="../dataWrapper/index.html">DataWrapper</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <h1>Altair</h1>
+      <p>
+        Altair is a declarative Python library for building interactive data
+        visualizations based on Vega-Lite grammar. Instead of manually
+        controlling each visual element, Altair allows you to describe what you
+        want to visualize and alows the library to determine how to render it.
+        This chart below allows us to visualize the relationship between penguin
+        flipper length and body mass, with additional encoding for bill length
+        and species using size and color respectively.
+        <b>Hover over any circle</b> to reveal detailed information such as
+        species, flipper length, body mass, and bill length.
+      </p>
+
+      <div class="viz-wrap">
+        <iframe
+          src="./penguins_altair.html"
+          title="Altair Penguin Chart"
+          style="width: 100%; height: 520px; border: 0; display: block"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </main>
+  </body>
+</html>
