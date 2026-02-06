@@ -144,7 +144,7 @@ Datawrraper is an online visualization tool. You can upload a dataset and use it
 https://datawrapper.dwcdn.net/fZBRj/2/
 
 
-![Datawrapper](img/datawrapper_plotJT.png)
+![Datawrapper](img/datawrapper_plotJY.png)
 
 
 # Flourish
