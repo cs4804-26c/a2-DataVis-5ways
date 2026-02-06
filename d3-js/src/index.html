@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> Penguin Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #F5F7FA;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        #container {
+            display: flex;
+            align-items: flex-start;
+            gap: 30px;
+        }
+
+        #vis-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        #sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            padding-top: 20px;
+            width: 150px;
+        }
+
+        .legend-title {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .legend-box {
+            background-color: #eeeeee;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            color: #000;
+        }
+
+        .tooltip {
+            position: fixed;
+            padding: 10px 14px;
+            background: white;
+            border: 1px solid #333;
+            border-radius: 4px;
+            pointer-events: none;
+            opacity: 0;
+            font-size: 13px;
+            line-height: 1.4;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+            z-index: 9999;
+            color: #222;
+        }
+
+        .axis path, .axis line { stroke: #ccc; }
+        .tick text { fill: #666; font-size: 11px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <div id="vis-container">
+        <div id="vis"></div>
+    </div>
+
+    <div id="sidebar">
+        <div>
+            <div class="legend-title">Bill Length (mm)</div>
+            <div class="legend-box">
+                <div class="legend-item">
+                    <svg width="24" height="24"><circle cx="12" cy="12" r="6" fill="#333"></circle></svg> 40
+                </div>
+                <div class="legend-item">
+                    <svg width="24" height="24"><circle cx="12" cy="12" r="10" fill="#333"></circle></svg> 50
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="legend-title">Species</div>
+            <div class="legend-box">
+                <div class="legend-item">
+                    <svg width="12" height="12"><circle cx="6" cy="6" r="4" fill="#E57C58"></circle></svg> Adelie
+                </div>
+                <div class="legend-item">
+                    <svg width="12" height="12"><circle cx="6" cy="6" r="4" fill="#353A4C"></circle></svg> Chinstrap
+                </div>
+                <div class="legend-item">
+                    <svg width="12" height="12"><circle cx="6" cy="6" r="4" fill="#9C74B5"></circle></svg> Gentoo
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="tooltip" class="tooltip"></div>
+<script src="script.js"></script>
+</body>
+</html>

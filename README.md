@@ -1,148 +1,39 @@
-
-![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
-
 # 02-DataVis-5ways
 
-Assignment 2 - Data Visualization, 5 Ways  
-===
+Assignment 2 - Data Visualization, 5 Ways
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
+## R + ggplot2
 
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
+I used IntelliJ IDEA with the R Language Support plugin to create this visualization. For the difficulty thing are I had to use `na.omit()` to clean the dataset, or ggplot would produce warnings about rows being removed.
+- Unlike RStudio, IntelliJ doesn't always show a plot window immediately, I resolved this by using `ggsave()` to export the image directly.
+- ![ggplot2](img/r-ggplot2.png)
 
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
+## Python + Altair
 
-Your goal is to use 5 different tools to make the following chart:
+For the second library, I selected Python and Altair. Although I frequently use Python, this marks my first attempt with this  visualization tool. One of Altair's strengths is how effortlessly interactive features can be added. Simply use the .interactive() method to enable zooming within the penguin colony visualization. Since I disliked the default export style, I wrote a Python script to wrap the chart in a standardized HTML/CSS container. Using Flexbox for centered layout and adding shadow effects.
+![Altair](img/Python-altair.png)
 
-![](img/ggplot2.png)
+## DataWrapper
+After using Python and R, DataWrapper feels incredibly easy to use. I simply upload a CSV file, and this tool accurately guesses what I need. Moreover, this tool is extremely user-friendly for those without a coding background.
+![DataWrapper Plot](img/datawrapper.png)
 
-These features should be preserved as much as possible in your replication:
+## d3js
 
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
+https://yunynl.github.io/a2-DataVis-5ways/d3-js/src/index.html
 
-Other features are not required. This includes:
+D3 is the most complex part of this project. Unlike other tools, I had to build every element from scratch. I used a CONFIG object to manage my dimensions and colors globally, which made tweaking the layout much easier. I implemented a custom sidebar legend in HTML/CSS.I added a transition effect so that when you hover over a penguin, the dot grows in size and the border darkens, while a fixed tooltip follows your cursor exactly.
+![d3js](img/d3.png)
 
-- The background grid.
-- The legends.
-
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
-
-Improvements are also welcome as part of Technical and Design achievements.
-
-Libraries, Tools, Languages
----
-
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
-
-Otherwise, you should seek tools and libraries to fill out your 5.
-
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
-
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
-
-I have marked a few that are strongly suggested.
-
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
-
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
-
-Tips
----
-
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
-
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
-
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
-
-Readme Requirements
----
-
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
-
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
-
-Other Requirements
----
-
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
-
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
-
-GitHub Details
----
-
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
-
+## Flourish
+Flourish feels like an upgraded version of DataWrapper. While both are no-code tools, Flourish offers greater customization. After getting started, it exports charts faster than DataWrapper. However, as I mentioned earlier, Flourish isn't very user-friendly for first-time users，you have to manually select each element, unlike DataWrapper which automatically recognizes them.
+![Flourish Plot](img/flourish.png)
 
 ## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
-
-### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+I wrote a custom HTML script that uses CSS Flexbox and shadows to center the visualization.
+D3’s .then() promises to ensure the visualization only renders once the data is fully parsed, preventing empty chart errors.
+Implemented a fixed position tooltip in D3 that uses event.pageX/Y to follow the mouse cursor with zero lag
+## Design Achievements
+I chose a specific palette (#E57C58, #353A4C, #9C74B5).
+I set the opacity to 0.8 across all my charts.
+In the DataWrapper version, I moved away from traditional circular markers and used squares instead.
+In the D3 version, I added thicker grid lines to the dots to make it easier for users to estimate weight and fin length values.
