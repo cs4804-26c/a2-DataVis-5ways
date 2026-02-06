@@ -1,148 +1,78 @@
-
-![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
-
-# 02-DataVis-5ways
+# 02-DataVis-5ways - Paola Frunzio
 
 Assignment 2 - Data Visualization, 5 Ways  
 ===
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
-
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
-
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
-
-Your goal is to use 5 different tools to make the following chart:
-
-![](img/ggplot2.png)
-
-These features should be preserved as much as possible in your replication:
-
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
-
-Other features are not required. This includes:
-
-- The background grid.
-- The legends.
-
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
-
-Improvements are also welcome as part of Technical and Design achievements.
-
-Libraries, Tools, Languages
----
-
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
-
-Otherwise, you should seek tools and libraries to fill out your 5.
-
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
-
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
-
-I have marked a few that are strongly suggested.
-
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
-
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
-
-Tips
----
-
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
-
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
-
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
-
-Readme Requirements
----
-
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
-
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
-
-Other Requirements
----
-
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
-
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
-
-GitHub Details
----
-
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
+## Description
+Used `penglings.csv` dataset and created the same visualization using the following 5 tools
+1. d3
+2. python+matplotlib
+3. excel
+4. R+ggplot2
+5. python+altair
+All code in this project is my own, I did not use starter code or demo programs from the web. I did use the w3schools tutorials for help with D3 and R. 
 
 
-## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
+## d3
+![caption](img/d3.png)`
+Replicated scatter plot using D3. Also available on GitHub pages here: https://pfrunzio.github.io/a2-DataVis-5ways/d3/d3.html
 
-### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+D3 was relatively simple to use becaue I had practice from A2, but it wasn't the simplest. It used over 4x more lines of code than the next longest implementation. However, it was the easiest to add interactive components to. D3 allowed me to replicate create the scatterplot and very easily add the interactive tool tips to make the data more accessible. The most challenging part of this implementation was understanding how to deal with the axes and scales to replicate the original visualization as closely as possible with tick mark intervals and the grid. I also had to position the legends manually, instead of for example just setting them to be on the left of the figure the way I was able to with matplotlib. Overall, D3 is a powerful tool for interactive visualization and for easy display in a webpage, but I wouldn't use it for non-interactive visualizations since it takes so many more lines of code than the other options. 
+
+
+## python+matplotlib
+![caption](img/py-mpl.png)`
+Replicated scatter plot using the matplotlib and pandas libraries in python.
+
+![caption](img/mpl3D.png)`
+Upgraded scatter plot in 3D using the matplotlib and pandas libraries in python.
+
+Matplotlib felt really easy to use for creating both the 2D scatterplot and the 3D version. This was the easiest one for me because I have a lot of experience using mpl for data anlysis in experimental physics, as its the most common library I've used in research projects. The functions are very clear for customizing axes, labels, gridlines, legends, etc. Adding a 3D scatter plot was simple since its built into the library, and allowed me to easily represent another variable with minimal additional effort. The most difficult part was managing legend placement for both color and size, since mpl doesn’t natively generate the bubble size legend and combine them. I created custom Line2D objects for the bill sizes and used the add_artist() method to get both of the legends into the figure. Overall, mpl is very flexible and useful for clean looking plots where interactivity isn't required. Pandas allowed for simple data cleaning. 
+
+
+## excel
+![caption](img/excel.png)`
+Replicated scatter plot using excel. 
+
+Excel was by far the most frustrating of these tools to work with. I was curious to compare the other software to excel because of its prominence in corporate culture and office jobs, however, I found that it was much more manual than writing a script with one of the other tools. I wouldn't be able to change a few lines of code to substitute in a different csv and column names and get a new plot almost instantly. I would instead need to go into the app and manual redo all of the steps I took. It was also relatively challenging to find the right buttons in the interface, although now that I am more familiar with it, it would probably be easy to make more plots of similar types. Excel was also the least powerful and flexible tool among this set of five as I wasn't able to add a legend for the bubble size or automate cleaning the data. 
+
+
+## R+ggplot2
+![caption](img/r-ggplot2.png)`
+Replicated scatter plot using the ggplot2 package in R.
+
+I was surprised how few lines of code were needed to implement this plot in R with ggplot. The ggplot function was very simple and straightforward to use. Customizing the axes, labels, gridlines, legends, etc. was very easy because of this built in functionality. ggplot also automatically drops Null data which meant that I didn't have to do additional data cleaning. R and ggplot seem useful for exploring the data and creating static plots since it's the software that requires the fewest lines of code and would be very easy to quickly adapt for different graphs and data sets. 
+
+
+## python+altair
+![caption](img/altair.png)`
+Replicated scatter plot using the altair library in python. Also available on GitHub pages here: https://pfrunzio.github.io/a2-DataVis-5ways/altair/altair.html
+
+Altair was very convient, and although I had never heard of it before, was easy to learn since it's just another python library. The syntax felt like a cross between matplotlib and ggplot, and was the second shortest program for these five visualizations. It was easy to customize the axes, labels, gridlines, legends, etc. A challenge I ran into was originally naming the scritp altair.py, which gave a circular import error until I renamed it to include "implementation". Altair was the second easiest to try interactive visuals with, after d3. Like with d3 and matplotlib, I had to do some data cleaning to remove datapoints with missing values before plotting. I used the same pandas function that I used for matplotlib, which was convient since all three of matplotlib, pandas, and altair are python libraries and therefore can be easily used together. As someone who uses python a lot for physics research, this is definetly a tool I can see myself continuing to use as it would be easy to integrate into existing python scripts and can more easily make interactive visualizations than matplotlib can. 
+
+
+# Technical Achievements
+- Implemented the original scatterplot in 5 different languages (D3, python+matplotlib, excel, R+ggplot2, python+altair).
+- Added interactive tool tips in D3 to show the values for each data point when hovering over it.
+- Created interactive 3D plot in matplotlib to show an additional axis of data.
+- Loaded the data from the csv and performed data cleaning in each of the languages to remove data points with Null values.
+- Hosted my D3 and altair implementations on GitHub pages for easy viewing.
+- Customized all of the implementations in their softwares to match the visuals in the example.
+
+
+# Design Achievements
+- Maintained visual consistency and preserved as many features as possible, including the option background grid and legends, from the example plot across languages:
+  - Data positioning: maintained in all 5 implementations
+  - Scales: maintained in all 5 implementations
+  - Axis ticks and labels: maintained in all 5 implementations
+    - d3: customized the tick size to make the grid and axes look like the example
+  - Color mapping: maintained in all 5 implementations
+  - Size mapping: maintained in all 5 implementations. In excel, I had to manually size to make them more visually similar to the example.
+  - Opacity of circles set to 0.8: maintained in all 5 implementations
+  - Background grid: maintained in all 5 implementations
+  - Legend: maintained in all 5 implementations
+    - matplotlib required creating a custom bubble size legend with Line2D and using the .add_artist() to combine both legends.
+    - excel: size mapping wasn't included in the legend because excel doesn't have that native capability
+    - R+ggplot2: was also able to keep the vertical order of the size and species legends by using the guides() function
+    - altair: used .configure_legend() to ensure correct vertical order of the size and species legends
+- Used a colorpicker to get exact hex codes from example and matched up all of the colors exactly across plots with the example
