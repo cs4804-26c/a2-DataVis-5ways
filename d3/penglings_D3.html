@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Penguins scatterplot</title>
+</head>
+<body>
+<div id="container"></div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script type="module">
+
+console.log(d3); // test if d3 is loaded
+
+//using d3-graph-gallery for code reference
+//https://d3-graph-gallery.com/graph/scatter_basic.html
+
+//sizing for the graph
+const width = 800;
+const height = 560;
+const marginTop = 10;
+const marginBottom = 50;
+const marginLeft = 50;
+const marginRight = 60;
+//add an SVG
+const svg = d3.create("svg")
+    .attr("width", width+ marginLeft + marginRight)
+    .attr("height", height + marginTop + marginBottom);
+
+  //add tooltip for interactivity
+//https://d3-graph-gallery.com/graph/interactivity_tooltip.html
+var tooltip = d3.select("#container").append("div")
+.style("position", "absolute").style("visibility", "hidden")
+.style("background-color", "white") //adds a white box behind the data when interaction occurs
+.style("border", "1px solid black") //adds a black border when interaction occurs
+.style("pointer-events", "none");
+
+// Read CSV
+    //converts this data from textual to numerical
+d3.csv("https://raw.githubusercontent.com/morganvazy/a2-DataVis-5ways/refs/heads/main/penglings.csv")
+  .then(data => {
+
+    data.forEach(d =>{
+      d.flipper_length_mm = +d.flipper_length_mm;
+      d.body_mass_g = +d.body_mass_g;
+      d.bill_length_mm = +d.bill_length_mm; //need this for the size of points
+    });
+    //make a svg that will be used for the plot. helps with having margins.
+    const plottingArea = svg.append("g").attr("transform", `translate(${marginLeft}, ${marginTop})`);
+
+    //setting intervals of ticks
+    //https://d3js.org/d3-array/ticks
+    var xTicks = d3.ticks(170,230,6)
+
+    // Add x axis
+    var x = d3.scaleLinear().domain([165, 235]).range([0, width]);
+    plottingArea.append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(x).tickValues(xTicks));
+
+    //setting intervals of ticks for y axis
+    var yTicks = d3.ticks(3000, 6000, 3)
+
+    //add x-axis label
+    //https://stackoverflow.com/questions/11189284/d3-axis-labeling
+    plottingArea.append("text").attr("text-anchor", "middle")
+    .attr("x", width/2).attr("y", height+marginBottom-10).text("Flipper length (mm)")
+
+    // Add y axis
+    var y = d3.scaleLinear().domain([2500, 6500]).range([height, 0]);
+    plottingArea.append("g").call(d3.axisLeft(y).tickValues(yTicks));
+
+    //Add y-axis label
+    plottingArea.append("g").attr("transform", `translate(${-marginLeft+10}, ${height/2})`)
+    .append("text").attr("text-anchor", "middle").attr("transform", "rotate(-90)")
+    .text("Body mass (g)");
+
+    //adding color based on species
+    //https://d3-graph-gallery.com/graph/scatter_grouped.html
+    var color = d3.scaleOrdinal().domain(["Adelie", "Chinstrap", "Gentoo"]).range(["#FA9702", "#B802FA", "#018A75"])
+
+    //adding size based on bill length
+    //https://d3js.org/d3-scale/linear
+    //https://observablehq.com/@d3/d3-extent 
+    var size = d3.scaleLinear().domain(d3.extent(data, d => d.bill_length_mm)).range([3, 10])
+
+    // Add data points
+    plottingArea.append("g").selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", d => x(d.flipper_length_mm))
+      .attr("cy", d => y(d.body_mass_g))
+      .attr("r", d => size(d.bill_length_mm))
+      .style("fill", d => color(d.species))
+      .style("opacity", 0.8)
+    //adding tooltip and event logic for hover effect
+      //https://medium.com/@kj_schmidt/hover-effects-for-your-scatter-plot-447df80ea116
+      //used chatgpt to fix event logic bc the source above uses an older version of d3
+      .on("mouseover", () => tooltip.style("visibility", "visible"))
+      .on("mousemove", (event,d)=>{
+        tooltip.html(
+          `Species: ${d.species}<br>` + `Flipper length: ${d.flipper_length_mm} mm<br>`
+          + `Body mass: ${d.body_mass_g} g<br>` + `Bill length: ${d.bill_length_mm} mm`
+        ).style("left", (event.pageX + 10) + "px").style("top", (event.pageY - 15) + "px");
+      }).on("mouseout", () =>tooltip.style("visibility", "hidden"));
+
+    //append SVG
+    document.getElementById("container").append(svg.node());
+
+  });
+
+</script>
+</body>
+
+</html>

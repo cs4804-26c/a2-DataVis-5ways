@@ -1,0 +1,23 @@
+//using vega documentation for reference
+//https://vega.github.io/vega-lite/examples/point_2d.html
+//https://vega.github.io/vega-lite/tutorials/explore.html
+//https://vega.github.io/vega-lite/docs/scale.html
+//https://vega.github.io/vega-lite/docs/axis.html
+
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "width": 700,
+  "height":500,
+  "data": {"url": "https://raw.githubusercontent.com/morganvazy/a2-DataVis-5ways/refs/heads/main/penglings.csv"},
+  "mark": {"type": "point", "filled":true, "opacity": 0.8}, //setting opacity
+  "encoding":{
+    "x": {"field": "flipper_length_mm", "type": "quantitative", "scale": {"domain": [165, 240]}, "axis": {"values": [170, 180, 190, 200, 210, 220, 230]},
+    "title": "Flipper Length (mm)"}, //setting up x axis including title, values, ticks marks
+    "y": {"field": "body_mass_g", "type": "quantitative","scale": {"domain": [2500, 6500]},"title": "Body Mass (g)",  "axis": {"values": [3000, 4000, 5000, 6000]}}, //setting up y axis including title, values, tick marks
+    "color":{"field": "species", "type": "nominal", "scale":{"domain":["Adelie", "Chinstrap", "Gentoo"], "range": ["#FA9702", "#B802FA", "#018A75"]}, //creates a coloring scale; uses pre-established hex codes
+    "title": "species"},
+//add a tooltip for interactivity. shows flipper length, body mass, spacies, and bill length when hovering over a point
+    "tooltip": [{"field": "flipper_length_mm", "type": "quantitative", "title":"Flipper length (mm)"}, {"field": "body_mass_g", "type": "quantitative", "title":"Body Mass (g)"},{"field": "species", "type": "nominal", "title":"Species"}, {"field": "bill_length_mm", "type": "quantitative", "title":"Bill length (mm)"}],
+    "size": {"field": "bill_length_mm", "type": "quantitative", "title": "bill_length_mm"} //set the size of the point based on bill length
+  }
+}
