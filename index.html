@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Penglings Scatterplot</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  body { font-family: sans-serif; background-color: #f9f9f9; }
+</style>
+</head>
+<body>
+
+<div id="d3_viz"></div>
+
+<script>
+
+var margin = {top: 50, right: 30, bottom: 50, left: 60},
+    width = 520 - margin.left - margin.right,
+    height = 520 - margin.top - margin.bottom;
+
+var svg = d3.select("#d3_viz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")")
+
+svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", -20)
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .style("font-weight", "bold")
+    .text("Penguin Size by Species")
+
+d3.csv("penglings.csv").then(function(data) {
+
+  var x = d3.scaleLinear()
+      .domain([170, d3.max(data, d => +d.flipper_length_mm)])
+      .range([0, width]);
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))
+      .select(".domain").remove()
+  svg.append("text")
+  .attr("x", width / 2)
+  .attr("y", height + 35)
+  .attr("text-anchor", "middle")
+  .text("Flipper Length (mm)")
+
+  var y = d3.scaleLinear()
+      .domain([2500, d3.max(data, d => +d.body_mass_g)])
+      .range([height, 0])
+      .nice()
+  svg.append("g")
+      .call(d3.axisLeft(y))
+      .select(".domain").remove()
+  svg.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("x", -height / 2)
+  .attr("y", -45)
+  .attr("text-anchor", "middle")
+  .text("Body Mass (g)")
+
+  var color = d3.scaleOrdinal()
+      .domain(["Adelie", "Chinstrap", "Gentoo"])
+      .range(["orange", "purple", "blue"])
+
+  svg.append("g")
+    .selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("cx", d => x(+d.flipper_length_mm))
+      .attr("cy", d => y(+d.body_mass_g))
+      .attr("r", d => +d.bill_length_mm / 5)
+      .style("fill", d => color(d.species))
+      .style("opacity", 0.8)
+
+});
+
+</script>
+</body>
+</html>
