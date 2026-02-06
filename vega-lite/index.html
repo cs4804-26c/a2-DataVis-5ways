@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vega-Lite Penguins</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+    #vis {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;   
+      height: 100vh; 
+    }
+  </style>
+</head>
+<body>
+
+<div id="vis"></div>
+
+<script>
+  // Load the JSON spec
+  fetch('penguins_vega.json')
+    .then(response => response.json())
+    .then(spec => {
+      // Override width and height for full screen
+      spec.width = window.innerWidth;
+      spec.height = window.innerHeight;
+      vegaEmbed('#vis', spec, { renderer: 'canvas' });
+    });
+</script>
+
+</body>
+</html>

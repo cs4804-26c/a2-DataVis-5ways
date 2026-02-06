@@ -1,0 +1,29 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Penguin Measurements Scatterplot",
+  "width": 900,
+  "height": 600,
+  "autosize": { "type": "fit", "contains": "padding" },
+  "data": { "url": "penglings.csv" },
+  "mark": { "type": "circle", "opacity": 0.8 },
+  "encoding": {
+    "x": {
+      "field": "flipper_length_mm",
+      "type": "quantitative",
+      "scale": { "domain": [170, 235] },
+      "title": "Flipper Length (mm)"
+    },
+    "y": {
+      "field": "body_mass_g",
+      "type": "quantitative",
+      "scale": { "domain": [2700, 6300] },
+      "title": "Body Mass (g)"
+    },
+    "color": { "field": "species", "type": "nominal" },
+    "size": {
+      "field": "bill_length_mm",
+      "type": "quantitative",
+      "title": "Bill Length (mm)"
+    }
+  }
+}
