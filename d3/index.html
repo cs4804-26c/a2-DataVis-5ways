@@ -92,9 +92,7 @@
                     Bill Length (mm): ${d.bill_length_mm}
                     Body Mass (g): ${d.body_mass_g}`
                 })
-                .on("mouseout", (event, d) => {
-                    document.getElementById("info_panel").innerText = ``
-                })
+
 
         // Attach axes labels
         svg.append("text")
