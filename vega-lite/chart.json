@@ -1,0 +1,54 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": { "url": "https://raw.githubusercontent.com/tahutzley/a2-DataVis-5ways/refs/heads/main/penglings.csv" },
+
+  "width": 700,
+  "height": 420,
+
+  "mark": { "type": "circle", "opacity": 0.8 },
+  
+  "config": {
+    "font": "Comic Sans MS"
+  },
+  "encoding": {
+    "x": {
+      "field": "flipper_length_mm",
+      "type": "quantitative",
+      "title": "Flipper Length (mm)",
+      "scale": { "zero": false },
+      "axis": { "tickCount": 7, "grid": true }
+    },
+    "y": {
+      "field": "body_mass_g",
+      "type": "quantitative",
+      "title": "Body Mass (g)",
+      "scale": { "zero": false },
+      "axis": { "tickCount": 7, "grid": true }
+    },
+
+    "color": {
+      "field": "species",
+      "type": "nominal",
+      "legend": { "title": "species", "orient": "right" },
+      "scale": {
+        "domain": ["Adelie", "Chinstrap", "Gentoo"],
+        "range": ["#F28E2B", "#7B3C9B", "#1B9E77"]
+      }
+    },
+
+    "size": {
+      "field": "bill_length_mm",
+      "type": "quantitative",
+      "legend": {
+        "title": "bill_length_mm",
+        "orient": "right",
+        "values": [30, 40, 50]
+      },
+      "scale": {
+        "domain": [32, 60],
+        "range": [30, 400],
+        "clamp": true
+      }
+    }
+  }
+}
