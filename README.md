@@ -6,143 +6,77 @@
 Assignment 2 - Data Visualization, 5 Ways  
 ===
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
-
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
-
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
-
-Your goal is to use 5 different tools to make the following chart:
-
-![](img/ggplot2.png)
-
-These features should be preserved as much as possible in your replication:
-
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
-
-Other features are not required. This includes:
-
-- The background grid.
-- The legends.
-
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
-
-Improvements are also welcome as part of Technical and Design achievements.
-
-Libraries, Tools, Languages
----
-
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
-
-Otherwise, you should seek tools and libraries to fill out your 5.
-
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
-
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
-
-I have marked a few that are strongly suggested.
-
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
-
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
-
-Tips
----
-
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
-
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
-
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
-
-Readme Requirements
----
-
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
-
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
-
-Other Requirements
----
-
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
-
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
-
-GitHub Details
----
-
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
+## Dataset
+All visualizations in this project use the penguins dataset. Each row represents a penguin observation and includes measurements such as flipper length, body mass, bill length, and species. Across all tools, the same visual encodings are used:
+- X-axis: Flipper Length (mm)
+- Y-axis: Body Mass (g)
+- Color: Species
+- Size: Bill Length (mm)
+- Opacity: Applied to reduce overplotting
 
 # R + ggplot2 + R Markdown
 
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
+R is a language primarily focused on statistical computing, and ggplot2 is a powerful library for creating declarative visualizations. I used geom_point() to create a scatterplot and mapped color to species and size to bill length.
 
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
+The static version was saved as a PNG, and I also created an interactive HTML version using plotly, which allows hovering over points to see exact values.
 
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
+While it took some time to find the correct documentation for exporting interactive plots, ggplot2 made it relatively easy to build a clean and readable visualization once the mappings were set up.
 
-![ggplot2](img/ggplot2.png)
+<img width="831" height="519" alt="R" src="https://github.com/user-attachments/assets/485987d1-c46e-4c95-bd17-d8d370a514b4" />
+
+# Python + Altair
+
+Altair is a declarative visualization library for Python that makes it easy to build interactive charts. I used Altair to recreate the same scatterplot with tooltips showing species, flipper length, body mass, and bill length.
+
+Altair handled interactivity automatically, which made hover interactions very straightforward to implement. I also explicitly disabled zero-based axes so the chart focused on the actual data range.
+
+The final visualization was exported as an interactive HTML file.
+
+<img width="813" height="497" alt="altair" src="https://github.com/user-attachments/assets/43aea990-8b5a-4e78-b597-b7c38891b526" />
 
 # d3...
 
-(And so on...)
+d3 is a low-level JavaScript library for building custom visualizations in the browser. For this version, I loaded the dataset using d3.csv, which required running a local web server due to asynchronous data loading.
 
+This visualization includes:
+- Scaled axes that do not start at zero
+- Color encoding for species
+- Size encoding for bill length
+- Hover tooltips that display all relevant values
+
+Compared to the other tools, d3 required the most code, but it also provided the most control over layout and interaction.
+
+<img width="725" height="543" alt="d3" src="https://github.com/user-attachments/assets/b2b95a66-58c1-4ec1-89b4-ea2699fc7efd" />
+
+# Datawrapper
+
+Datawrapper was used as one of the visualization tools to recreate the same scatterplot. I mapped flipper length to the x-axis, body mass to the y-axis, color to species, and size to bill length.
+
+While Datawrapper correctly applies the size encoding, the differences in bill length are relatively small, so the bubble size variation is very subtle. The size legend is included to explain the mapping, even though the visual differences are not highly pronounced.
+
+<img width="536" height="403" alt="datawrapper" src="https://github.com/user-attachments/assets/3c065e02-373e-4033-8327-102894acb943" />
+
+# Flourish
+
+Flourish was used as the second visualization tool. Similar to Datawrapper, I mapped size to bill length, but Flourish automatically normalizes symbol sizes and does not provide direct control over minimum and maximum bubble size.
+
+Because bill length values fall within a narrow range, the resulting size differences are there but difficult to distinguish visually. Despite this, the encoding is technically correct and consistent with the other visualizations.
+
+<img width="1073" height="546" alt="flourish" src="https://github.com/user-attachments/assets/33058f76-2d5d-406c-81f7-5928ca03ea76" />
 
 ## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
+- Created the same visualization using three libraries (ggplot2, Altair, d3) and two tools (Datawrapper, Flourish).
+- Implemented interactive hover tooltips in Altair and d3.
+- Loaded external data asynchronously in d3 using d3.csv.
+- Made sure axes do not start at zero and are scaled to the data range.
+- Exported both static and interactive visualizations.
 
 ### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+- Used a consistent color scheme for species across all visualizations.
+- Applied opacity to reduce overplotting.
+- Included legends and axis labels to clearly communicate visual encodings.
+- Prioritized accurate data representation over exaggerating visual differences.
+
+# Sources
+// http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+
