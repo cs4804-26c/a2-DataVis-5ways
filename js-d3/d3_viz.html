@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<div id="container"></div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+<script type="module">
+    
+    // High-level reference: https://d3-graph-gallery.com/graph/scatter_basic.html for getting started with base-level visualization (including but not limited to using d3.select(), d3.csv(), the transform attribute, domain and range for d3.scaleLinear(), axis functions like d3.axisBottom(), creating graph points, etc.)
+    
+    const svg = d3.select("#container")
+        .append("svg")
+            .attr("width", 800)
+            .attr("height", 600)
+        .append("g")
+            .attr("transform", "translate(100, 100)");
+
+    // Filtered the data by preserving only the objects where the flipper length was not NA and the body mass was above 2500 grams (so points were not placed below the x-axis)
+    // Also called the plotData function within the d3 function
+    // Note: Debugged with Prof. Harrison's assistance (he also suggested and helped with using the filter function)
+    d3.csv("https://raw.githubusercontent.com/TheLegacy-Coder/a2-DataVis-5ways/refs/heads/main/penglings.csv").then(function(scatterData) {
+            console.log(scatterData);
+            const filteredData = scatterData.filter(function(singleDataObject) {
+                return singleDataObject.flipper_length_mm != "NA" && singleDataObject.body_mass_g > 2500;
+            });
+            console.log(filteredData);
+            plotData(filteredData);
+    });
+
+    // Boilerplate logic for this function comes from https://d3-graph-gallery.com/graph/scatter_basic.html for getting started with base-level visualization
+    // Granted, made changes to scatter elements based on the visual that we are/were tasked with replicating
+    function plotData (scatterData) {
+        const xAxis = d3.scaleLinear()
+            .domain([170, 230])
+            .range([0, 400]);
+        svg.append("g")
+            .attr("transform", "translate(0, 400)")
+            .call(d3.axisBottom(xAxis));
+        
+        const yAxis = d3.scaleLinear()
+            .domain([2500, 6500])
+            .range([400, 0]);
+        svg.append("g")
+            .call(d3.axisLeft(yAxis));
+
+        // Referred to https://d3-graph-gallery.com/graph/custom_axis.html#axistitles for creating both the x-axis and y-axis labels
+        svg.append("text")
+            .attr("x", 150)
+            .attr("y", 450)
+            .text("Flipper Length (mm)");
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -250)
+            .attr("y", -50)
+            .text("Body Mass (g)");
+
+        console.log(scatterData);
+        console.log(scatterData[0]);
+        
+        // Referred to https://d3js.org/d3-scale/ordinal for color-coding based on species
+        const speciesColorCodes = d3.scaleOrdinal(["Adelie", "Chinstrap", "Gentoo"], ["orange", "#ba55d3", "teal"]);
+
+        // Referred to http://www.d3noob.org/2014/02/styles-in-d3js.html for setting the opacity of the points
+        // Also, TA suggested dividing the bill lengths by a number for appropriate point sizes
+        svg.append("g")
+            .selectAll("circle")
+            .data(scatterData)
+            .enter()
+            .append("circle")
+                .attr("cx", function(singleDataObject) {
+                    return xAxis(singleDataObject.flipper_length_mm);
+                })
+                .attr("cy", function(singleDataObject) {
+                    return yAxis(singleDataObject.body_mass_g);
+                })
+                .attr("r", function(singleDataObject) {
+                    return singleDataObject.bill_length_mm / 6;
+                })
+                .style("fill", function(singleDataObject) {
+                    return speciesColorCodes(singleDataObject.species);
+                })
+                .style("opacity", 0.8);
+
+        // Referred to https://d3-graph-gallery.com/graph/interactivity_tooltip.html for adding an info pane for the data points, as well as the mouseover and mouseout functionality
+        const pointInfoPane  = d3.select("#container")
+            .append("div")
+                .style("visibility", "hidden");
+        
+        d3.selectAll("circle")
+            .on("mouseover", function(singleMouseEvent, singleDataObject) {
+                pointInfoPane
+                    .style("visibility", "visible")
+                    .text("Flipper length in mm: " + singleDataObject.flipper_length_mm + 
+                    ", Body mass in g: " + singleDataObject.body_mass_g + 
+                    ", Bill length in mm: " + singleDataObject.bill_length_mm + 
+                    ", Species: " + singleDataObject.species);
+                console.log("Hovering");
+            })
+            .on("mouseout", function() {
+                pointInfoPane
+                    .style("visibility", "hidden");
+                console.log("Not hovering");
+            });
+    };
+
+</script>

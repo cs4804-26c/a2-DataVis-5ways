@@ -1,0 +1,32 @@
+---
+title: "r_ggplot_viz"
+author: "Klaudio Fusha"
+date: "2026-01-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+# Referred to https://www.geeksforgeeks.org/r-language/read-contents-of-a-csv-file-in-r-programming-read-csv-function/ for reading in a CSV
+penglingsData = read.csv("penglings.csv")
+
+head(penglingsData)
+```
+
+```{r}
+# Referred to https://r-graph-gallery.com/272-basic-scatterplot-with-ggplot2.html for creating a basic scatter using ggplot()
+# Also referred to https://ggplot2.tidyverse.org/reference/index.html and the contained subpages for most ggplot2 functions/operations
+# Referred to https://stackoverflow.com/questions/67480685/r-ggplot-how-to-manually-change-legend-name-and-colors for manual color coding
+# Learned how to size points based on bill length from the TA
+
+library(ggplot2)
+
+ggplot(penglingsData, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(na.rm = TRUE, mapping = aes(colour = species, size = bill_length_mm, alpha = 0.8)) + scale_color_manual(name = "species", values = c("Adelie" = "orange", "Chinstrap" = "#ba55d3", "Gentoo" = "#29a68d")) + xlab("Flipper Length (mm)") + ylab("Body Mass (g)")
+```
+

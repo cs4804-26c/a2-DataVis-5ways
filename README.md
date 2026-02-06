@@ -1,148 +1,79 @@
-
-![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
-
-# 02-DataVis-5ways
-
-Assignment 2 - Data Visualization, 5 Ways  
+Klaudio Fusha - Assignment 2 - Data Visualization, 5 Ways  
 ===
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
+# JavaScript + d3
 
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
+![kf_js_d3_viz](img/Klaudio_Fusha_JS_d3_Viz.png)
 
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
+![kf_js_d3_viz_interactivity](img/Klaudio_Fusha_JS_d3_Viz_Interactivity.png)
 
-Your goal is to use 5 different tools to make the following chart:
+JS + d3 made recreating the visualization somewhat difficult, since it's been a while from the last time I've used d3 for anything of this caliber (past internship 2 years ago). I needed to refer to various resources to get started, make use of certain functions, etc. Granted, it became simple to customize elements as time went on. I definitely see JS + d3 being useful in cases where a lot of customizability is needed. Compared to libraries in other languages (such as matplotlib) or even GUI programs (such as Excel or PowerBI), there is a lot more you can play around with simply due to the nature of d3, even if it is a bit more complex. Regarding hacks or data manipulation, I filtered the data by preserving only the objects where the flipper length was not NA and the body mass was above 2500 grams. The latter was mainly to ensure that points were not placed/rendered below the x-axis. I also manually scaled the bill length by dividing values by 6 in order to size the points.
 
-![](img/ggplot2.png)
+### Resources referenced in code:
+- https://d3-graph-gallery.com/graph/scatter_basic.html (main resource referenced, used boilerplate logic)
+- https://d3-graph-gallery.com/graph/custom_axis.html#axistitles
+- https://d3js.org/d3-scale/ordinal
+- http://www.d3noob.org/2014/02/styles-in-d3js.html
+- https://d3-graph-gallery.com/graph/interactivity_tooltip.html
 
-These features should be preserved as much as possible in your replication:
 
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
+# Python + Matplotlib
 
-Other features are not required. This includes:
+![kf_python_matplotlib_viz](img/Klaudio_Fusha_Python_Matplotlib_Viz.png)
 
-- The background grid.
-- The legends.
+Python + Matplotlib made the visualization relatively easy to recreate, since I've used both (as well as pandas for data prep) in the past. Being able to easily prep the data with pandas and then feed resulting dataframes into plt.scatter instances was nice. Granted, I needed a refresher on some things, so I used documentation and other resources from the web. Scaling was also a bit difficult/annoying to deal with, but the overall experience was not bad. I can see Python + Matplotlib (and technically pandas) being useful if there needs to be a blend between customizability and simplicity. The extensive documentation on Matplotlib functions can also be really helpful at times, especially if you are just getting started with this type of implementation. Regarding hacks or data manipulation, I dropped NA values from the data and used min-max normalization (multiplied by 200) on the bill length for properly sizing points on the visualization.
 
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
+### Resources referenced in code:
+- https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html
+- https://www.geeksforgeeks.org/python/normalize-a-column-in-pandas/
+- https://www.w3schools.com/python/matplotlib_scatter.asp
+- https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.scatter.html
+- https://www.geeksforgeeks.org/python/how-to-add-a-legend-to-a-scatter-plot-in-matplotlib/
 
-Improvements are also welcome as part of Technical and Design achievements.
 
-Libraries, Tools, Languages
----
+# R + ggplot2
 
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
+![kf_r_ggplot2_viz](img/Klaudio_Fusha_R_ggplot2_Viz.png)
 
-Otherwise, you should seek tools and libraries to fill out your 5.
+R + ggplot2 made recreating the visualization moderately difficult. Although I've used R + ggplot2 before, I haven't used it to this degree (coloring points by species, mapping point size to an attribute, etc). Hence, I had to look up how to do certain things via documentation, forums, and other sources on the web. However, looking back, creating the above visualization took up the least amount of code and was intuitive at times. Additionally, the background grid and legends were added automatically, which made the visualization look more polished without me needing to add more code. This functionality and condensed nature of the code is why I can see R + ggplot2 being useful in cases where a lot of graphs may need to be created (high repetition). Overall, it's even more simple than Python + Matplotlib. Regarding hacks or data manipulation, I didn't have to do much for this implementation, except for removing NA value by changing a default parameter value.
 
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
+### Resources referenced in code:
+- https://www.geeksforgeeks.org/r-language/read-contents-of-a-csv-file-in-r-programming-read-csv-function/
+- https://r-graph-gallery.com/272-basic-scatterplot-with-ggplot2.html
+- https://ggplot2.tidyverse.org/reference/index.html and contained subpages
+- https://stackoverflow.com/questions/67480685/r-ggplot-how-to-manually-change-legend-name-and-colors
 
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
 
-I have marked a few that are strongly suggested.
+# Excel
 
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
+![kf_excel_viz](img/Klaudio_Fusha_Excel_Viz.png)
 
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
+Excel made recreating the visualization pretty easy. After creating a .xlsx version of the penglings.csv file, I was able to convert the raw data in table format. This allowed me to filter out NA values. Then, after inserting a chart, I created data series and added/changed elements (as a note, I initially used a scatter, which was limited and made me search for a different kind of chart -> bubble). However, much like the Python + Matplotlib implementation, making the point sizes be based off of the bill length was not as intuitive. I had to use min-max normalization and configure scaling in the chart menu(s). I can see Excel being useful in cases where coding may be too overkill for visualizing data and establishing surface-level trends, or simply seeing if visualizing data makes sense before comitting to a more complex tool. Regarding hacks or data manipulation, I filtered out NA values and min-max normalized the bill length values in another column.
 
-Tips
----
+### Resources referenced in spreadsheet:
+- https://support.microsoft.com/en-us/office/available-chart-types-in-office-a6187218-807e-4103-9e0a-27cdb19afb90
+- https://www.tutorialspoint.com/how-to-adjust-the-bubble-size-in-a-bubble-chart-in-excel
+- https://www.geeksforgeeks.org/excel/how-to-normalize-data-in-excel/
 
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
 
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
+# PowerBI
 
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
+![kf_powerbi_viz](img/Klaudio_Fusha_PowerBI_Viz.png)
 
-Readme Requirements
----
+PowerBI made recreating the visualization relatively easy. I loaded in a copy of penglings.csv, transformed certain columns (in terms of filtering out NA and changing data types), inserted a scatter chart, and specified/customized corresponding attributes, which was not too bad. Much like Excel (and Python + Matplotlib), I still had to make use of min-max normalization and play around with scaling in the chart menu(s), which was kind of annoying. I can see PowerBI being useful in the same way that I stated for Excel. However, given that this tool is meant for business intelligence, it does appear to have more out-of-the-box functionality than Excel. Perhaps it can be used to create more complex visualizations without having to deal with code (for the most part at least). Regarding hacks or data manipulation, I filtered out NA values and min-max normalized the bill length values in another column much like with Excel.
 
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
-
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
-
-Other Requirements
----
-
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
-
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
-
-GitHub Details
----
-
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
+### Resources referenced:
+- https://www.statology.org/power-bi-normalize-data-between-0-and-1/
 
 
 ## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
+- Called then() on d3.csv() to deal with asynchronicity issues with the JS + d3 logic (specifically when it came to plotting the data points).
+- Created a function within then() to filter the data by preserving only the objects where the flipper length was not NA and the body mass was above 2500 grams (so points were not placed below the x-axis). Still within this created function, the filtered data was then passed into another function for plotting the data.
+- Made use of min-max normalization in order to normalize the bill length, which helped in sizing the points of the visualization recreations (specifically Python + Matplotlib, Excel, and PowerBI).
+- For the JS + d3 visualization, added interactivity that allows the user to hover over any given point and see information about it be displayed right below the chart in a pane. Specifically, the flipper length, body mass, bill length, and species are shown.
 
 ### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+- Was able to replicate the original visualization almost perfectly across all the different tools/libraries. I made sure to preserve the species color-coding, point sizing, and overall format of the graph (axes ticks and labels, scales, etc.) as much as possible.
+- Included legends for most of the visualizations (excluding the JS and d3 implementation) to make it easier to interpret the color coding of the points based on species. Even though the JS and d3 implementation does not have a dedicated legend, the user can still pick up on what the coloring means via the interactivity feature (hovering over points and seeing information about them).
+- Included background grids for R + ggplot2, Excel, and PowerBI visualizations.
+- For the JS + d3 visualization, as part of the interactivity functionality, made sure that the point information pane was placed below the visualization instead of being adjacent to any given hovered point. This way, the information would not cover any other points, and the user would be able to see the entire visualization.
