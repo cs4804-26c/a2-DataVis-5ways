@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <svg width="900" height="550"></svg>
+
+  <script>
+    const svg = d3.select("svg");
+
+    const margin = { top: 40, right: 120, bottom: 60, left: 70 };
+    const width = +svg.attr("width") - margin.left - margin.right;
+    const height = +svg.attr("height") - margin.top - margin.bottom;
+
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    d3.csv("penglings.csv").then(data => {
+
+        // Parse numbers in csv
+        data.forEach(d => {
+        d.flipper_length_mm = +d.flipper_length_mm;
+        d.body_mass_g = +d.body_mass_g;
+        d.bill_length_mm = +d.bill_length_mm;
+        });
+
+        // Scales 
+        const x = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.flipper_length_mm))
+        .nice()
+        .range([0, width]);
+
+        const y = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.body_mass_g))
+        .nice()
+        .range([height, 0]);
+
+        const r = d3.scaleSqrt()
+        .domain(d3.extent(data, d => d.bill_length_mm))
+        .range([4, 10]);
+
+        const color = d3.scaleOrdinal()
+        .domain(["Adelie", "Chinstrap", "Gentoo"])
+        .range(["#F28E2B", "#8E63CE", "#1B9E9E"]);
+
+        // Axes 
+        g.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x));
+
+        g.append("g")
+        .call(d3.axisLeft(y));
+
+        // Axis labels
+        svg.append("text")
+        .attr("x", margin.left + width / 2)
+        .attr("y", height + margin.top + 45)
+        .attr("text-anchor", "middle")
+        .text("Flipper Length (mm)");
+
+        svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -(margin.top + height / 2))
+        .attr("y", 20)
+        .attr("text-anchor", "middle")
+        .text("Body Mass (g)");
+
+        // penguins
+        g.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => x(d.flipper_length_mm))
+        .attr("cy", d => y(d.body_mass_g))
+        .attr("r", d => r(d.bill_length_mm))
+        .attr("fill", d => color(d.species))
+        .attr("opacity", 0.8);
+
+        
+
+        // Species legend 
+        const legend = svg.append("g")
+        .attr("transform", `translate(${width + margin.left + 20}, ${margin.top})`);
+
+        // legend header
+        legend.append("text")
+        .attr("y", -20)
+        .attr("font-weight", "bold")
+        .text("Species");
+        
+        color.domain().forEach((species, i) => {
+        const row = legend.append("g")
+            .attr("transform", `translate(0, ${i * 25})`);
+
+        row.append("circle")
+            .attr("r", 6)
+            .attr("fill", color(species));
+
+        row.append("text")
+            .attr("x", 12)
+            .attr("y", 4)
+            .text(species);
+        });
+
+        // Bill length legend 
+        const sizeLegendValues = [40, 50];
+
+        const sizeLegend = svg.append("g")
+        .attr("transform", `translate(${width + margin.left + 20}, ${margin.top + 150})`);
+
+        // Legend title
+        sizeLegend.append("text")
+        .attr("y", -20)
+        .attr("font-weight", "bold")
+        .text("bill_length_mm");
+
+        sizeLegendValues.forEach((val, i) => {
+        const row = sizeLegend.append("g")
+            .attr("transform", `translate(0, ${i * 35})`);
+
+        row.append("circle")
+            .attr("r", r(val))
+            .attr("cx", r(val))
+            .attr("cy", 0)
+            .attr("fill", "black")
+            .attr("stroke", "black");
+
+        row.append("text")
+            .attr("x", r(val) * 2 + 8)
+            .attr("y", 4)
+            .text(val);
+        });
+
+    });
+  </script>
+</body>
+</html>
