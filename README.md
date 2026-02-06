@@ -1,148 +1,78 @@
+# Rachel Conca Assignment 2: 5 Ways
 
-![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
+## Intro/Some Notes
 
-# 02-DataVis-5ways
+For each of these visualizations, I wrote all the code myself with aid from online documentations with tweaks to make them applicable to the dataset I was using.
 
-Assignment 2 - Data Visualization, 5 Ways  
-===
+For ease of coding I also made copies of the CSV file for each different tool (I did two visualizations using Python, so I just did them on the same file) since I didn't want to deal with any pathing issues that might pop up.
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
+## Part 1: R and ggplot2
 
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
+The first tool/library I chose to use was R and ggplot2. R is a mainly statistical programming language, but has some good visualization build-ins/libraries as well. The standard R library has some visualization generation built in, but I chose to use ggplot2 since it was more customizable and comes out looking nicer than the standard packages.
 
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
+Finding the documentation for ggplot2 wasn't too difficult, and functioned very similar to most Python libraries which was nice. The main challenge I had was that I usually prefer to use VSCode for coding since it has good GitHub integration, but didn't work well with the Rmd file, so I had to use RStudio to do the coding rather than just using VSCode like I normally do. Since I have experience with R and RStudio, this wasn't too big of a deal, just a little annoying.
 
-Your goal is to use 5 different tools to make the following chart:
+It was also very easy to add an interactivity feature to the plot with a detailed tooltip and zoom/selection functionalities via plotly. Despite using R for over 3 years at this point, I had no idea you could make interactive plots in R but you learn something new every day.
 
-![](img/ggplot2.png)
+**R/ggplot2 Plot:**
+![R Plot](img/rplot.png)
 
-These features should be preserved as much as possible in your replication:
+## Part 2: Python and Altair
 
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
+For my second visualization, I chose to use Python's Altair library which is a popular visualization library. Similar to ggplot2, I didn't have too much of an issue finding documentation to make my plot. One thing I liked about the Altair library was how easy it was to make my plot interactive and how well the interactivity worked by just adding a few additional lines of code.
 
-Other features are not required. This includes:
+One thing I noticed about the Python library plots (same thing happened when I used matplotlib later) was that the size scaling didn't really do all that much and it was very hard to tell the difference between the sizes of bill lengths, so I ended up Min Max scaling that column which helped a little bit.
 
-- The background grid.
-- The legends.
+**Altair Plot:**
+![Altair Plot](img/altair_plot.png)
 
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
+*Note: If you open the notebook file and run the code, the plot has interactivity (you can select multiple points and the tooltip tells you the species of pengling).*
 
-Improvements are also welcome as part of Technical and Design achievements.
+## Part 3: Power BI
 
-Libraries, Tools, Languages
----
+Power BI is a tool in the Microsoft Suite designed around making data visualization and analysis quick and easy as it is most commonly used in business applications where not everyone is familiar with how to work with data.
 
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
+I chose Power BI since I had used Tableau in the past and found it to be a relatively simple yet very useful platform to visualize data, and as a Data Science major it would be beneficial to learn how to use an inexpensive alternative to Tableau as well. I initially started to do my work on the browser version, but that version doesn't have much functionality and is laid out in a very counterintuitive way, leading me to download the desktop version.
 
-Otherwise, you should seek tools and libraries to fill out your 5.
+The desktop version was much easier to use, and I was able to customize much more of my visualization than I was on the browser version which was nice. I like how a lot of the interactivity aspects (zoom, point selection, tooltips) that I would normally have to code myself are already built into the software. Additionally, the custom sized points were so much better than the ones from the R/Python libraries since they actually have a decent amount of size variation without having to do any outside work to scale the points properly.
 
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
+One thing I did not like was that sharing your visualization was a paid feature, so outside people either need to download the Power BI file or just use the downloadable PNG file.
 
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
+**Power BI Plot:**
+![Power BI Plot](img/powerbi%20plot.png)
 
-I have marked a few that are strongly suggested.
+## Part 4: D3
 
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
+For the next part, I chose to use the D3 library, which is a comprehensive data visualization library for JavaScript. Out of all the options I chose for this project, D3 was the most difficult one since I had basically 0 JavaScript/HTML experience prior to this class and D3 gives the user customization options for basically every aspect of a visualization which can get pretty overwhelming.
 
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
+Documentation for D3 was relatively easy to find, and there were quite a few in-depth tutorials for exactly what I wanted to do which was nice. Getting everything to look even somewhat presentable took a lot of trial and error, but I feel a lot more confident about using D3 and understanding a bit more about how everything works now.
 
-Tips
----
+Since D3 essentially allows the user to customize every aspect of their visual, the interactive features I added to my plot were a lot "jankier" than the interactive features in other libraries. The tooltip function doesn't really work too well in highly clustered areas whereas the tooltips in other libraries/tools work just fine no matter where they're being used.
 
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
+**D3 Plot:**
+![D3 Plot](img/d3%20plot.png)
 
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
+## Part 5: Matplotlib
 
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
+Matplotlib is a highly popular Python library for data visualization. In most data science/statistics related classes, this is the library most commonly used, so I wanted to see how it compared to some of the other libraries I already used.
 
-Readme Requirements
----
+It's formatted very similarly in syntax to the other Python library I used (Altair) and was easy to find the documentation for how to use it. Compared to other libraries, this one felt less customizable and looked more "rushed" than some of the other visualizations I made. It was also difficult to add any interactivity to the plot as the documentation for that was confusing and didn't seem to work for this specific plot.
 
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
+Overall this library is great for getting visualizations done quickly (good for assignments/reports) but lacks some of the visual quality of other libraries.
 
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
+**Matplotlib Plot:**
+![Matplotlib Plot](img/matplotlib_plot.png)
 
-Other Requirements
----
+## Conclusions/Achievements
 
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
+Overall, my goal with this assignment was to test out different tools for data visualization to see how they compared to each other for different applications. 
 
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
+### Technical Achievements:
 
-GitHub Details
----
-
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
-
-
-## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
+For most graphs, I tried to add an interactive element to them so that users could explore the data in more detail. I was able to do this for each plot minus the Matplotlib one. All the interactive plots have a tooltip that gives varying amounts of information about the point, and the Altair and Power BI visualizations allow users to select specific points.
 
 ### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+
+In terms of design, all the plots are colored in a way that you can tell the difference between the three species of pengling, and the colors contrast with the background of the plot so that they aren't invisible.
+
+On each of the plots, the size of the points vary based on the bill length of the penglings, although the amount of variation changes drastically between the different tools. The biggest contrast in sizes is on the Power BI plot, while the Python and D3 plots have the least amount of contrast in point sizes.

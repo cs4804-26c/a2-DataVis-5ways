@@ -1,0 +1,44 @@
+---
+title: "R Code for CS4084 A2"
+author: "Rachel Conca"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r}
+# import data from csv file
+penglings <- read.csv("penglings.csv")
+
+# view data to see if there's any editing that needs to be done
+penglings
+```
+```{r}
+# import tidyr library
+library(tidyr)
+
+# drop na values in columns we need for the graph
+penglings_no_na <- drop_na(penglings,
+                           bill_length_mm,
+                           flipper_length_mm,
+                           body_mass_g,
+                           species)
+
+# check to make sure it worked
+penglings_no_na
+```
+
+```{r}
+# plot
+library(ggplot2)
+library(plotly)
+
+peng_plot <- ggplot(penglings_no_na,
+                    aes(x = flipper_length_mm,
+                        y = body_mass_g,
+                        color = species,
+                        size = bill_length_mm)) +
+                        geom_point(alpha = 0.8) +
+                        labs(x = "Flipper Length (mm)", y = "Body Mass (g)")
+
+ggplotly(peng_plot)
+```

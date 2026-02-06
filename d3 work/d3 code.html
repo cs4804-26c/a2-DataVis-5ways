@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<head>
+    <title>Penglings Data Plot</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <h2>Penglings Data Plot</h2>
+    <div id="Area"></div>
+    <script>
+    // set margins
+    var margin = {top: 10, right: 50, bottom: 50, left: 50},
+        width = 750 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+    // select area to put stuff on
+    var svg = d3.select("#Area")
+        .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // load data
+    d3.csv("penglings.csv").then( function(data) {
+        // put x axis on there
+        const x = d3.scaleLinear()
+        .domain([170, 240])
+        .range([0, width]);
+
+        svg
+            .append('g')
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        // put y axis on there
+        const y = d3.scaleLinear()
+            .domain([2000, 7000])
+            .range([height, 0]);
+    
+        svg
+            .append('g')
+            .call(d3.axisLeft(y));
+
+        // add axis labelling
+        svg
+            .append('text')
+            .attr("x", width / 2)
+            .attr("y", height + 30)
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .style("fill", "black")
+            .style("font-size", "10px")
+            .text("Flipper Length (mm)")
+
+        svg
+            .append('text')
+            .attr("x", -height/2)
+            .attr("y", -40)
+            .attr("text-anchor", "end")
+            .attr("dominant-baseline", "end")
+            .attr("transform", "rotate(-90)")
+            .style("fill", "black")
+            .style("font-size", "10px")
+            .text("Body Mass (g)")
+        
+        // select species categories for coloring
+        const categories = [... new Set(data.map(d => d.species))];
+
+        // set color scheme
+        const colorScale = d3.scaleOrdinal()
+            .domain(categories)
+            .range(d3.schemeCategory10);
+        
+        // add interactive legend
+        const tooltip = d3.select("body")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "1px")
+            .style("border-radius", "5px")
+            .style("padding", "10px")
+            .style("position", "absolute")
+            .style("pointer-events", "none")
+
+        const mouseover = function (d) {
+            tooltip
+                .style("opacity", 1)
+        }
+
+        const mousemove = function (event, d) {
+            tooltip
+                .html(
+                    "Species: " + d.species + " (color)" +
+                    "<br>Flipper Length: " + d.flipper_length_mm + " mm" +
+                    "<br>Body Mass: " + d.body_mass_g + " g" +
+                    "<br>Bill Length: " + d.bill_length_mm + " mm (point size)"
+                )
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px")
+        }
+
+        const mouseleave = function (d) {
+            tooltip
+                .transition()
+                .duration(200)
+                .style("opacity", 0)
+        }
+        
+        // put points on the graph
+        svg.append("g")
+            .selectAll("dot")
+            .data(data)
+            .join("circle")
+                .attr("cx", function (d) {return x(d.flipper_length_mm);})  // sets flipper length as the x value
+                .attr("cy", function (d) {return y(d.body_mass_g);})        // sets body mass as the y value
+                .attr("r", function (d) {return (d.bill_length_mm * 0.15)}) // size scales linearly based on bill length
+                .style("fill", d => colorScale(d.species))                  // color based on what species they are
+                .style("opacity", 0.8)
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
+    })
+    </script>
+</body>
+</html>
