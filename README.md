@@ -76,3 +76,7 @@ Because bill length values fall within a narrow range, the resulting size differ
 - Applied opacity to reduce overplotting.
 - Included legends and axis labels to clearly communicate visual encodings.
 - Prioritized accurate data representation over exaggerating visual differences.
+
+# Sources
+// http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+
