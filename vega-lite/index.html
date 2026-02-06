@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vega-Lite Penguins Scatterplot</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    const spec = {
+      "title": "Vega-Lite: Flipper Length vs Body Mass",
+      "description": "Penguins Scatterplot: Flipper Length vs Body Mass",
+      "width": 600,
+      "height": 400,
+      "data": {"url": "penglings.csv"},
+      "mark": {"type": "circle", "opacity": 0.8},
+      "encoding": {
+        "x": {
+          "field": "flipper_length_mm",
+          "type": "quantitative",
+          "title": "Flipper Length (mm)",
+          "scale": {"zero": false},
+          "axis": {"tickMinStep": 10}
+        },
+        "y": {
+          "field": "body_mass_g",
+          "type": "quantitative",
+          "title": "Body Mass (g)",
+          "scale": {"zero": false},
+          "axis": {"tickMinStep": 250}
+        },
+        "color": {
+          "field": "species",
+          "type": "nominal",
+          "title": "Species",
+          "scale": {"range": ["#E69F00", "#56B4E9", "#009E73"]}
+        },
+        "size": {
+          "field": "bill_length_mm",
+          "type": "quantitative",
+          "title": "Bill Length (mm)",
+          "scale": {"domain": [40, 50], "range": [50, 300]}
+        }
+      }
+    };
+
+    vegaEmbed('#vis', spec)
+      .then(result => console.log("Vega-Lite chart rendered!"))
+      .catch(console.error);
+  </script>
+</body>
+</html>
+

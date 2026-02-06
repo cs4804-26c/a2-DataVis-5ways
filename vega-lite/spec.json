@@ -1,0 +1,40 @@
+{
+  "description": "Penguins Scatterplot: Flipper Length vs Body Mass",
+  "width": 600,
+  "height": 400,
+  "data": {
+    "url": "penglings.csv"
+  },
+  "mark": {
+    "type": "circle",
+    "opacity": 0.8
+  },
+  "encoding": {
+    "x": {
+      "field": "flipper_length_mm",
+      "type": "quantitative",
+      "title": "Flipper Length (mm)",
+      "scale": {"zero": false},
+      "axis": {"tickMinStep": 10}
+    },
+    "y": {
+      "field": "body_mass_g",
+      "type": "quantitative",
+      "title": "Body Mass (g)",
+      "scale": {"zero": false},
+      "axis": {"tickMinStep": 250}
+    },
+    "color": {
+      "field": "species",
+      "type": "nominal",
+      "title": "Species",
+      "scale": {"range": ["#E69F00", "#56B4E9", "#009E73"]}
+    },
+    "size": {
+      "field": "bill_length_mm",
+      "type": "quantitative",
+      "title": "Bill Length (mm)",
+      "scale": {"domain": [40, 50], "range": [50, 300]}
+    }
+  }
+}

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Penglings D3 Visualization</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      max-width: 100%;
+      width: 100%;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    svg {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .axis text {
+      font-size: 12px;
+      fill: #333;
+    }
+
+    .axis path,
+    .axis line {
+      stroke: #333;
+    }
+
+    .axis-label {
+      font-size: 14px;
+      font-weight: bold;
+      fill: #333;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 15px;
+      font-size: 12px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .size-legend {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .size-legend-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .size-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .size-circle {
+      border-radius: 50%;
+      fill: #666;
+      opacity: 0.8;
+      stroke: #fff;
+      stroke-width: 0.5;
+    }
+
+    .grid line {
+      stroke: #e0e0e0;
+      stroke-opacity: 0.8;
+    }
+
+    .grid path {
+      stroke-width: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Penglings</h1>
+    <div class="subtitle">Flipper Length vs Body Mass</div>
+    
+    <div id="chart-container"></div>
+    
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <script type="module">
+    import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+    const width = 800;
+    const height = 500;
+    const margin = { top: 40, right: 40, bottom: 60, left: 70 };
+
+    const innerWidth = width - margin.left - margin.right;
+    const innerHeight = height - margin.top - margin.bottom;
+    const svg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    d3.csv("penglings.csv").then(data => {
+      
+      const filteredData = data.filter(d => 
+        d.flipper_length_mm && 
+        d.body_mass_g && 
+        d.bill_length_mm && 
+        d.species
+      );
+      filteredData.forEach(d => {
+        d.flipper_length_mm = +d.flipper_length_mm;
+        d.body_mass_g = +d.body_mass_g;
+        d.bill_length_mm = +d.bill_length_mm;
+      });
+
+      const x = d3.scaleLinear()
+        .domain(d3.extent(filteredData, d => d.flipper_length_mm))
+        .range([0, innerWidth])
+        .nice();
+
+      const y = d3.scaleLinear()
+        .domain(d3.extent(filteredData, d => d.body_mass_g))
+        .range([innerHeight, 0])
+        .nice();
+
+      const color = d3.scaleOrdinal()
+        .domain(["Adelie", "Chinstrap", "Gentoo"])
+        .range(["#E69F00", "#56B4E9", "#009E73"]);
+
+      const size = d3.scaleLinear()
+        .domain(d3.extent(filteredData, d => d.bill_length_mm))
+        .range([6, 10]);
+
+      g.append("g")
+        .attr("class", "grid")
+        .attr("transform", `translate(0,${innerHeight})`)
+        .call(d3.axisBottom(x)
+          .ticks(5)
+          .tickSize(-innerHeight)
+          .tickFormat("")
+        );
+
+      g.append("g")
+        .attr("class", "grid")
+        .call(d3.axisLeft(y)
+          .ticks(5)
+          .tickSize(-innerWidth)
+          .tickFormat("")
+        );
+
+      g.append("g")
+        .attr("transform", `translate(0,${innerHeight})`)
+        .call(d3.axisBottom(x))
+        .attr("class", "axis");
+
+      g.append("g")
+        .call(d3.axisLeft(y))
+        .attr("class", "axis");
+      g.append("text")
+        .attr("x", innerWidth / 2)
+        .attr("y", innerHeight + 45)
+        .attr("text-anchor", "middle")
+        .attr("class", "axis-label")
+        .text("Flipper Length (mm)");
+
+      g.append("text")
+        .attr("x", -innerHeight / 2)
+        .attr("y", -50)
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "middle")
+        .attr("class", "axis-label")
+        .text("Body Mass (g)");
+
+      g.selectAll("circle")
+        .data(filteredData)
+        .enter()
+        .append("circle")
+        .attr("cx", d => x(d.flipper_length_mm))
+        .attr("cy", d => y(d.body_mass_g))
+        .attr("r", d => size(d.bill_length_mm))
+        .attr("fill", d => color(d.species))
+        .attr("opacity", 0.8)
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 0.5);
+
+      const legendContainer = document.getElementById("legend");
+      const species = ["Adelie", "Chinstrap", "Gentoo"];
+      species.forEach(speciesName => {
+        const colorValue = color(speciesName);
+        const legendItem = document.createElement("div");
+        legendItem.className = "legend-item";
+        legendItem.innerHTML = `
+          <span class="legend-color" style="background-color: ${colorValue}"></span>
+          ${speciesName}
+        `;
+        legendContainer.appendChild(legendItem);
+      });
+
+      const sizeLegendContainer = document.createElement("div");
+      sizeLegendContainer.className = "size-legend";
+      sizeLegendContainer.innerHTML = '<div class="size-legend-title">Bill Length (mm)</div>';
+      const sizeDomain = d3.extent(filteredData, d => d.bill_length_mm);
+      const minSize = Math.round(sizeDomain[0]);
+      const maxSize = Math.round(sizeDomain[1])
+      const sizeValues = [minSize, Math.round((minSize + maxSize) / 2), maxSize];
+      
+      sizeValues.forEach(value => {
+        const sizeItem = document.createElement("div");
+        sizeItem.className = "size-item";
+        
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        circle.setAttribute("width", "20");
+        circle.setAttribute("height", "20");
+        const circleElement = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circleElement.setAttribute("cx", "10");
+        circleElement.setAttribute("cy", "10");
+        circleElement.setAttribute("r", size(value));
+        circleElement.setAttribute("class", "size-circle");
+        
+        circle.appendChild(circleElement);
+        
+        sizeItem.innerHTML += `
+          <div>${value}</div>
+        `;
+        
+        sizeLegendContainer.appendChild(sizeItem);
+        sizeLegendContainer.insertBefore(circle, sizeItem);
+      });
+      
+      legendContainer.appendChild(sizeLegendContainer);
+
+    });
+
+    document.getElementById("chart-container").appendChild(svg.node());
+  </script>
+</body>
+</html>
