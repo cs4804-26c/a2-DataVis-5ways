@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+<style>
+  .tooltip {
+    position: absolute;
+    text-align: left;
+    padding: 8px;
+    font-size: 12px;
+    background: white;
+    border: 1px solid gray;
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+</style>
+<div id="container"></div>
+<div class="tooltip" id="tooltip"></div>
+<script type="module">
+  console.log(d3);
+
+  const tooltip = d3.select("#tooltip")
+  
+  const margin = {top: 40, right: 40, bottom: 40, left: 40},
+        width = 500 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+  const svg = d3.select("#container")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right + 150)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+  d3.csv("/penglings.csv").then(function(data) {
+
+    const x = d3.scaleLinear()
+    .domain(d3.extent(data, d => +d.flipper_length_mm))
+    .range([0, width]);
+    svg.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(d3.axisBottom(x))
+    .append("text")
+      .attr("text-anchor", "end")
+      .attr("fill", "black")
+      .attr("font-size", "12px")
+      .attr("font-weight", "bold")
+      .attr("x", width - margin.right)
+      .attr("y", -10)
+      .text("Flipper Length (mm)");
+
+    const y = d3.scaleLinear()
+    .domain(d3.extent(data, d => +d.body_mass_g))
+    .range([height, 0]);
+    svg.append("g")
+    .call(d3.axisLeft(y))
+    .append("text")
+      .attr("transform", `translate(20, ${margin.top}) rotate(-90)`)
+      .attr("text-anchor", "end")
+      .attr("fill", "black")
+      .attr("font-size", "12px")
+      .attr("font-weight", "bold")
+      .text("Body Mass (g)");
+
+    const color = d3.scaleOrdinal()
+      .domain(["Adelie", "Gentoo", "Chinstrap"])
+      .range(["orange","#008080","purple"]);
+    const size = d3.scaleLinear()
+      .domain(d3.extent(data, d => +d.bill_length_mm))
+      .range([3, 10])
+
+    svg.append("g")
+    .selectAll("dot")
+    .data(data)
+    .join("circle")
+        .attr("cx", function (d) {return x(d.flipper_length_mm);} )
+        .attr("cy", function (d) {return y(d.body_mass_g);} )
+        .attr("r", function (d) {return size(d.bill_length_mm);})
+        .style("fill", function (d) {return color(d.species);})
+        .style("opacity", 0.8)
+    .on("mouseover", function(event, d) {
+      tooltip.style("opacity", 1)
+        .html(`
+          <strong>Species:</strong> ${d.species}<br/>
+          <strong>Flipper Length: </strong> ${d.flipper_length_mm} mm<br/>
+          <strong>Body Mass: </strong> ${d.body_mass_g} g<br/>
+          <strong>Bill Length:</strong> ${d.bill_length_mm} mm
+        `)
+      d3.select(this).style("stroke", "black").style("stroke-width", 2)
+    })
+    .on("mouseout", function() {
+      tooltip.style("opacity", 0)
+      d3.select(this).style("stroke", "none")
+    })
+    
+
+    const legendX = width + 40;
+    const legendY = 0;
+    const legendSpacing = 19;
+
+    const legendColor = svg.append("g")
+      .attr("transform", `translate(${legendX}, ${legendY})`)
+    
+    const species = color.domain()
+
+    legendColor.selectAll("legendColors")
+      .data(species)
+      .join("circle")
+        .attr("cx", 0)
+        .attr("cy", (d,i) => i*25)
+        .attr("r", 6)
+        .style("fill", d => color(d))
+    
+    legendColor.selectAll("legendColorLabels")
+      .data(species)
+      .join("text")
+        .attr("x", 12)
+        .attr("y", (d,i) => i*25+4)
+        .text(d => d)
+        .attr("font-size", "12px")
+        .attr("fill", "black") 
+
+    const legendSize = svg.append("g")
+      .attr("transform", `translate(${legendX - 10}, ${species.length*25 + legendSpacing})`)
+    
+    const sizeValues = [30, 40, 50, 60]
+
+    legendSize.selectAll("legendSizes")
+      .data(sizeValues)
+      .join("circle")
+        .attr("cx", 10)
+        .attr("cy", (d,i) => i*25)
+        .attr("r", d => size(d))
+        .style("fill", "gray")
+        .style("opacity", 0.8)
+    
+    legendSize.selectAll("legendSizeLabels")
+      .data(sizeValues)
+      .join("text")
+        .attr("x", 30)
+        .attr("y", (d,i) => i*25)
+        .text(d => d + " mm")
+        .attr("alignment-baseline", "middle")
+        .attr("font-size", "12px")
+        .attr("fill", "black")    
+       
+})
+  
+</script>
