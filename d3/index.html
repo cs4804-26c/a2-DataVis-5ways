@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Penguins Scatterplot (d3)</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .axis-label { font-size: 14px; }
+    .title { font-size: 18px; font-weight: 600; }
+    .tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(0,0,0,0.85);
+      color: white;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.3;
+      opacity: 0;
+      transform: translate(-50%, -110%);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+<div id="chart"></div>
+
+<script>
+const margin = { top: 10, right: 240, bottom: 60, left: 80 };
+const width = 950 - margin.left - margin.right;
+const height = 550 - margin.top - margin.bottom;
+
+const svg = d3.select("#chart")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", `translate(${margin.left},${margin.top})`);
+
+const tooltip = d3.select("body")
+  .append("div")
+  .attr("class", "tooltip");
+
+const colors = new Map([
+  ["Adelie", "#F8766D"],
+  ["Chinstrap", "#C77CFF"],
+  ["Gentoo", "#00BFC4"]
+]);
+
+d3.csv("../penglings.csv", d3.autoType).then(data => {
+  // Columns in your CSV:
+  // species, flipper_length_mm, body_mass_g, bill_length_mm
+
+  const xCol = "flipper_length_mm";
+  const yCol = "body_mass_g";
+  const sizeCol = "bill_length_mm";
+  const colorCol = "species";
+
+  // Filter out any rows missing values
+  data = data.filter(d =>
+    d[xCol] != null && d[yCol] != null && d[sizeCol] != null && d[colorCol] != null
+  );
+
+  const xExtent = d3.extent(data, d => d[xCol]);
+  const yExtent = d3.extent(data, d => d[yCol]);
+
+  // Padding so axes don’t start exactly at min (and definitely not at 0)
+  const xPad = (xExtent[1] - xExtent[0]) * 0.05;
+  const yPad = (yExtent[1] - yExtent[0]) * 0.05;
+
+  const x = d3.scaleLinear()
+    .domain([xExtent[0] - xPad, xExtent[1] + xPad])
+    .range([0, width]);
+
+  const y = d3.scaleLinear()
+    .domain([yExtent[0] - yPad, yExtent[1] + yPad])
+    .range([height, 0]);
+
+  const r = d3.scaleSqrt()
+    .domain(d3.extent(data, d => d[sizeCol]))
+    .range([3, 14]);
+
+  // Axes
+  svg.append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x).ticks(8));
+
+  svg.append("g")
+    .call(d3.axisLeft(y).ticks(8));
+
+  // Axis labels
+  svg.append("text")
+    .attr("class", "axis-label")
+    .attr("x", width / 2)
+    .attr("y", height + 45)
+    .attr("text-anchor", "middle")
+    .text("Flipper Length (mm)");
+
+  svg.append("text")
+    .attr("class", "axis-label")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", -55)
+    .attr("text-anchor", "middle")
+    .text("Body Mass (g)");
+
+  // Points
+  svg.selectAll("circle")
+    .data(data)
+    .join("circle")
+    .attr("cx", d => x(d[xCol]))
+    .attr("cy", d => y(d[yCol]))
+    .attr("r", d => r(d[sizeCol]))
+    .attr("fill", d => colors.get(d[colorCol]) || "#999")
+    .attr("opacity", 0.8)
+    .on("mousemove", (event, d) => {
+      tooltip
+        .style("opacity", 1)
+        .html(
+          `<b>${d[colorCol]}</b><br>` +
+          `Flipper: ${d[xCol]} mm<br>` +
+          `Body mass: ${d[yCol]} g<br>` +
+          `Bill length: ${d[sizeCol]} mm`
+        )
+        .style("left", (event.pageX) + "px")
+        .style("top", (event.pageY) + "px");
+    })
+    .on("mouseleave", () => {
+      tooltip.style("opacity", 0);
+    });
+});
+</script>
+</body>
+</html>
