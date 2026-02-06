@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<div id="container"></div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script type="module"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+<style>
+
+</style>
+
+This is the original chart
+<img src="../img/ggplot2.png" alt="the given">
+<br>
+
+This is the d3 chart
+<br>
+<svg id="viz"></svg>
+<script src="./d3.js" type="module"></script>
+<br>
+
+This is the ggplot chart
+<img src="ggplot.png">
+<br>
+
+This is the altair char
+<br>
+<div id="altair" style="width: 900px; height: 600px;"></div>
+<script>
+    fetch("altair.json")
+        .then(response => {
+            return response.json();
+        })
+        .then(spec => {
+            vegaEmbed("#altair", spec, {actions: false});
+        });
+</script>
+<br>
+This is the gnuPlot chart
+<br>
+<img src="gnuPlot.png">
+This is the datawrapper chart
+<iframe title="" aria-label="Scatter Plot" id="datawrapper-chart-HUYmz" src="https://datawrapper.dwcdn.net/HUYmz/2/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="485" data-external="1"></iframe><script type="text/javascript">window.addEventListener("message",function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}});</script>
