@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Penguin d3</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+    <div id="vis"></div>
+    
+    <div id="tooltip" style="position: absolute; opacity: 0; background: white; border: 1px solid #ccc; padding: 8px; pointer-events: none; border-radius: 4px; font-family: sans-serif;"></div>
+
+    <script>
+        // Margins and SVG setup
+        const margin = {top: 50, right: 150, bottom: 60, left: 80};
+        const width = 800 - margin.left - margin.right;
+        const height = 500 - margin.top - margin.bottom;
+
+        const svg = d3.select("#vis")
+        .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+        
+        // Load data
+        d3.csv("../penglings.csv").then(data => {
+        // Convert strings to numbers
+        data.forEach(d => {
+            d.flipper_length_mm = +d.flipper_length_mm;
+            d.body_mass_g = +d.body_mass_g;
+            d.bill_length_mm = +d.bill_length_mm;
+        });
+
+        // Filter out rows with missing data
+        const cleanData = data.filter(d => !isNaN(d.flipper_length_mm) && !isNaN(d.body_mass_g));
+
+        // Define scales
+        const x = d3.scaleLinear()
+            .domain([170, 235])
+            .range([0, width]);
+
+        const y = d3.scaleLinear()
+            .domain([2500, 6500])
+            .range([height, 0]);
+
+        const color = d3.scaleOrdinal()
+            .domain(["Adelie", "Chinstrap", "Gentoo"])
+            .range(["#FDA247", "#AC5AD4", "#4AA1A1"]); // replicate colors
+
+        const size = d3.scaleSqrt()
+            .domain([d3.min(cleanData, d => d.bill_length_mm), d3.max(cleanData, d => d.bill_length_mm)])
+            .range([3, 8]); // dot size
+
+        // Draw axes
+        svg.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x).ticks(10))
+            .append("text")
+            .attr("x", width / 2)
+            .attr("y", 40)
+            .attr("fill", "black")
+            .style("text-anchor", "middle")
+            .text("Flipper Length (mm)");
+
+        svg.append("g")
+            .call(d3.axisLeft(y))
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", -60)
+            .attr("x", -height / 2)
+            .attr("fill", "black")
+            .style("text-anchor", "middle")
+            .text("Body Mass (g)");
+
+        // Tooltip setup
+        const tooltip = d3.select("#tooltip");
+
+        // Draw dots
+        svg.selectAll("circle")
+            .data(cleanData)
+            .enter()
+            .append("circle")
+            .attr("cx", d => x(d.flipper_length_mm))
+            .attr("cy", d => y(d.body_mass_g))
+            .style("fill", d => color(d.species))
+            .style("opacity", 0.8)
+            // Listener for tooltip
+            .on("mouseover", (event, d) => {
+                d3.select(event.currentTarget).style("stroke", "black").style("stroke-width", 2);
+                tooltip.transition().duration(200).style("opacity", 0.9);
+                tooltip.html(`Species: ${d.species}<br/>Bill Length: ${d.bill_length_mm}mm`)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", (event) => {
+                d3.select(event.currentTarget).style("stroke", "none");
+                tooltip.transition().duration(500).style("opacity", 0);
+            })
+            // add entrance animation
+            .attr("r", 0) 
+            .transition()
+            .duration(800)
+            .delay((d, i) => i * 2) 
+            .attr("r", d => size(d.bill_length_mm));
+        });
+    </script>
+</body>
+</html>
