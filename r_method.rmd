@@ -1,0 +1,24 @@
+---
+title: "R_Method for Data Visualization"
+output: html_document
+---
+
+```{r, echo=FALSE}
+library(ggplot2)
+```
+
+Import Data
+```{r}
+data <- read.csv("penglings.csv")
+head(data)
+```
+
+Plot
+```{r, fig.width=8, fig.height=5}
+ggplot(data, aes(x = flipper_length_mm, y = body_mass_g, color = species, size = bill_length_mm)) +
+  geom_point(alpha = 0.8) +
+  labs(x = "Flipper Length (mm)",
+       y = "Body Mass (g)") +
+  scale_colour_manual(values = c("#fe9013", "#9932cc", "#018b8b")) +
+  guides(color = guide_legend(order = 2), size = guide_legend(order = 1))
+```

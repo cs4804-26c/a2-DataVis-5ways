@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<div id="container"></div>
+<script type="module">
+
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+// from https://d3js.org/getting-started 
+// Declare the chart dimensions and margins.
+const width = 800;
+const height = 500;
+const marginTop = 40;
+const marginRight = 160;
+const marginBottom = 60;
+const marginLeft = 80;
+
+// import data from penglings.csv
+const data = await d3.csv("penglings.csv");
+
+// filter out rows with missing values and convert to numbers
+const filteredData = data.filter(d => 
+    d.flipper_length_mm !== "NA" && 
+    d.body_mass_g !== "NA" && 
+    d.bill_length_mm !== "NA"
+).map(d => ({
+    ...d,
+    flipper_length_mm: +d.flipper_length_mm,
+    body_mass_g: +d.body_mass_g,
+    bill_length_mm: +d.bill_length_mm
+}));
+
+// Declare the x (horizontal position) scale.
+const x = d3.scaleLinear()
+    .domain(d3.extent(filteredData, d => d.flipper_length_mm)).nice()
+    .range([marginLeft, width - marginRight]);
+
+// Declare the y (vertical position) scale.
+const y = d3.scaleLinear()
+    .domain(d3.extent(filteredData, d => d.body_mass_g)).nice()
+    .range([height - marginBottom, marginTop]);
+
+// Declare the color scale for species.
+const color = d3.scaleOrdinal()
+    .domain(["Adelie", "Chinstrap", "Gentoo"])
+    .range(["#fe9013", "#9932cc", "#018b8b"]);
+
+// Declare the size scale for bill length.
+const size = d3.scaleLinear()
+    .domain(d3.extent(filteredData, d => d.bill_length_mm))
+    .range([3, 10]);
+
+// Create the SVG container.
+const svg = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+// Add background rectangle
+svg.append("rect")
+    .attr("x", marginLeft)
+    .attr("y", marginTop)
+    .attr("width", width - marginLeft - marginRight)
+    .attr("height", height - marginTop - marginBottom)
+    .attr("fill", "#ebebeb");
+
+// Add the x-axis.
+const xTicks = d3.range(Math.floor(x.domain()[0] / 5) * 5, x.domain()[1] + 5, 5);
+svg.append("g")
+    .attr("transform", `translate(0,${height - marginBottom})`)
+    .call(d3.axisBottom(x)
+        .tickValues(xTicks)
+        .tickFormat(d => d % 10 === 0 ? d : "")
+        .tickSize(-height + marginTop + marginBottom).tickPadding(10))
+    .call(g => g.select(".domain").remove())
+    .call(g => g.selectAll(".tick line").attr("stroke", "white").attr("stroke-width", d => d % 10 === 0 ? 1 : 0.5));
+
+// Add the y-axis.
+const yTicks = d3.range(Math.floor(y.domain()[0] / 500) * 500, y.domain()[1] + 500, 500);
+svg.append("g")
+    .attr("transform", `translate(${marginLeft},0)`)
+    .call(d3.axisLeft(y)
+        .tickValues(yTicks)
+        .tickFormat(d => d % 1000 === 0 ? d : "")
+        .tickSize(-width + marginLeft + marginRight).tickPadding(10))
+    .call(g => g.select(".domain").remove())
+    .call(g => g.selectAll(".tick line").attr("stroke", "white").attr("stroke-width", d => d % 1000 === 0 ? 1 : 0.5));
+
+// Add the circles.
+svg.append("g")
+    .selectAll("circle")
+    .data(filteredData)
+    .join("circle")
+    .attr("cx", d => x(d.flipper_length_mm))
+    .attr("cy", d => y(d.body_mass_g))
+    .attr("fill", d => color(d.species))
+    .attr("r", d => size(d.bill_length_mm))
+    .attr("opacity", 0.8);
+
+// Add axis titles
+svg.append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", marginLeft + (width - marginLeft - marginRight) / 2)
+    .attr("y", height - 15)
+    .style("font-family", "sans-serif")
+    .style("font-size", "14px")
+    .text("Flipper Length (mm)");
+
+svg.append("text")
+    .attr("text-anchor", "middle")
+    .attr("transform", `rotate(-90)`)
+    .attr("y", 20)
+    .attr("x", -(marginTop + (height - marginTop - marginBottom) / 2))
+    .style("font-family", "sans-serif")
+    .style("font-size", "14px")
+    .text("Body Mass (g)");
+
+// Add Legend
+const legend = svg.append("g")
+    .attr("transform", `translate(${width - marginRight + 20}, ${marginTop})`)
+    .style("font-family", "sans-serif");
+
+// Size Legend (Bill Length)
+legend.append("text").text("bill_length_mm").attr("font-weight", "bold").attr("font-size", "12px");
+const sizeValues = [35, 45, 55];
+const sizeLegend = legend.selectAll(".sizeLegend")
+    .data(sizeValues)
+    .enter().append("g")
+    .attr("transform", (d, i) => `translate(10, ${25 + i * 25})`);
+
+sizeLegend.append("circle").attr("r", d => size(d)).attr("fill", "#777");
+sizeLegend.append("text").attr("x", 25).attr("y", 5).text(d => d).attr("font-size", "11px");
+
+// Color Legend (Species)
+const colorLegendStart = 130;
+legend.append("text")
+    .attr("y", colorLegendStart)
+    .text("species")
+    .attr("font-weight", "bold")
+    .attr("font-size", "12px");
+
+const species = color.domain();
+const colorLegend = legend.selectAll(".colorLegend")
+    .data(species)
+    .enter().append("g")
+    .attr("transform", (d, i) => `translate(10, ${colorLegendStart + 20 + i * 25})`);
+
+colorLegend.append("circle").attr("r", 6).attr("fill", d => color(d));
+colorLegend.append("text").attr("x", 20).attr("y", 5).text(d => d).attr("font-size", "11px");
+
+// Append the SVG element.
+container.append(svg.node());
+
+</script>
