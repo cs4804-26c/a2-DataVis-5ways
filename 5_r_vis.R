@@ -1,0 +1,31 @@
+install.packages("ggplot2")
+
+
+library(ggplot2)
+
+df <- read.csv("penglings.csv")
+df <- df[complete.cases(df[, c("flipper_length_mm","body_mass_g","bill_length_mm","species")]), ]
+
+xlim <- quantile(df$flipper_length_mm, c(0.02, 0.98))
+ylim <- quantile(df$body_mass_g, c(0.02, 0.98))
+
+p <- ggplot(df, aes(
+  x = flipper_length_mm,
+  y = body_mass_g,
+  color = species,
+  size = bill_length_mm
+)) +
+  geom_point(alpha = 0.8) +
+  coord_cartesian(xlim = xlim, ylim = ylim) +
+  scale_color_manual(values = c(
+    "Adelie" = "#5d8769",
+    "Chinstrap" = "#3348b4",
+    "Gentoo" = "#c25cb5"
+  )) +
+  labs(
+    x = "Flipper Length (mm)",
+    y = "Body Mass (g)"
+  ) +
+  theme_minimal()
+
+print(p)
