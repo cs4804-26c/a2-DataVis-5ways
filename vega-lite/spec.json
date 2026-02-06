@@ -1,0 +1,91 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Penguins: Flipper Length vs Body Mass",
+  "data": {"url": "../penglings.csv"},
+  "transform": [
+    {"filter": "isValid(datum.flipper_length_mm) && isValid(datum.body_mass_g) && isValid(datum.bill_length_mm)"}
+  ],
+  "width": 600,
+  "height": 420,
+  "background": "#EBEBEB",
+  "autosize": {"type": "fit", "contains": "padding"},
+  "params": [
+    {"name": "hover", "select": {"type": "point", "on": "mouseover", "clear": "mouseout"}}
+  ],
+  "mark": {"type": "point", "filled": true, "opacity": 0.8},
+  "encoding": {
+    "x": {
+      "field": "flipper_length_mm",
+      "type": "quantitative",
+      "title": "Flipper Length (mm)",
+      "scale": {"domain": [170, 235]},
+      "axis": {"grid": true, "tickCount": 7, "offset": 6}
+    },
+    "y": {
+      "field": "body_mass_g",
+      "type": "quantitative",
+      "title": "Body Mass (g)",
+      "scale": {"domain": [2600, 6400]},
+      "axis": {"grid": true, "values": [3000, 4000, 5000, 6000]}
+    },
+    "color": {
+      "field": "species",
+      "type": "nominal",
+      "title": "Species",
+      "legend": {"orient": "right"},
+      "scale": {
+        "domain": ["Adelie", "Chinstrap", "Gentoo"],
+        "range": ["#4E79A7", "#E15759", "#59A14F"]
+      }
+    },
+    "opacity": {
+      "condition": {"param": "hover", "value": 0.9},
+      "value": 0.2
+    },
+    "stroke": {
+      "condition": {"param": "hover", "value": "#333"},
+      "value": null
+    },
+    "strokeWidth": {
+      "condition": {"param": "hover", "value": 1.2},
+      "value": 0
+    },
+    "size": {
+      "field": "bill_length_mm",
+      "type": "quantitative",
+      "title": "Bill Length (mm)",
+      "scale": {"domain": [40, 50], "range": [110, 220], "clamp": true},
+      "legend": {"values": [40, 50]}
+    },
+    "tooltip": [
+      {"field": "species", "type": "nominal", "title": "Species"},
+      {"field": "bill_length_mm", "type": "quantitative", "title": "Bill Length (mm)"},
+      {"field": "flipper_length_mm", "type": "quantitative", "title": "Flipper Length (mm)"},
+      {"field": "body_mass_g", "type": "quantitative", "title": "Body Mass (g)"}
+    ]
+  },
+  "config": {
+    "view": {"stroke": null, "fill": "#EBEBEB"},
+    "axis": {
+      "grid": true,
+      "gridColor": "white",
+      "gridOpacity": 1,
+      "domainColor": "#BDBDBD",
+      "tickColor": "#BDBDBD",
+      "labelColor": "#4D4D4D",
+      "titleColor": "#4D4D4D",
+      "labelFont": "Source Sans 3",
+      "titleFont": "Source Sans 3"
+    },
+    "title": {"font": "Source Sans 3"},
+    "legend": {
+      "labelColor": "#4D4D4D",
+      "titleColor": "#4D4D4D",
+      "labelFont": "Source Sans 3",
+      "titleFont": "Source Sans 3",
+      "symbolSize": 80,
+      "fillColor": "#EBEBEB",
+      "strokeColor": "#EBEBEB"
+    }
+  }
+}
