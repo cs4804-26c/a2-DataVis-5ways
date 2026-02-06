@@ -1,0 +1,240 @@
+<!--I copied the header from a1-->
+<!DOCTYPE html>
+<div id="container"></div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+<script type="module">
+    console.log('working')
+
+    // Code copied from https://d3-graph-gallery.com/graph/bubble_color.html then edited
+
+    // set the dimensions and margins of the graph
+    //tried editing the margins to move down the graph, but had trouble, so added padding in style
+    var width = 800,
+        height = 420,
+        margin = { top: 10, right: 120, bottom: 50, left: 60 }; //increase right margin for legend
+
+    // create SVG
+    var svg = d3.create("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    // I added a gray rectangle to background and then I am going to add graph over it
+    svg.append("rect")
+        .attr("width", width - margin.left - margin.right)
+        .attr("height", height - margin.top - margin.bottom)
+        .attr("x", margin.left)
+        .attr("y", margin.top)
+        .attr("fill", "#f0f0f0"); // light gray background
+
+    // append group inside SVG
+    var g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`)
+
+    //making a legend on the right hand side for species colors
+    var legend = svg.append("g")
+        .attr("transform", `translate(${width - margin.right + 30},${margin.top + 200})`); //copied syntax from above
+    var species = ["Adelie", "Chinstrap", "Gentoo"];
+    var colors = ["#FFA500", "#800080", "#008080"]; // googled hex code for orange, purple, teal
+    legend.append("text")
+        .attr("x", 0)
+        .attr("y", -20)
+        .text("Species")
+        .attr("text-anchor", "start");
+    legend.append("rect") //box around legend
+        .attr("x", -10)
+        .attr("y", -15)
+        .attr("width", 20)
+        .attr("height", 75)
+        .attr("fill", "lightgray")
+        .attr("stroke-width", 1);
+    // learned to do this kind of for each loop on the series array here: https://stackoverflow.com/questions/9329446/loop-for-each-over-an-array-in-javascript 
+    species.forEach((s, i) => {
+        var legendRow = legend.append("g")
+            .attr("transform", `translate(0, ${i * 20})`);
+        legendRow.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 3)
+            .attr("fill", colors[i]);
+        legendRow.append("text")
+            .attr("x", 15)
+            .attr("y", 0)
+            .text(s)
+            .attr("text-anchor", "start")
+            .style("alignment-baseline", "middle");
+    });
+
+    //making a legend on the right hand side for bill length sizes
+    var legend = svg.append("g")
+        .attr("transform", `translate(${width - margin.right + 30},${margin.top + 100})`); //copied syntax from above
+    legend.append("text")
+        .attr("x", 0)
+        .attr("y", -20)
+        .text("bill_length_mm")
+        .attr("text-anchor", "start");
+    legend.append("rect") //box around legend
+        .attr("x", -10)
+        .attr("y", -15)
+        .attr("width", 20)
+        .attr("height", 55)
+        .attr("fill", "lightgray")
+        .attr("stroke-width", 1);
+    legend.append("circle") //small circle
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", 5)
+        .attr("fill", "black");
+    legend.append("text") //small circle text
+        .attr("x", 15)
+        .attr("y", 0)
+        .text("40")
+        .attr("text-anchor", "start")
+        .style("alignment-baseline", "middle");
+    legend.append("circle") //large circle
+        .attr("cx", 0)
+        .attr("cy", 30)
+        .attr("r", 7)
+        .attr("fill", "black");
+    legend.append("text") //large circle text
+        .attr("x", 15)
+        .attr("y", 30)
+        .text("50")
+        .attr("text-anchor", "start")
+        .style("alignment-baseline", "middle");
+
+    d3.select("#container").append(() => svg.node()); //copied from a1
+
+    //Read the data
+    d3.csv("https://raw.githubusercontent.com/hsmith1212/a2-DataVis-5ways-has/refs/heads/main/penglings.csv").then(function (data) {
+        // data columns that are relevant: species, body_mass_g, flipper_length_mm, bill_length_mm) 
+
+        console.log(data.columns); //used to make sure I got the columns corrrect
+
+
+        // Add X axis
+        var x = d3.scaleLinear()
+            .domain([169, 240])
+            .range([0, width - margin.left - margin.right]);
+        g.append("g")
+            .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+            .call(d3.axisBottom(x).tickValues([170, 180, 190, 200, 210, 220, 230])); // edited to only show these ticks
+
+        // Add Y axis
+        var y = d3.scaleLinear()
+            .domain([2500, 6500])
+            .range([height - margin.top - margin.bottom, 0]);
+        g.append("g")
+            .call(d3.axisLeft(y).tickValues([3000, 4000, 5000, 6000])); // edited to only show these ticks
+
+        //adding axis labels
+        // X axis label
+        svg.append("text")
+            .attr("text-anchor", "end")
+            .attr("x", width / 2 + margin.left)
+            .attr("y", height - 10)
+            .text("Flipper Length (mm)");
+        // Y axis label
+        svg.append("text")
+            .attr("text-anchor", "end")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 15)
+            .attr("x", -height / 2 + margin.top)
+            .text("Body Mass (g)");
+
+        // Add a scale for bubble size
+        var z = d3.scaleLinear()
+            .domain([20, 60])
+            .range([1, 9]);
+
+        //used to find legend radius above
+        console.log(z(50));
+        console.log(z(40));
+
+        // Add a scale for bubble color
+        // learned how to change colors here: https://d3js.org/d3-scale/ordinal 
+        var myColor = d3.scaleOrdinal()
+            .domain(species)
+            .range(colors);
+
+        console.log(x.ticks()); //used to help with grid lines
+        console.log(y.ticks());
+
+
+        //the x major and minor grids were landing nicely, but the y ones looked a bit messy
+        // so I created arrays for major and minor y grid lines 
+        var yMajor = d3.range(2500, 6501, 1000);
+        var yMinor = d3.range(2500, 6501, 500);
+
+        //learned how to create the background grid from a snip of code here: https://observablehq.com/@d3/scatterplot/2
+        // I edited the original code to add mintor grid lines and change the color and opacity of the lines
+        g.append("g")
+            .attr("stroke", "white")
+            .attr("stroke-opacity", 1)
+            // major x gird lines
+            .call(g => g.append("g")
+                .selectAll("line")
+                .data(x.ticks())
+                .join("line")
+                .attr("x1", d => x(d))
+                .attr("x2", d => x(d))
+                .attr("y1", 0)
+                .attr("y2", height - margin.top - margin.bottom))
+            // major y grid lines
+            .call(g => g.append("g")
+                .selectAll("line")
+                .data(yMajor)
+                .join("line")
+                .attr("y1", d => y(d))
+                .attr("y2", d => y(d))
+                .attr("x1", 0)
+                .attr("x2", width - margin.left - margin.right))
+            //minor x grid line
+            //learned the arguments to pass to .ticks here: https://d3js.org/d3-axis#axis_ticks 
+            .call(g => g.append("g")
+                .selectAll("line")
+                .data(x.ticks(x.ticks().length * 2))
+                .join("line")
+                .attr("x1", d => x(d))
+                .attr("x2", d => x(d))
+                .attr("y1", 0)
+                .attr("y2", height - margin.top - margin.bottom))
+            .attr("stroke-width", 0.5)
+            //minor y grid line
+            .call(g => g.append("g")
+                .selectAll("line")
+                .data(yMinor)
+                .join("line")
+                .attr("y1", d => y(d))
+                .attr("y2", d => y(d))
+                .attr("x1", 0)
+                .attr("x2", width - margin.left - margin.right))
+            .attr("stroke-width", 0.5);
+
+
+        // Add dots
+        g.append('g')
+            .selectAll("dot")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d) { return x(d.flipper_length_mm); })
+            .attr("cy", function (d) { return y(d.body_mass_g); })
+            .attr("r", function (d) { return z(d.bill_length_mm); })
+            .style("fill", function (d) { return myColor(d.species); })
+            .style("opacity", "0.7")
+            .attr("stroke", function (d) { return myColor(d.species); }) // edited to make outline same color
+            .style("stroke-width", "2px")
+
+
+    });
+
+</script>
+
+
+<style>
+    /* the margins were giving me trouble above to move down the graph, so I decided to just add padding */
+    svg {
+        padding: 40px;
+    }
+</style>
