@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A2 — Penguins (d3)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+<div class="page">
+  <h1 class="title">d3 — Penguins bubble scatter</h1>
+
+  <div class="controls">
+    <label class="control">
+      <span>Species filter:</span>
+      <select id="speciesFilter">
+        <option value="ALL" selected>All</option>
+      </select>
+    </label>
+
+    <label class="control checkbox">
+      <input type="checkbox" id="downwardToggle" />
+      <span>Data downward (optional)</span>
+    </label>
+
+    <div class="count" id="count">0 points shown</div>
+  </div>
+
+  <div id="chart"></div>
+
+  <div id="tooltip" class="tooltip"></div>
+
+  <p class="note">
+    Default view matches the reference plot (upward trend). Toggle “Data downward” to flip the y-axis
+    screen direction as an extra feature.
+  </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="main.js"></script>
+</body>
+</html>

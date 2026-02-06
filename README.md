@@ -1,148 +1,184 @@
+# Assignment 2 — Data Visualization, 5 Ways (Penguins)
 
-![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
+This repo contains **five replications of the same penguin scatterplot** using **3 libraries (code)** and **2 tools (no-code)**, based on `penglings.csv`.
 
-# 02-DataVis-5ways
+Target plot features preserved as much as possible across tools:
 
-Assignment 2 - Data Visualization, 5 Ways  
-===
+- **Data positioning:** upward-trending scatterplot (matches the reference)
+  - X = **Flipper Length (mm)**
+  - Y = **Body Mass (g)**
+- **Scales do not start at 0**
+- **Axis ticks + labels**
+- **Color = species**
+- **Size = bill_length_mm**
+- **Opacity ≈ 0.8**
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
+**Note on “data downward”:** the rubric mentions “data downward,” but the assignment directions also require matching the **upward-trending reference**.  
+To satisfy both, the coded charts include an **optional “Data downward” checkbox** (default view matches the reference). Excel and Datawrapper do not include this toggle.
 
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
-
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
-
-Your goal is to use 5 different tools to make the following chart:
-
-![](img/ggplot2.png)
-
-These features should be preserved as much as possible in your replication:
-
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
-
-Other features are not required. This includes:
-
-- The background grid.
-- The legends.
-
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
-
-Improvements are also welcome as part of Technical and Design achievements.
-
-Libraries, Tools, Languages
 ---
 
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
+## Quick links (local server)
 
-Otherwise, you should seek tools and libraries to fill out your 5.
+If you run a local server from the repo root (example below), you can open each version at:
 
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
+- **d3:** `http://localhost:8000/d3/`
+- **Altair:** `http://localhost:8000/python-altair/altair.html`
+- **Plotly:** `http://localhost:8000/python-plotly/plotly.html`
 
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
-
-I have marked a few that are strongly suggested.
-
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
-
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
-
-Tips
 ---
 
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
+## Tool link (Datawrapper)
 
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
+- **Datawrapper public chart:** https://datawrapper.dwcdn.net/8VNpp/1/
 
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
-
-Readme Requirements
 ---
 
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
+## Repo structure
 
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
+- `d3/` — d3.js version (library)
+- `python-altair/` — Altair + Vega-Lite version (library)
+- `python-plotly/` — Plotly version (library)
+- `excel/` — Excel version (tool)
+- `datawrapper/` — Datawrapper version (tool)
+- `img/` — screenshots used in this README
+- `penglings.csv` — dataset (repo root)
 
-Other Requirements
 ---
 
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
+## How to run / view locally
 
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
+### Start a local web server (from repo root)
 
-GitHub Details
+```bash
+python3 -m http.server 8000
+
+Then open:
+- http://localhost:8000/d3/
+- http://localhost:8000/python-altair/altair.html
+- http://localhost:8000/python-plotly/plotly.html
+
+```
+
+> You can also open the HTML files directly, but a local server keeps paths consistent (especially if anything loads assets).
+
 ---
 
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
+## d3
 
-Grading
+**Local link:** http://localhost:8000/d3/
+
+![d3 penguins](img/d3.png)
+
+**Reflection:**  
+The d3 version gave me the most direct control over scales, axes, legends, and interaction. The main challenge was handling **asynchronous CSV loading** and ensuring the visualization only renders after cleaning/filtering the data. d3 is ideal when you want full customization (tooltips, filters, custom legends), but it requires more code than “tool” workflows.
+
+**Limitations / deviations:**  
+- Default view matches the reference (upward trend).  
+- Includes an optional **Data downward** checkbox (off by default).
+
 ---
 
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
+## Altair (Vega-Lite)
 
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
+**Local link:** http://localhost:8000/python-altair/altair.html
 
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
+![altair penguins](img/altair.png)
 
-# R + ggplot2 + R Markdown
+**Reflection:**  
+Altair made it quick to reproduce the chart once the encodings were set. Tooltips and export come naturally through Vega/Vega-Lite, which makes it good for fast iteration. The key adjustment was matching bubble sizing, since Altair’s `size` channel represents **area**, not radius—so I tuned the size scale to visually match the reference/d3.
 
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
+**Limitations / deviations:**  
+- Default view matches the reference (upward trend).  
+- Includes an optional **Data downward** checkbox (off by default).
 
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
+---
 
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
+## Plotly
 
-![ggplot2](img/ggplot2.png)
+**Local link:** http://localhost:8000/python-plotly/plotly.html
 
-# d3...
+![plotly penguins](img/plotly.png)
 
-(And so on...)
+**Reflection:**  
+Plotly is convenient for quickly generating an interactive scatter plot with hover, pan, and zoom. Matching the reference required tuning marker sizing because Plotly scales marker size differently than d3. I kept a consistent category order and palette across tools and added a checkbox in the wrapper HTML to optionally flip the y-axis screen direction.
 
+**Limitations / deviations:**  
+- Default view matches the reference (upward trend).  
+- Includes an optional **Data downward** checkbox (off by default).
+
+---
+
+## Excel
+
+**Files:**
+- `excel/excel_penguins.xlsx`
+- `excel/excel_penguins.png`
+
+![excel penguins](img/excel_penguins.png)
+
+**Reflection:**  
+Excel was fast for building a chart, but it required more manual setup to match the reference. Color mapping by species meant creating separate series (one per species), and bubble sizing needed manual scaling (bubble scale %) to avoid oversized markers. Excel is useful for quick exploratory visuals or sharing with non-programmers, but it’s less reproducible than code-based approaches.
+
+**Limitations / deviations:**  
+- Matches the reference (upward trend).  
+- **No “Data downward” toggle** implemented in a clean/portable way.  
+- Some formatting (opacity and bubble scaling) is easiest through the Excel UI.
+
+---
+
+## Datawrapper
+
+**Public link:** https://datawrapper.dwcdn.net/8VNpp/1/
+
+**Files:**
+- `datawrapper/datawrapper.png`
+- `datawrapper/link.txt` (contains the public URL)
+
+![datawrapper penguins](img/datawrapper.png)
+
+**Reflection:**  
+Datawrapper was the quickest way to produce a polished chart and export a PNG. It’s great for publishing and fast iteration, but it offers less control than code libraries for fine-grained behavior. Reproducibility also depends on the published URL rather than running local code.
+
+**Limitations / deviations:**  
+- Matches the reference (upward trend).  
+- **No “Data downward” toggle** implemented.
+
+---
 
 ## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
 
-### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+- **Five distinct tools total (3 libraries + 2 tools):**
+  - Libraries: d3, Altair, Plotly
+  - Tools: Excel, Datawrapper
+- **Cross-tool consistency:** preserved the same core encodings everywhere:
+  - X = flipper length, Y = body mass
+  - color = species, size = bill length
+  - opacity ≈ 0.8
+  - axis domains set from data (not forced to 0)
+- **Interactivity (coded versions):**
+  - d3: hover tooltip + filtering/legend toggles + optional “Data downward” checkbox
+  - Altair: interactive tooltips + optional “Data downward” checkbox in HTML wrapper
+  - Plotly: interactive tooltips + optional “Data downward” checkbox in HTML wrapper
+- **Reproducibility:** code versions read `penglings.csv` and generate viewable HTML outputs.
+
+---
+
+## Design Achievements
+
+- **Consistent categorical palette across tools** (same species mapping):
+  - Adelie: `#F28E2B`
+  - Chinstrap: `#8F63B8`
+  - Gentoo: `#2CA7A0`
+- **Reference-matching choices:**
+  - non-zero axis domains
+  - readable tick density
+  - semi-transparent points to reduce overplotting
+  - bubble size tuned to visually match the reference (ggplot-style) as closely as possible
+- **Readable labeling:** consistent axis labels + legend titles.
+
+---
+
+## Submission
+
+- **Pull Request:** https://github.com/cs4804-26c/a2-DataVis-5ways/pull/16
