@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+
+<body>
+    <div>
+        <button onclick="location.href='index.html'">
+            Static Visualization
+        </button>
+
+        <button onclick="location.href='scatterrug.html'">
+            Enhanced Visualization
+        </button>
+    </div>
+
+    <svg id="graph"></svg>
+
+
+    <script>
+
+        // Specify the chart’s dimensions.
+        const width = 928;
+        const height = 600;
+        const marginTop = 20;
+        const marginRight = 150;
+        const marginBottom = 50;
+        const marginLeft = 60;
+
+        // Create the SVG container.
+        const svg = d3.select("#graph")
+            .attr("viewBox", [0, 0, width, height])
+            .style("width", "80%")
+            .style("height", "80%");
+
+
+
+        d3.csv("penglings.csv", d3.autoType).then(data => {
+
+            const cleanData = data.filter(d =>
+                d.flipper_length_mm != null &&
+                d.body_mass_g != null
+            );
+
+            // Create the horizontal (x) scale, positioning N/A values on the left margin.
+            const x = d3.scaleLinear()
+                .domain([d3.min(cleanData, d => d["flipper_length_mm"]) - 5, d3.max(cleanData, d => d["flipper_length_mm"])])
+                .range([marginLeft, width - marginRight])
+
+            // Create the vertical (y) scale, positioning N/A values on the bottom margin.
+            const y = d3.scaleLinear()
+                .domain([d3.min(cleanData, d => d["body_mass_g"]) - 150, d3.max(cleanData, d => d["body_mass_g"])])
+                .range([height - marginBottom, marginTop])
+
+            // Shape scale
+            const r = d3.scaleRadial()
+                .domain([d3.min(cleanData, d => d["bill_length_mm"]), d3.max(cleanData, d => d["bill_length_mm"])])
+                .range([2, 6])
+
+            // Color pallete
+            const species = Array.from(
+                new Set(cleanData.map(d => d.species))
+            );
+
+            const color = d3.scaleOrdinal()
+                .domain(species)
+                .range(["#F2A65A", "#6F8F72", "#7570b3"]);
+
+            // Legend color
+            const legend = svg.append("g")
+                .attr("transform", `translate(${width - 120},${height / 2})`);
+
+            const legendItem = legend.selectAll(".legend-item")
+                .data(species)
+                .join("g")
+                .attr("class", "legend-item")
+                .attr("transform", (d, i) => `translate(0, ${i * 20})`);
+
+            legendItem.append("circle")
+                .attr("r", 6)
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .attr("fill", d => color(d));
+
+            legendItem.append("text")
+                .attr("x", 12)
+                .attr("y", 4)
+                .text(d => d);
+
+            legend.append("text")
+                .attr("y", -20)
+                .attr("font-weight", "bold")
+                .text("species");
+
+            // Size legend
+            const sizeLegendValues = [40, 50];
+
+            const sizeLegend = svg.append("g")
+                .attr("transform", `translate(${width - 120},${(height / 2) - 100})`);
+
+            const sizeItem = sizeLegend.selectAll(".size-item")
+                .data(sizeLegendValues)
+                .join("g")
+                .attr("class", "size-item")
+                .attr("transform", (d, i) => `translate(0, ${i * 30})`);
+
+            sizeItem.append("circle")
+                .attr("r", d => r(d))
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .attr("fill", "black")
+                .attr("stroke", "black");
+
+            sizeItem.append("text")
+                .attr("x", d => r(d) + 6)
+                .attr("y", 4)
+                .text(d => `${d}`);
+
+            sizeLegend.append("text")
+                .attr("y", -20)
+                .attr("font-weight", "bold")
+                .text("bill_length_mm");
+
+            svg.append("rect")
+                .attr("x", marginLeft)
+                .attr("y", marginTop)
+                .attr("width", width - marginLeft - marginRight)
+                .attr("height", height - marginTop - marginBottom)
+                .attr("fill", "#e8e8e8");
+
+
+            // Append the axes.
+            svg.append("g")
+                .attr("transform", `translate(0,${height - marginBottom})`)
+                .call(d3.axisBottom(x))
+                .call(g => g.append("text")
+                    .attr("x", width / 2)
+                    .attr("y", marginBottom - 12)
+                    .attr("fill", "currentColor")
+                    .attr("text-anchor", "middle")
+                    .text("Flipper Length (mm)"));
+
+
+            svg.append("g")
+                .attr("transform", `translate(${marginLeft},0)`)
+                .call(d3.axisLeft(y))
+                .call(g => g.append("text")
+                    .attr("fill", "currentColor")
+                    .attr("transform", "rotate(-90)")
+                    .attr("x", -height / 2)
+                    .attr("y", -marginLeft + 12)
+                    .attr("text-anchor", "middle")
+                    .text("Body Mass (g)")
+                );
+
+            // Add a grid.
+            svg.append("g")
+                .attr("stroke", "white")
+                .attr("stroke-opacity", 1)
+                .call(g => g.append("g")
+                    .selectAll("line")
+                    .data(x.ticks())
+                    .join("line")
+                    .attr("x1", d => 0.5 + x(d))
+                    .attr("x2", d => 0.5 + x(d))
+                    .attr("y1", marginTop)
+                    .attr("y2", height - marginBottom))
+                .call(g => g.append("g")
+                    .selectAll("line")
+                    .data(y.ticks())
+                    .join("line")
+                    .attr("y1", d => 0.5 + y(d))
+                    .attr("y2", d => 0.5 + y(d))
+                    .attr("x1", marginLeft)
+                    .attr("x2", width - marginRight));
+
+            // Append the dots.
+            const dots = svg.append("g")
+                .selectAll("circle")
+                .data(cleanData)
+                .join("circle")
+                .attr("fill", d => color(d.species))
+                .attr("cx", d => x(d.flipper_length_mm))
+                .attr("cy", d => y(d.body_mass_g))
+                .attr("r", d => r(d.bill_length_mm))
+                .attr("fill-opacity", 0.7)
+            //.on("mouseover", function () {
+            //    d3.select(this).attr("fill-opacity", 1);
+            //})
+            //.on("mouseout", function () {
+            //    d3.select(this).attr("fill-opacity", 0.5);
+            //});
+
+
+        });
+
+    </script>
+
+
+
+
+
+</body>
+
+</html>
