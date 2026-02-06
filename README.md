@@ -1,148 +1,64 @@
+# Assignment 2 - Data Visualization, 5 Ways
 
-![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
+This project replicates a specific scatter plot—analyzing the relationship between penguin flipper length and body mass—across five different visualization technologies. The goal was to maintain high design fidelity and consistent data mapping while exploring the unique strengths and interactivity of each platform.
 
-# 02-DataVis-5ways
-
-Assignment 2 - Data Visualization, 5 Ways  
-===
-
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
-
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
-
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
-
-Your goal is to use 5 different tools to make the following chart:
-
-![](img/ggplot2.png)
-
-These features should be preserved as much as possible in your replication:
-
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
-
-Other features are not required. This includes:
-
-- The background grid.
-- The legends.
-
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
-
-Improvements are also welcome as part of Technical and Design achievements.
-
-Libraries, Tools, Languages
 ---
-
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
-
-Otherwise, you should seek tools and libraries to fill out your 5.
-
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
-
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
-
-I have marked a few that are strongly suggested.
-
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
-
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
-
-Tips
----
-
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
-
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
-
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
-
-Readme Requirements
----
-
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
-
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
-
-Other Requirements
----
-
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
-
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
-
-GitHub Details
----
-
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
-
 
 ## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
+* **Advanced Interactivity (d3.js & Datawrapper)**: I implemented custom HTML-based tooltips that provide "details-on-demand" (Species, Mass, Flipper, and Bill Length), going beyond the static requirements.
+* **Selection Binding (Altair)**: I added an interactive legend using `selection_point`. Users can click a species label to highlight its data cluster while others dim to 0.1 opacity, aiding in cluster isolation. Also, added feature for zooming and panning.
+* **Staggered SVG Transitions (d3.js)**: By initializing the circle radii at 0 and using an index-based delay function .delay((d, i) => i * 2), I created a dynamic datapoints "popping" effect as the page loads.
+* **Linear regression (R + ggplot2)**: I added a linear regression model (geom_smooth) over the data to visualize the growth correlation specific to each species.
 
-### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+## Design Achievements
+* **Universal Color Branding**: I manually enforced a unified categorical hex-code palette (`#FDA247`, `#AC5AD4`, `#4AA1A1`) across all five tools, including those without native categorical mapping, to ensure a consistent project identity. These color are similar to the original scatterplot given, but I also check for color blindess accessibility with the feature on Datawrapper.
+* **Optimized Data-Ink Ratio**: Per the rubric, all axes were configured to start at non-zero baselines (170mm for flippers, 2500g for mass) to maximize the "data-ink" area and highlight the correlation trends.
+* **Legend Refinement**: I manually customized the size legends in R, Python, and d3 to display only the 40mm and 50mm breaks, reducing visual noise and matching the target original.
+* **Visual Consistency (Opacity)**: I maintained a strict 0.8 opacity (or 20% transparency) across all platforms to handle overplotting in dense clusters effectively.
+
+---
+
+## 1. d3.js (Library)
+![d3 visualization](img/d3_graph.png)
+* **Interactivity**: Multi-line HTML tooltips and hover-based stroke highlights. Entrance animation using transition.
+* **Reflection**: d3 offered total control over every pixel but was the hardest one to do, took a lot of time to look at documentation. In the end, manually calculating scales and building axes from SVG elements provided the deepest understanding of the "under-the-hood" mechanics of web visualization. Also, since d3 requires manual work, you can control everything to your liking. I think this makes d3 the best library for creating unique data art, complex scrollytelling, or interactive tools that don't look like standard charts.
+* **Resource**: This is what I originally looked at to learn how to make scatter plot in d3: https://d3-graph-gallery.com/graph/scatter_basic.html
+
+## 2. R + ggplot2 (Library)
+![ggplot2 visualization](img/ggplot_graph.png)
+Replicate original
+![ggplot2 with regression line](img/ggplot_regression.png)
+With regression line
+* **Interactivity**: Static.
+* **Reflection**: I had a hard time figuring out how to run R code on my machine. At first I don't want to download R studio, so I tried using Vscode with extension. I couldn't get it to work, so I move to using online tool Posit.cloud. The "Grammar of Graphics" is logical for mapping aesthetics. Using `scale_color_manual` and `scale_size_continuous` allowed for the most precise replication of the original design requirements. However, ggplot2 is static by default, and if you want to add interactive features, you will need to use a separate library to do so.
+* **Resource**: https://www.sthda.com/english/wiki/ggplot2-scatter-plots-quick-start-guide-r-software-and-data-visualization
+
+## 3. Python + Altair (Library)
+![altair visualization](img/altair_graph.png)
+* **Interactivity**: Interactive legend selection (click on a specie to make other species dim) and tooltips to show detail. Zoom and pan feature.
+* **Reflection**: This was the most efficient coding experience. The declarative syntax allowed me to implement complex interactivity (like legend filtering and tooltip) with only a few lines of code. I think this library is the easiest to use since it does not require a lot of code and it is python, which I'm familiar with. At the same time, it still provided some good customization.
+* **Resource**: https://altair-viz.github.io/gallery/scatter_tooltips.html
+
+## 4. Flourish (Tool)
+![flourish visualization](img/flourish_graph.png)
+* **Interactivity**: Responsive hover effects, auto-filtering, and mobile-ready layout.
+* **Reflection**: Flourish is a powerful GUI-based tool. It handled the "size" and "color" mapping instantly through column selection. I used the "Custom Overrides" feature to ensure the hex codes matched the coding libraries perfectly. It is fast and easy to use. It also provide the option for you to embed the visualization on your website. Flourish has ready to use preview of tablet and mobile layout too.
+* **Published link**: https://public.flourish.studio/visualisation/27535733/
+
+
+## 5. Datawrapper (Tool)
+![datawrapper visualization](img/datawrapper_graph.png)
+* **Interactivity**: Custom-formatted HTML tooltips.
+* **Reflection**: Datawrapper was excellent for fine-tuning axis labels and gridlines. I utilized its custom HTML tooltip feature to provide a clean, descriptive interface for the penguin data. This also provide an option for embeded on to your website. This tool has a quick colorbind check feature, allow you to quickly see if your color palete works with different type of color blindness.
+* **Published link**: https://www.datawrapper.de/_/INjDN/
+---
+
+## Quick comparison table
+
+| Tool | Ease of Use | Customization | Verdict |
+| :--- | :--- | :--- | :--- |
+| **Altair** | High | High | Best balance of concise code and high-level interactivity |
+| **Flourish** | High | Medium | Best for quick, professional, and mobile-responsive deployment |
+| **ggplot2** | Medium | High | Excellent for academic precision and static publication |
+| **Datawrapper** | High | Medium | Good for quick web charts with clean typography |
+| **d3.js** | Low | Total | Unlimited potential for creative visualization but steep learning curve, extremely high development cost |
