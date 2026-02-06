@@ -6,143 +6,66 @@
 Assignment 2 - Data Visualization, 5 Ways  
 ===
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
+# d3 + JavaScript
 
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
+JavaScript is a language primarily for web scripting.
+d3 is a popular JavaScript library for creating data visualizations for websites. d3 makes use of SVGs to provide many different options for visuals and interactivity.
 
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
+I used d3's built in CSV parser to read the data, then built the x and y axis and inserted circles into the plot based on the data. I then provided mouse functionality for hovering over data points.
 
-Your goal is to use 5 different tools to make the following chart:
+There are many samples of d3 charts online so there were plenty of examples to help understand th ecode. d3 allows for tons of customization at the cost of ease of use. Some of the SVG features were hard to work with, suhc as the axis titles, since you have to manually translate the text to go to the proper location.
 
-![](img/ggplot2.png)
+To run this, I used VSCode's built in web server functionality since we need to load a local CSV file, which is blocked by CORS.
 
-These features should be preserved as much as possible in your replication:
+![d3](img/d3.png)
 
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
+# Vega-Lite + JavaScript
 
-Other features are not required. This includes:
+Vega-Lite is a JavaScript library that provides JSON syntax to create visualizations. Unlike d3 where you have to specify the creation of an SVG yourself, Vega-Lite will automatically do it.
 
-- The background grid.
-- The legends.
+I used Vega's schema for the JSON, specified the height and width of the graph, and then specified the encoding. The encoding allows for many channels, including size, color, x, y, and shape.
 
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
+I found the syntax to be easier than d3 but it was harder to figure out how to manipulate certain things. Since d3 relies solely on SVG's, it's easy to figure out which attributes you can change. I found Vega-Lite's documentation more difficult to parse. If I needed a simple graph without much customization I would choose Vega-Lite over d3, but Vega-Lite does not provide options for interactivity as far as I can tell.
 
-Improvements are also welcome as part of Technical and Design achievements.
+To run this, I used VSCode's built in web server functionality since we need to load a local CSV file, which is blocked by CORS.
 
-Libraries, Tools, Languages
----
+![vega-lite](img/vega-lite.png)
 
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
+# Altair + Python
 
-Otherwise, you should seek tools and libraries to fill out your 5.
+Python is a programming language that emphasizes code readability. It is commonly used in the data science industry.
+Altair is a Python package that allows users to create visuals, which are generated into an HTML file. Altair is essentially a generator for Vega-Lite visualizations.
 
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
+Overall I found the syntax for Altair to be more intuitive than Vega-Lite, but again there is the issue of documentation. There aren't great examples of Altair code in the docs so I had to do a lot of guessing to figure out how to make certain things work. Even then, I couldn't figure out how to make the size scaling work the same way as it does in Veha-Lite. Again, I think this fills the same niche as Vega-Lite, if you want an easy way to create a chart without interactivity.
 
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
+![altair](img/atair.png)
 
-I have marked a few that are strongly suggested.
+# Datawrapper
 
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
+Datawrapper is an online tool for creating data visualizations. You can upload your data, and Datawrapper will automatically parse the data and provide options for different chart types. After picking a specifc chart, you can customize the chart, provide annotations, and then publish the chart, making it accessible with a link.
 
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
+I was pleasantly surprised with the customization that Datawrapper provides. There are many options for the axes, color, size, and shape of the data points. You can customize the position, the number format, there are options for basic interactivity, and you can easily adjust the labels and title for the graph. There are certain things I wish Datawrapper had, like moving the position of the axes titles while keeping the axes the same place, but overall I was impressed with Datawrapper's capabilities.
 
-Tips
----
+I think Datawrapper is great for creating visuals that you want to share with people easily since you can just share a link to the chart. You can also insert it into a website with an iframe.
 
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
+<https://datawrapper.dwcdn.net/IYxC4/1/>
 
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
+![datawrapper](img/data-wrapper.png)
 
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
+# Flourish
 
-Readme Requirements
----
+Flourish is an online tool for creating data visualizations. The main focus for this tool is compatibility with Canva, which is an online image and video editing platform.
 
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
+I found Flourish to be a worse option than Datawrapper for one main reason: the UI in Datawrapper is much nicer and laid out more intuitively. In Flourish all the options are crammed into a side panel, making it difficult to find exactly what you need. There are probably options that could have made the chart look nicer, but I just couldn't find them. Additionally, there are some options that you need Canva Pro to use, like downloading the chart as an HTML file.
 
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
+Like Datawrapper, you can publish the chart and make it accessible with a link, or embed into a website. However, since Datawrapper is a better tool to work with in my opinion, I would rather stick to Datawrapper than work with Flourish unless I was specifically making a visual for Canva.
 
-Other Requirements
----
-
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
-
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
-
-GitHub Details
----
-
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
-
+![flourish](img/flourish.png)
 
 ## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
+
+- **Interactivity**: On the d3 visual, hovering over one of the points provides additional info about the selected point
 
 ### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+
+- **Additional Visual Features**: I provided a legend in all of the visuals besides for d3
