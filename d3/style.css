@@ -1,0 +1,59 @@
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  margin: 24px;
+  color: #222;
+}
+
+#chart {
+  max-width: 960px;
+}
+
+/* ---- THEME: ggplot-like ---- */
+.plot-bg {
+  fill: #EBEBEB; /* classic ggplot-ish grey */
+}
+
+.grid line {
+  stroke: #FFFFFF;      /* white gridlines */
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0; /* hide the domain line for grid axes */
+}
+
+.axis path.domain {
+  stroke: #333;   /* subtle axis baseline */
+  stroke-width: 1;
+}
+
+.axis .tick line {
+  stroke: #333;
+  stroke-width: 0.5;
+  opacity: 0.25; /* keep ticks subtle */
+}
+
+.axis .tick text {
+  fill: #333;
+  font-size: 12px;
+}
+
+.axis-label {
+  font-size: 14px;
+  fill: #111;
+}
+
+/* Optional tooltip if you keep it */
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(20, 20, 20, 0.95);
+  color: white;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.25;
+  transform: translate(-50%, -120%);
+  opacity: 0;
+}

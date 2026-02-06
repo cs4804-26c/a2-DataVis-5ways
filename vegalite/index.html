@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Penguins Flipper Length vs Body Mass scatterplot</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+    <style>
+      body {
+        margin: 24px;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      }
+      #vis {
+        max-width: 1000px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>Penguins Flipper Length vs Body Mass scatterplot</h2>
+    <div id="vis"></div>
+
+    <script>
+      vegaEmbed("#vis", "./spec.json", { actions: true })
+        .then(() => console.log("✅ Vega-Lite rendered"))
+        .catch(console.error);
+    </script>
+  </body>
+</html>

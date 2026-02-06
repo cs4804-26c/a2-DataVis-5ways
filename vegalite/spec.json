@@ -1,0 +1,66 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Penguins scatterplot (Vega-Lite): x=flipper_length, y=body_mass, color=species, size=bill_length, opacity≈0.8, axes not starting at 0.",
+  "data": {
+    "url": "./penglings.csv",
+    "format": { "type": "csv" }
+  },
+  "transform": [
+    {
+      "filter": "isValid(datum.flipper_length_mm) && isValid(datum.body_mass_g) && isValid(datum.bill_length_mm) && isValid(datum.species)"
+    }
+  ],
+  "mark": {
+    "type": "circle",
+    "opacity": 0.8
+  },
+  "encoding": {
+    "x": {
+      "field": "flipper_length_mm",
+      "type": "quantitative",
+      "title": "Flipper Length (mm)",
+      "scale": { "zero": false },
+      "axis": { "grid": false }
+    },
+    "y": {
+      "field": "body_mass_g",
+      "type": "quantitative",
+      "title": "Body Mass (g)",
+      "scale": { "zero": false },
+      "axis": { "grid": false }
+    },
+    "color": {
+      "field": "species",
+      "type": "nominal",
+      "legend": null,
+      "scale": {
+        "domain": ["Adelie", "Chinstrap", "Gentoo"],
+        "range": ["#4E79A7", "#F28E2B", "#E15759"]
+      }
+    },
+    "size": {
+      "field": "bill_length_mm",
+      "type": "quantitative",
+      "title": "Bill Length (mm)",
+      "scale": { "range": [30, 500] }
+    },
+    "tooltip": [
+      { "field": "species", "type": "nominal", "title": "Species" },
+      { "field": "flipper_length_mm", "type": "quantitative", "title": "Flipper (mm)" },
+      { "field": "body_mass_g", "type": "quantitative", "title": "Body Mass (g)" },
+      { "field": "bill_length_mm", "type": "quantitative", "title": "Bill (mm)" }
+    ]
+  },
+  "width": 800,
+  "height": 480,
+  "title": "Penguins Flipper Length vs Body Mass Scatterplot",
+  "config": {
+    "view": { "stroke": null },
+    "axis": {
+      "tickSize": 6,
+      "labelFontSize": 12,
+      "titleFontSize": 13
+    },
+    "title": { "fontSize": 16 }
+  }
+}
