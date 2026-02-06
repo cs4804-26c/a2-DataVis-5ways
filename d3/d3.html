@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<head>
+  <title>Data Visiualization 5 Ways</title>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <style>
+    body {
+        margin: 0;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: sans-serif;
+    }
+    .legend-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .x-grid line,
+    .y-grid line {
+    stroke: #ccc;
+    stroke-opacity: 0.5;
+    shape-rendering: crispEdges;
+    }
+    .x-grid path,
+    .y-grid path {
+    display: none;
+    }
+    
+    #tooltip {
+      position: absolute;
+      background-color: rgba(255,255,255,0.95);
+      border: 1px solid #999;
+      padding: 8px;
+      border-radius: 4px;
+      pointer-events: none;
+      opacity: 0;
+    }
+</style>
+</head>
+
+<body>
+<svg width="900" height="600"></svg>
+<div id="tooltip"></div>
+
+<script>
+
+    console.log(d3); // test if d3 is loaded
+
+
+    const margin = {
+        top: 40, 
+        right: 200, 
+        bottom: 60, 
+        left: 80 
+    };
+    const width = 900 - margin.left - margin.right;
+    const height = 600 - margin.top - margin.bottom;
+
+    const svg = d3.select("svg")
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const color = d3.scaleOrdinal()
+        .domain(["Adelie", "Chinstrap", "Gentoo"])
+        .range(["#fda147", "#ab5ad3", "#48a1a0"]);
+
+    const size = d3.scaleSqrt()
+        .domain([30, 60])
+        .range([4, 20]);
+    
+    const tooltip = d3.select("#tooltip");
+
+    // load and clean data
+    d3.csv("../penglings.csv", d => ({
+        flipper: +d.flipper_length_mm,
+        mass: +d.body_mass_g,
+        bill: +d.bill_length_mm,
+        species: d.species
+    })).then(data => {
+
+    data = data.filter(d =>
+        !isNaN(d.flipper) &&
+        !isNaN(d.mass) &&
+        !isNaN(d.bill)
+    );
+
+    const x = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.flipper))
+        .nice()
+        .range([0, width]);
+
+    const y = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.mass))
+        .nice()
+        .range([height, 0]);
+
+    x.domain([x.domain()[0], 235]);
+
+    // axis labels
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height + 45)
+        .attr("text-anchor", "middle")
+        .text("Flipper Length (mm)");
+
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", -55)
+        .attr("text-anchor", "middle")
+        .text("Body Mass (g)");
+
+    // axis increments
+    svg.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(
+            d3.axisBottom(x)
+            .tickValues(d3.range(
+                Math.floor(x.domain()[0] / 10) * 10,
+                Math.ceil(x.domain()[1] / 10) * 10 + 1,
+                10
+            ))
+        );
+
+    svg.append("g")
+        .call(
+            d3.axisLeft(y)
+            .tickValues(d3.range(
+                Math.floor(y.domain()[0] / 1000) * 1000,
+                Math.ceil(y.domain()[1] / 1000) * 1000 + 1,
+                1000
+            ))
+            .tickFormat(d3.format(","))
+        );
+
+    // grid lines
+    const xGridG = svg.append("g")
+        .attr("class", "x-grid")
+        .attr("transform", `translate(0,${height})`);
+
+    const yGridG = svg.append("g")
+        .attr("class", "y-grid");
+
+    xGridG.call(
+        d3.axisBottom(x)
+            .tickValues(
+            d3.range(
+                Math.floor(x.domain()[0] / 10) * 10,
+                235 + 1,
+                10
+            )
+            )
+            .tickSize(-height)
+            .tickFormat("")
+    );
+
+    yGridG.call(
+        d3.axisLeft(y)
+            .tickValues(
+            d3.range(
+                Math.floor(y.domain()[0] / 1000) * 1000,
+                Math.ceil(y.domain()[1] / 1000) * 1000 + 1,
+                1000
+            )
+            )
+            .tickSize(-width)
+            .tickFormat("")
+    );
+
+    // data points
+    svg.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => x(d.flipper))
+        .attr("cy", d => y(d.mass))
+        .attr("r", d => size(d.bill))
+        .attr("fill", d => color(d.species))
+        .attr("opacity", 0.8)
+        .on("mouseover", (event, d) => {
+            tooltip
+            .style("opacity", 1)
+            .html(`
+                <strong>Species:</strong> ${d.species}<br>
+                <strong>Flipper Length:</strong> ${d.flipper} mm<br>
+                <strong>Body Mass:</strong> ${d.mass} g<br>
+                <strong>Bill Length:</strong> ${d.bill} mm
+            `)
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mousemove", (event) => {
+            tooltip
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", () => {
+            tooltip.style("opacity", 0);
+        });
+
+    // legends
+    const sizeLegendValues = [40, 50];
+
+    const sizeLegend = svg.append("g")
+        .attr("transform", `translate(${width + 30}, 50)`);
+
+    sizeLegend.append("text")
+        .attr("class", "legend-title")
+        .text("Bill length (mm)");
+
+    sizeLegendValues.forEach((v, i) => {
+        const g = sizeLegend.append("g")
+        .attr("transform", `translate(0, ${25 + i * 30})`);
+
+        g.append("circle")
+        .attr("r", size(v))
+        .attr("fill", "gray")
+        .attr("opacity", 0.8);
+
+        g.append("text")
+        .attr("x", 30)
+        .attr("y", 5)
+        .text(v);
+    });
+    });
+
+    const speciesLegend = svg.append("g")
+        .attr("transform", `translate(${width + 30}, 160)`);
+
+    speciesLegend.append("text")
+        .attr("class", "legend-title")
+        .text("Species");
+
+    color.domain().forEach((sp, i) => {
+        const g = speciesLegend.append("g")
+        .attr("transform", `translate(0, ${20 + i * 22})`);
+
+        g.append("circle")
+        .attr("r", 6)
+        .attr("fill", color(sp));
+
+        g.append("text")
+        .attr("x", 15)
+        .attr("y", 4)
+        .text(sp);
+    });
+</script>
