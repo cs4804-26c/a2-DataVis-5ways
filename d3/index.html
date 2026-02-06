@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penguin Body Mass vs. Flipper & Bill Length</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .dot {
+            stroke: #fff;
+            stroke-width: 1px;
+        }
+        .axis-label {
+            font-size: 14px;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="chart"></div>
+    
+    <script>
+        const margin = {top: 40, right: 150, bottom: 60, left: 80};
+        const width = 800 - margin.left - margin.right;
+        const height = 600 - margin.top - margin.bottom;
+
+
+        const svg = d3.select("#chart")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+
+        d3.csv("../penglings.csv").then(function(data) {
+        
+            data.forEach(d => {
+                d.flipper_length_mm = +d.flipper_length_mm;  
+                d.body_mass_g = +d.body_mass_g;
+                d.bill_length_mm = +d.bill_length_mm;
+            });
+
+            const xScale = d3.scaleLinear()
+                .domain([d3.min(data, d => d.flipper_length_mm) - 5, 
+                         d3.max(data, d => d.flipper_length_mm) + 5])
+                .range([0, width]);
+
+            const yScale = d3.scaleLinear()
+                .domain([d3.min(data, d => d.body_mass_g) - 100, 
+                         d3.max(data, d => d.body_mass_g) + 100])
+                .range([height, 0]);
+
+            const sizeScale = d3.scaleSqrt()
+                .domain([d3.min(data, d => d.bill_length_mm), 
+                         d3.max(data, d => d.bill_length_mm)])
+                .range([3, 12]);
+
+            const colorScale = d3.scaleOrdinal()
+                .domain([...new Set(data.map(d => d.species))])
+                .range(d3.schemeCategory10);
+
+            const xAxis = d3.axisBottom(xScale)
+                .ticks(10);
+            
+            svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(xAxis);
+
+            const yAxis = d3.axisLeft(yScale)
+                .ticks(10);
+            
+            svg.append("g")
+                .call(yAxis);
+
+            svg.append("text")
+                .attr("class", "axis-label")
+                .attr("text-anchor", "middle")
+                .attr("x", width / 2)
+                .attr("y", height + 40)
+                .text("Flipper Length (mm)");
+
+            svg.append("text")
+                .attr("class", "axis-label")
+                .attr("text-anchor", "middle")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -height / 2)
+                .attr("y", -50)
+                .text("Body Mass (g)");
+            
+            svg.append("text")
+                .attr("class", "title")
+                .attr("text-anchor", "middle")
+                .attr("x", width / 2)
+                .attr("y", -10)
+                .text("Penguin Body Mass vs. Flipper & Bill Length");
+
+            svg.selectAll(".dot")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("class", "dot")
+                .attr("cx", d => xScale(d.flipper_length_mm))
+                .attr("cy", d => yScale(d.body_mass_g))
+                .attr("r", d => sizeScale(d.bill_length_mm))
+                .style("fill", d => colorScale(d.species))
+                .style("opacity", 0.8);
+
+            const legend = svg.append("g")
+                .attr("transform", `translate(${width + 20}, 0)`);
+
+            const species = [...new Set(data.map(d => d.species))];
+            
+            species.forEach((s, i) => {
+                const legendRow = legend.append("g")
+                    .attr("transform", `translate(0, ${i * 25})`);
+                
+                legendRow.append("circle")
+                    .attr("r", 6)
+                    .style("fill", colorScale(s))
+                    .style("opacity", 0.8);
+                
+                legendRow.append("text")
+                    .attr("x", 15)
+                    .attr("y", 5)
+                    .style("font-size", "12px")
+                    .text(s);
+            });
+
+        }).catch(function(error) {
+            console.log("Error loading data:", error);
+        });
+    </script>
+</body>
+</html>
