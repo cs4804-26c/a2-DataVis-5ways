@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>D3</title>
+    <link rel="stylesheet" href="d3.css">
+</head>
+<body>
+<div id="container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script type="module">
+
+        const width = 540;
+        const height = 400;
+        const marginTop = 20;
+        const marginRight = 20;
+        const marginBottom = 30;
+        const marginLeft = 40;
+        const container = document.getElementById("container");
+
+        const data = await d3.csv("/penglings.csv");
+
+        const x = d3.scaleLinear()
+            .domain([170, 235])
+            .range([marginLeft, width - marginRight]);
+
+        const y = d3.scaleLinear()
+            .domain([2500, 6500])
+            .range([height - marginBottom, marginTop]);
+
+        //set point size based on bill length
+        const minBillLength = d3.min(data.map(d => d.bill_length_mm));
+        const maxBillLength = d3.max(data.map(d => d.bill_length_mm).filter(d => d != "NA"));
+        const r = d3.scaleSqrt()
+            .domain([minBillLength, maxBillLength])
+            .range([4, 10])
+
+        const colorScale = d3.scaleOrdinal(["orange", "purple", "teal"]).domain(["Adelie", "Chinstrap", "Gentoo"])
+
+        const svg = d3.create("svg")
+            .attr("width", width + 500)
+            .attr("height", height + 500);
+
+        var div = d3.select("body").append("div")
+            .attr("class", "info")
+            .style("opacity", 0)
+            .style("position", "absolute")
+
+        svg.append("text")
+            .attr("x", width/2 - 10)
+            .attr("y", height + 20)
+            .text("Flipper Length (mm)")
+            .style("font-family", "Arial");
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 20)
+            .attr("x", -height/2 - 30)
+            .text("Body Mass (g)")
+            .style("font-family", "Arial");
+
+        svg.append("g")
+            .attr("transform", `translate(30,${height - marginBottom})`)
+            .call(d3.axisBottom(x).ticks(7));
+
+        svg.append("g")
+            .attr("transform", `translate(${marginLeft + 30},0)`)
+            .call(d3.axisLeft(y).ticks(5));
+
+        const avgFlipperLength = svg.append("text")
+            .attr("x", 70)
+            .attr("y", height + 80)
+            .attr("font-size", 15)
+            .text("Average Selected Flipper Length: 0 mm")
+            .style("font-family", "Arial");
+
+        const avgBodyMass = svg.append("text")
+            .attr("x", 70)
+            .attr("y", height + 105)
+            .attr("font-size", 15)
+            .text("Average Selected Body Mass: 0 g")
+            .style("font-family", "Arial");
+
+        const avgBillLength = svg.append("text")
+            .attr("x", 70)
+            .attr("y", height + 130)
+            .attr("font-size", 15)
+            .text("Average Selected Bill Length: 0 mm")
+            .style("font-family", "Arial");
+
+        const avgBillDepth = svg.append("text")
+            .attr("x", 70)
+            .attr("y", height + 155)
+            .attr("y", height + 155)
+            .attr("font-size", 15)
+            .text("Average Selected Bill Depth: 0 mm")
+            .style("font-family", "Arial");
+
+        //add brush
+        svg.append("g")
+            .attr("class", "brush")
+            .call(d3.brush().on("brush", brushed));
+
+        //function for brushing
+        function brushed(event) {
+            if (!event.selection) return;
+            const [[x0, y0], [x1, y1]] = event.selection;
+
+            const filteredData = [];
+
+            svg.selectAll("circle")
+                .attr("fill", d => {
+                    const expression = x(d.flipper_length_mm) >= x0 - 30 &&  x(d.flipper_length_mm) <= x1 - 30 && y(d.body_mass_g) >= y0 && y(d.body_mass_g) <= y1;
+
+                    if (expression) filteredData.push(d);  return expression ? "black" : colorScale(d.species)});
+
+            var flipperLengthTotal = 0;
+            var bodyMassTotal = 0;
+            var billLengthTotal = 0;
+            var billDepthTotal = 0;
+            var averageFL = 0;
+            var averageBM = 0;
+            var averageBL = 0;
+            var averageBD = 0;
+
+            filteredData.forEach((penguin) => {
+                flipperLengthTotal += parseInt(penguin.flipper_length_mm);
+                bodyMassTotal += parseInt(penguin.body_mass_g);
+                billLengthTotal += parseInt(penguin.bill_length_mm);
+                billDepthTotal += parseInt(penguin.bill_depth_mm);
+            })
+
+            if (filteredData.length > 0) {
+                averageFL = (flipperLengthTotal / filteredData.length).toFixed(2);
+                averageBM = (bodyMassTotal / filteredData.length).toFixed(2);
+                averageBL = (billLengthTotal / filteredData.length).toFixed(2);
+                averageBD = (billDepthTotal / filteredData.length).toFixed(2);
+            }
+
+            avgFlipperLength.text(`Average Selected Flipper Length: ${averageFL} mm`)
+            avgBodyMass.text(`Average Selected Body Mass: ${averageBM} g`)
+            avgBillLength.text(`Average Selected Bill Length: ${averageBL} mm`)
+            avgBillDepth.text(`Average Selected Bill Depth: ${averageBD} mm`)
+        }
+
+        //draw each point on graph
+        svg.append("g")
+            .selectAll("circle")
+            .data(data)
+            .join("circle")
+            .attr("transform", `translate(30,0)`)
+            .attr("cx", d => x(d.flipper_length_mm))
+            .attr("cy", d => y(d.body_mass_g))
+            .attr("r", d => r(d.bill_length_mm))
+            .attr("fill", d => colorScale(d.species))
+            .attr("opacity", 0.8)
+
+            //add hover functionality
+            .on('mouseover', function (event, d) {
+                d3.select(this).transition()
+                    .attr('opacity', '1')
+                    .attr("r", d => r(d.bill_length_mm)*2)
+                    .duration('1')
+                div.transition()
+                    .duration(1)
+                    .style('opacity', '1')
+                div.html("<b>Island:</b> " +  d.island + "<br><b>Sex:</b> " + d.sex + "<br><b>Flipper Length:</b> " + d.flipper_length_mm + " mm <br><b>Body Mass:</b> " + d.body_mass_g + " g")
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 15) + "px")
+            })
+            .on('mouseout', function (event, d) {
+                d3.select(this).transition()
+                    .attr('opacity', '.8')
+                    .attr("r", d => r(d.bill_length_mm))
+                    .duration('1')
+                div.transition()
+                    .duration('1')
+                    .style("opacity", 0)
+            });
+
+        container.append(svg.node());
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+.info {
+    font-size: 15px;
+    font-family: "Arial", serif;
+    color: black;
+    background: white;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 8px;
+}

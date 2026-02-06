@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+    <title>Vega-Lite</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@6.2.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@6.4.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@7.1.0"></script>
+</head>
+<body>
+<div id="vis"></div>
+
+<script type="text/javascript">
+    var penglingspec = {
+        $schema: 'https://vega.github.io/schema/vega-lite/v6.json',
+        data: {
+            url: "/penglings.csv"
+        },
+        width: 400,
+        mark: {"type":'point', "filled":true, "opacity":0.8},
+        encoding: {
+            x: {field: 'flipper_length_mm', type:"quantitative", title: "Flipper Length (mm)", axis: {"tickMinStep": 10}, scale: {domain: [170, 235]}},
+            y: {field: 'body_mass_g', type: 'quantitative', title: "Body Mass (g)", axis: {"tickMinStep": 1000}, scale: {domain: [2500, 6500]}},
+            color: {field: 'species', legend: null,
+            scale: {range: ["orange", "purple", "teal"]}},
+            size: {field: 'bill_length_mm', legend: null}
+        }
+    };
+    vegaEmbed('#vis', penglingspec);
+</script>
+</body>
+</html>
