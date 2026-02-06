@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<body>
+<div id="container"></div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script type="module">
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+  console.log(d3); // test if d3 is loaded
+  // Add an SVG
+  const width = 1000;
+  const height = 600;
+  const margin = 100;
+  var penglings;
+
+  d3.csv("../data/penglings.csv",d3.autoType).then(function(data) {
+  penglings = data;
+  console.log(penglings);
+  
+  const color = d3.scaleOrdinal(["a", "b", "c"], ["rgb(240,150,0)", "rgb(0,160,140)", "rgb(140,0,180)"]);
+
+  const x = d3.scaleLinear()
+    .domain(d3.extent(penglings, d => d.flipper_length_mm)).nice()
+    .range([margin, width - margin]);
+
+  const y = d3.scaleLinear()
+    .domain(d3.extent(penglings, d => d.body_mass_g)).nice()
+    .range([height - margin, margin]);
+
+  const r = d3.scaleLinear()
+    .domain(d3.extent(penglings, d => d.bill_length_mm)).nice()
+    .range([2,20]);
+
+  const svg = d3.create("svg")
+      .attr("viewBox", [0, 0, width, height])
+      .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;");
+
+  svg.append("g")
+    .attr("transform", `translate(0,${height - margin})`)
+    .call(d3.axisBottom(x))
+    .call(g => g.select(".domain").remove())
+    .call(g => g.append("text")
+        .attr("x", width/2)
+        .attr("y", 50)
+        .attr("fill", "currentColor")
+        .attr("text-anchor","middle")
+        .attr("font-size",15)
+        .text("Flipper Length (mm)"));
+
+  svg.append("g")
+    .attr("transform", `translate(${margin},0)`)
+    .call(d3.axisLeft(y))
+    .call(g => g.select(".domain").remove())
+    .call(g => g.append("text")
+        .attr("x", -50)
+        .attr("y", height/2)
+        .attr("transform", "rotate(-90,-50,300)")
+        .attr("fill", "currentColor")
+        .attr("text-anchor","middle")
+        .attr("font-size",15)
+        .text("Body Mass (g)"));
+
+    svg.append("rect")
+    .attr("x",margin)
+    .attr("y",margin)
+    .attr("width",width-margin*2)
+    .attr("height",height-margin*2)
+    .attr("fill","light-grey")
+    .attr("opacity",0.1);
+    
+
+    svg.append("g")
+    .attr("stroke", "white")
+    .attr("stroke-width",2)
+    .attr("stroke-opacity", 1)
+    .call(g => g.append("g")
+      .selectAll("line")
+      .data(x.ticks())
+      .join("line")
+        .attr("x1", d => 0.5 + x(d))
+        .attr("x2", d => 0.5 + x(d))
+        .attr("y1", margin)
+        .attr("y2", height - margin))
+    .call(g => g.append("g")
+      .selectAll("line")
+      .data(y.ticks())
+      .join("line")
+        .attr("y1", d => 0.5 + y(d))
+        .attr("y2", d => 0.5 + y(d))
+        .attr("x1", margin)
+        .attr("x2", width - margin));
+
+    svg.append("g")
+            .attr("stroke", "none")
+            .attr("stroke-width", 1.5)
+        .selectAll("circle")
+        .data(penglings)
+        .join("circle")
+            .attr("cx", d => x(d.flipper_length_mm))
+            .attr("cy", d => y(d.body_mass_g))
+            .attr("r", d => r(d.bill_length_mm))
+            .attr("fill", d => color(d.species))
+            .attr("stroke", d => color(d.species))            
+            .attr("fill-opacity",0.6)
+            .attr("stroke-opacity",1);
+
+    container.append(svg.node());
+
+  })
+</script>
+</body>
