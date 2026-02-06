@@ -121,28 +121,52 @@ Make sure you include the files necessary to reproduce your plots.
 You should structure these in folders if helpful.
 We will choose some at random to run and test.
 
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
 
-# R + ggplot2 + R Markdown
+# d3
 
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
+d3 is a JavaScript visualization library. I did this by constructing an svg using information from the csv. Although, I found it annoying how much code was needed to create scales and parameters. It did feel fairly powerful and I could tell which new features I was slowly adding in. I did force some data into numbers.
 
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
 
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
 
-![ggplot2](img/ggplot2.png)
+![d3](img/d3_plotJY.png)
 
-# d3...
+# Altair
 
-(And so on...)
+Altair is a Python visualization library. I found it easy to create a graph with little code while mapping out factors like colors and scale. Overall, it felt good to use and I really enjoyed its capabilities for how clean the code felt compared to d3. I did force some data into numbers.
+
+
+![Altair](img/altair_plotJY.png)
+
+# Datawrapper
+
+Datawrraper is an online visualization tool. You can upload a dataset and use it to quickly create a chart. The UI is easy to understand to modify the graphic as needs to handle many simple parameters and displays. Although I find the simplicity lacking when I want to customize the visual more finely, as I'm restrained by the site UI. No hacks or data manipulation were used.
+
+https://datawrapper.dwcdn.net/fZBRj/2/
+
+
+![Datawrapper](img/datawrapper_plotJY.png)
+
+
+# Flourish
+
+Flourish is an online visualization software. It was easy to setup up initially due to the template format, and feels like a good starting point to quickly experiment with different datasets. Although, I found the template too restricting when I wanted to optimize certain parameters more specifically. No hacks or data manipulation were used.
+
+https://public.flourish.studio/visualisation/27521330/
+
+![Flourish](img/flourish_plotJY.png)
+
+# R + ggplot
+
+ggplot is a charting libary that uses the R language. I used geom_point() to conceptualize the dataset, and added other features like opacity and color where needed. I found it okay to use like Altair and felt the code was cleaner than Altair. No hacks or data manipulation were used.
+
+![ggplot2](img/r_ggplot2_JY.png)
 
 
 ## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
+- **Added Interactivity**: For d3, you can hover over each point of data to learn more info about it.
+
 
 ### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+- **Consistent Color Choice**: Maintaining a general set of regonizable colors between each plot.
+- **Usage of Legends**: I attempted to have legends for all of the scatterplots to best show what each species is represented by and the general size frame to users. I was unable to get a legend for size in Flourish.
+
