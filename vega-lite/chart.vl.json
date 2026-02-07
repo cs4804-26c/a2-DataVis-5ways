@@ -1,0 +1,51 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 700,
+  "height": 400,
+  "title": {
+    "text": "Penguins Scatter (Vega-Lite)",
+    "fontSize": 22,
+    "anchor": "start"
+  },
+  "data": {
+    "url": "../data/penglings.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.flipper_length_mm != null && datum.body_mass_g != null && datum.bill_length_mm != null && datum.species != null"
+    }
+  ],
+  "mark": {
+    "type": "circle",
+    "opacity": 0.8
+  },
+  "encoding": {
+    "x": {
+      "field": "flipper_length_mm",
+      "type": "quantitative",
+      "title": "Flipper Length (mm)",
+      "scale": { "zero": false }
+    },
+    "y": {
+      "field": "body_mass_g",
+      "type": "quantitative",
+      "title": "Body Mass (g)",
+      "scale": { "zero": false }
+    },
+    "color": {
+      "field": "species",
+      "type": "nominal",
+      "legend": { "title": "Species" },
+      "scale": {
+        "domain": ["Adelie", "Chinstrap", "Gentoo"],
+        "range": ["#F28E2B", "#9C51B6", "#4E9E9A"]
+      }
+    },
+    "size": {
+      "field": "bill_length_mm",
+      "type": "quantitative",
+      "legend": { "title": "Bill Length (mm)" },
+      "scale": { "range": [30, 600] }
+    }
+  }
+}
