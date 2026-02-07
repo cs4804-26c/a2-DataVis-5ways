@@ -1,148 +1,116 @@
+# Assignment 2 – Data Visualization, 5 Ways
+# Aishwarya Sinha
 
-![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
+This project recreates the same penguins scatterplot using five different visualization tools and libraries.  
+Each chart uses:
 
-# 02-DataVis-5ways
+- **X-axis:** Flipper Length (mm)  
+- **Y-axis:** Body Mass (g)  
+- **Color:** Species  
+- **Size:** Bill Length (mm)  
+- **Opacity:** Semi-transparent points (opacity 0.8)  
 
-Assignment 2 - Data Visualization, 5 Ways  
-===
+The dataset used for all visualizations is `penglings.csv`.
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
 
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
+# d3.js
 
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
+![d3](img/d3.png)
 
-Your goal is to use 5 different tools to make the following chart:
+For the d3 visualization, I implemented the scatterplot using SVG elements and d3’s scale and axis utilities. Data was loaded asynchronously using `d3.csv` with `d3.autoType`, and rows with missing values were filtered out before plotting.
 
-![](img/ggplot2.png)
+This tool required the most manual work, especially figuring out margins, coordinate transforms, and debugging data loading paths. However, it also offered the most flexibility. I added an interactive tooltip that appears on hover, which displays the species and exact values for flipper length, body mass, and bill length.
 
-These features should be preserved as much as possible in your replication:
+**Sources**
+- https://d3js.org/
+- https://github.com/d3/d3/blob/main/API.md
+- https://observablehq.com/@d3/learn-d3
 
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
 
-Other features are not required. This includes:
 
-- The background grid.
-- The legends.
+# Tableau
 
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
+![tableau](img/tableau.png)
 
-Improvements are also welcome as part of Technical and Design achievements.
+Tableau allowed me to recreate the scatterplot quickly using a drag-and-drop interface. After disabling automatic aggregation, each row in the dataset was plotted as an individual point. Species was mapped to color, bill length to size, and opacity was adjusted to reduce overplotting.
 
-Libraries, Tools, Languages
+One challenge was ensuring that Tableau did not aggregate size or position by default, which required me explicitly adjusting measure settings. Tableau is very effective for rapid exploratory analysis and presentation-ready charts, but it offers less low-level control than code-based tools.
+
+**Sources**
+- https://help.tableau.com/current/pro/desktop/en-us/buildexamples_scatter.htm
+
 ---
 
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
+# Altair (Python)
 
-Otherwise, you should seek tools and libraries to fill out your 5.
+![altair](img/altair.png)
 
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
+Altair was straightforward to specify details for position, color, and size. The scatterplot was generated from a cleaned pandas DataFrame and exported as an interactive HTML file.
 
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
+I customized the color palette to match the other visualizations and adjusted the size scale to ensure smooth variation by bill length. Compared to d3, Altair requires much less code and is easier to read, but offers less freedom for custom interactions.
 
-I have marked a few that are strongly suggested.
+**Sources**
+- https://altair-viz.github.io/
+- https://altair-viz.github.io/user_guide/marks/circle.html
+- https://altair-viz.github.io/user_guide/encoding.html
 
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
-
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
-
-Tips
 ---
 
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
+# Matplotlib (Python)
 
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
+![matplotlib](img/matplotlib.png)
 
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
+The matplotlib visualization was created using Python and required manually grouping the data by species and plotting each group separately. Size scaling and color assignment were handled explicitly in code.
 
-Readme Requirements
+To improve the aesthetics, I managed to customize the plot with a light gray background and white gridlines, similar to the reference image. Matplotlib provides more detailed control over styling, but also subsequently requires more detailed code compared to Altair.
+
+**Sources**
+- https://matplotlib.org/
+- https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.scatter.html
+
 ---
 
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
+# Vega-Lite
 
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
+![vegalite](img/vegalite.png)
 
-Other Requirements
+Vega-Lite allowed me to make the entire visualization using a JSON specification. Encodings for position, color, size, and opacity were specified, and a custom color scale was used to match the other charts.
+
+I struggled with font sizes for the title, axes, and legends, meant to improve readability and adjusted the chart width to better match the reference. Vega-Lite is powerful for producing consistent visualizations with minimal code, though debugging JSON can be more challenging than working in a programming language.
+
+**Sources**
+- https://vega.github.io/vega-lite/
+- https://vega.github.io/vega-lite/docs/
+- https://vega.github.io/vega-lite/examples/
+
 ---
-
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
-
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
-
-GitHub Details
----
-
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
-
 
 ## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
 
-### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+- Implemented interactive tooltips in the d3 visualization to display detailed information on hover
+- Successfully reproduced the same visual encodings across five different tools and libraries
+- Handled data cleaning and missing values consistently across all visualizations
+- Customized size scaling in Altair, Matplotlib, and Vega-Lite 
+
+---
+
+## Design Achievements
+
+- Maintained a consistent color palette for species across all visualizations
+- Specified point opacity and size per bill-length
+- Improved readability through larger fonts and clear axis labeling
+- Added subtle gridlines and background styling in Tableau, Vega-Lite, and Matplotlib to enhance visual clarity
+
+---
+
+## Repository Structure
+
+d3/ # d3.js visualization
+tableau/ # Tableau workbook
+altair/ # Altair Python script and HTML output
+matplotlib/ # Matplotlib Python script
+vega-lite/ # Vega-Lite JSON spec and HTML
+data/ # penglings.csv
+img/ # screenshots of all visualizations
+README.md
+

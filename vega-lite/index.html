@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Vega-Lite Penguins</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <h1>Vega-Lite Penguins</h1>
+  <div id="vis"></div>
+
+  <script>
+    vegaEmbed("#vis", "chart.vl.json", { actions: false });
+  </script>
+</body>
+</html>
