@@ -72,7 +72,7 @@ To improve the aesthetics, I managed to customize the plot with a light gray bac
 
 # Vega-Lite
 
-![vega-lite](img/vegalite.png)
+![vega-lite](img/vega-lite.png)
 
 Vega-Lite allowed me to make the entire visualization using a JSON specification. Encodings for position, color, size, and opacity were specified, and a custom color scale was used to match the other charts.
 
@@ -113,5 +113,6 @@ vega-lite/ # Vega-Lite JSON spec and HTML
 data/ # penglings.csv
 img/ # screenshots of all visualizations
 README.md
+
 
 
