@@ -23,6 +23,8 @@ Tools = `ggplot2, Google Sheets, D3, Altair, Vega-lite`
 
 ### ggplot2
 R is a language primarily focused on statistical computing, and ggplot2 is a popular library for charting in R.
+ggplot2 was very easy to manipulate, reading in data was extremely simple, and changing the output to fit the needs of the project was trivial.
+R seems like a great resource to filter and display large quantities of data in beautiful graphs with minimum effort.
 
 ### Google Sheets
 ![Google Sheets Chart](img/google-sheets.png)
