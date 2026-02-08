@@ -2,6 +2,9 @@ Assignment 2 - Data Visualization, 5 Ways
 Gabriel Olafsson
 Feb 8th 2026 (using 2 late days)
 
+Github Pages Link:
+https://gabrielolafs.github.io/a2-DataVis-5ways/index.html
+
 ###### d3
 ![](img/d3.png)
 This is the first one that I did and for talking to some other folks in the class about it, it seemed like I got the hardest one out of the way first. I really did like this one because, yes, it was really annoying, but with that it gave you a ton of control over what you are actually doing. I think this will be a very good library to use for making complicated visualizations that you want to have a ton of control over and I am excited to be using this in the future. Absolutly A teir.
