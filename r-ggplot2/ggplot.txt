@@ -1,0 +1,20 @@
+
+> ggscatter <- ggplot(penguins, aes(
++   x = flipper_length_mm,
++   y = body_mass_g,
++   color = species,
++   size = bill_length_mm
++ )) +
++   geom_point(alpha = 0.8, na.rm = TRUE) +
++   scale_x_continuous(limits = range(penguins$flipper_length_mm, na.rm = TRUE)) +
++   scale_y_continuous(limits = range(penguins$body_mass_g, na.rm = TRUE)) +
++   labs(
++     title = "Penguin Flipper Length vs Body Mass",
++     x = "Flipper Length (mm)",
++     y = "Body Mass (g)",
++     color = "Species",
++     size = "Bill Length (mm)"
++   ) +
++   theme_minimal()
+
+interactive_plot <- ggplotly(ggscatter)
