@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>d3</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <button onclick="window.location.href='../index.html'"> Home </button>
+
+    <div id="chart"></div>
+
+    <script>
+        // color hexs used thru-out
+        const grey = "#e8e8e8";
+        const darkGrey = "#7F7F7F";
+        const black = "#4D4D4D"; // not really black i know
+
+        // dimentions for padding space for lables
+        const margin = {top: 20, right: 350, bottom: 100, left: 145};
+        const width = 1650 - margin.left - margin.right; // threw it in Gimp to find aprox vals - in retrospect, i should have just guessed and made this a more normal size
+        const height = 1050 - margin.bottom - margin.top;
+
+        const svg = d3.select("#chart")  
+        .append("svg")                
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.bottom + margin.top);
+
+        // rect for only grey background for the chart
+        svg.append("rect") 
+        .attr("x", margin.left)
+        .attr("y", margin.top)
+        .attr("width", width)
+        .attr("height", height)
+        .attr("fill", grey);
+
+        // Scaling for data points
+        const yScale = d3.scaleLinear()
+        .domain([2500, 6500])
+        .range([height, 0]); // flipped
+
+        const xScale = d3.scaleLinear()
+        .domain([169, 234])
+        .range([0, width]);
+
+        const rScale = d3.scaleSqrt()
+        .domain([30, 60])
+        .range([10, 25]);
+
+        // color mapping - also use the domain for the color legend for loop
+        const colorScale = d3.scaleOrdinal()
+        .domain(["Adelie", "Chinstrap", "Gentoo"])
+        .range(["#F09539", "#8E3BC6", "#3C898A"]);
+        
+        const frame = svg.append("g") 
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Y Grid
+        const yGrid = d3.axisLeft(yScale)
+        .tickSize(-width)
+        .tickValues([2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500]);
+
+        const yGridGroup = frame.append("g")
+        .attr("class", "grid")
+        .call(yGrid);
+        
+        // AI note: helped with the altering of stoke width and weird styling lines (domain)
+        yGridGroup.select(".domain").remove(); // weird lines
+        yGridGroup.selectAll("line")
+        .style("stroke", "white")
+        .style("stroke-width", d => d % 1000 === 0 ? 5 : 3);
+
+        // X Grid
+        const xGrid = d3.axisBottom(xScale)
+        .tickSize(-height)
+        .tickValues(d3.range(170, 235, 5));
+
+        const xGridGroup = frame.append("g")
+        .attr("class", "grid")
+        .attr("transform", `translate(0,${height})`)
+        .attr("font-weight", 24)
+        .call(xGrid);
+
+        xGridGroup.select(".domain").remove();
+        xGridGroup.selectAll("line")
+        .style("stroke", "white")
+        .style("stroke-width", d => d % 10 === 0 ? 5 : 3);
+
+        d3.csv("../penglings.csv").then(function(data) {
+            // filter all NA out
+            const cleanData = data.filter(d =>
+                d.flipper_length_mm !== "NA" &&
+                d.body_mass_g !== "NA"
+            );
+
+            // drawing circles (data points)
+            frame.selectAll("circle")
+            .data(cleanData)
+            .enter()
+            .append("circle")
+            .attr("cx", d => xScale(d.flipper_length_mm))
+            .attr("cy", d => yScale(d.body_mass_g))
+            .attr("r", d => rScale(d.bill_length_mm))
+            .attr("fill", d => colorScale(d.species))
+            .attr("fill-opacity", 0.8)
+            .attr("stroke", d => colorScale(d.species))
+            .attr("stroke-width", 2)
+            .attr("stroke-opacity", 1);
+        }).catch(function(error) {
+            console.error("Error loading CSV:", error);
+        });
+
+        // body mass
+        svg.append("text")
+        .attr("transform", "rotate(-90)")  // Rotate for vertical text
+        .attr("y", margin.left / 2) 
+        .attr("x", -(margin.top + height / 2))  // center vertically
+        .attr("text-anchor", "middle")
+        .style("font-size", "38px")
+        .text("Body Mass (g)");
+
+        // Flipper Length
+        svg.append("text")
+        .attr("x", margin.left + width / 2)  
+        .attr("y", margin.top + height + margin.bottom / 2) 
+        .attr("text-anchor", "middle")
+        .style("font-size", "38px")
+        .text("Flipper Length (mm)");
+
+        // vars for legend area (y will increment as we continue)
+        const xLegend = margin.left + width + 50;
+        let yLegend = 200;
+        const yIncrement = 75;
+
+        // bill length
+        svg.append("text")
+        .attr("x", xLegend)
+        .attr("y", yLegend)
+        .attr("text-anchor", "left")
+        .attr("dominant-baseline", "hanging")  
+        .style("font-size", "38px")
+        .text("bill_length_mm")
+
+        yLegend += yIncrement;
+
+        // creation of two sizes
+        const sizeVals = [40, 50];
+        const boxSize = 60; // also used in future
+        sizeVals.forEach((value, i) => {
+            // grey background
+            svg.append("rect")
+            .attr("y", yLegend)
+            .attr("x", xLegend)
+            .attr("width", boxSize)
+            .attr("height", boxSize)
+            .attr("fill", grey);
+
+            // actual point - centered on the grey box
+            svg.append("circle")
+            .attr("cx", xLegend + boxSize / 2)
+            .attr("cy", yLegend + boxSize / 2)
+            .attr("r", rScale(value))
+            .attr("fill", darkGrey)
+            .attr("fill-opacity", 0.35)
+            .attr("stroke", black)
+            .attr("stroke-width", 1);
+
+            // label
+            svg.append("text")
+            .attr("x", boxSize + xLegend + 10)
+            .attr("y", yLegend + boxSize / 2)
+            .attr("dominant-baseline", "middle")
+            .attr("fill", black)
+            .style("font-size", "24px")
+            .text(value);
+
+            yLegend += yIncrement;
+        });
+
+        yLegend += yIncrement; // wanted a bigger gap
+
+
+        // Species Legend Title
+        svg.append("text")
+        .attr("x", xLegend)
+        .attr("y", yLegend)
+        .attr("text-anchor", "left")
+        .attr("dominant-baseline", "hanging")  
+        .style("font-size", "38px")
+        .text("species")
+
+        yLegend += yIncrement;
+
+        // different colors 
+        const species = colorScale.domain();
+        // make colors
+        species.forEach((specy, i) => { // specy is of course just one species.
+            // grey background box
+            svg.append("rect")
+            .attr("y", yLegend)
+            .attr("x", xLegend)
+            .attr("width", boxSize)
+            .attr("height", boxSize)
+            .attr("fill", grey);
+
+            // colored point, centered on the (also small like the example)
+            svg.append("circle")
+            .attr("cx", xLegend + boxSize / 2)
+            .attr("cy", yLegend + boxSize / 2)
+            .attr("r", rScale(30))
+            .attr("fill", colorScale(specy)) 
+            .attr("stroke-width", 1);
+
+            //label
+            svg.append("text")
+            .attr("x", boxSize + xLegend + 10)
+            .attr("y", yLegend + boxSize / 2)
+            .attr("dominant-baseline", "middle")
+            .attr("fill", black)
+            .style("font-size", "24px")
+            .text(specy);
+
+            yLegend += yIncrement;
+        });
+
+
+    </script>
+</body>
+</html>

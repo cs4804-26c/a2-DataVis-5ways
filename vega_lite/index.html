@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vega-Lite Penguin Plot</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+    <button onclick="window.location.href='../index.html'"> Home </button>
+
+    <div id="vis"></div>
+    
+    <script>
+        const chart = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+            "description": "Penguin scatter plot",
+            
+            "data": {
+                "url": "../penglings.csv",
+            },
+            
+            "mark": {
+                "type": "point",
+                "filled": true,
+                "opacity": 0.8,
+                "strokeWidth": 2
+            },
+            
+            "encoding": {
+                "x": {
+                    "field": "flipper_length_mm",
+                    "type": "quantitative",
+                    "title": "Flipper Length (mm)",
+                    "scale": {
+                        "domain": [169, 234] // set x bounds
+                    }
+                },
+                "y": {
+                    "field": "body_mass_g",
+                    "type": "quantitative",
+                    "title": "Body Mass (g)",
+                    "scale": {
+                        "domain": [2500, 6500] // set y bounds
+                    }
+                },
+                "size": {
+                    "field": "bill_length_mm",
+                    "type": "quantitative",
+                    "scale": {
+                        "type": "sqrt",
+                        "domain": [30, 60], 
+                        "range": [25, 144]      
+                    },
+                    "legend": {
+                        "title": "bill_length_mm",
+                        "values": [40, 50],
+                    }
+                },
+                "color": {
+                    "field": "species",
+                    "type": "nominal",
+                    "scale": { // assign colors based on species
+                        "domain": ["Adelie", "Chinstrap", "Gentoo"],
+                        "range": ["#F09539", "#8E3BC6", "#3C898A"]
+                    },
+                    "legend": {
+                        "title": "species"
+                    }
+                },
+            }
+        };
+        
+        vegaEmbed('#vis', chart);
+    </script>
+</body>
+</html>
