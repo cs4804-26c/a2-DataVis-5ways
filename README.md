@@ -54,11 +54,13 @@ Other Requirements
 All files can be found in the `./tools` folder
 
 ### Technical Achievements
-- Some ideas include interaction, such as mousing over to see more detail about the point selected.
-	
 - Used Google Sheets' Scripting API to fully create a chart that can regenerate and cleanup after itself from a single button press.
-The Google suite API is notoriously hard to work with as it is unintuitive, has constantly out-of-date documentation, and few examples especially when dealing with chart manipulation.
+The Google suite API is notoriously hard to work with as it is unintuitive, has constantly out-of-date documentation, and few examples — especially when dealing with chart manipulation.
 
 
 ### Design Achievements
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
+- Consistent color and design themes
+	- Use of the same color pallette for Species markers and plot background
+	- Use of Ariel font and similar font sizes
+	- Use of the same / similar circle sizes
+	- Use of both legends (where possible)
