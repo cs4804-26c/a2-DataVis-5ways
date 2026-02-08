@@ -19,7 +19,10 @@ Tools = `ggplot2, Google Sheets, D3, Altair, Vega-lite`
 ...
 
 ### D3
-...
+D3 is an open-source JavaScript library used for visualizing data.
+Setting up D3 was a little hard as documentation varies for the different versions, but manipulating the various SVG elements proved quite intuitive.
+D3 is a great resource for making much more complex and freeform graphs as you are drawing a majority of the structure yourself.
+While this can be a lot more freeing, it can also prove to be a bit of a hassle when you just want to make a basic visualization.
 
 ### ggplot2
 R is a language primarily focused on statistical computing, and ggplot2 is a popular library for charting in R.
