@@ -53,7 +53,11 @@ This is because Google treats the chart as an object upon being converted to a "
 Google Sheets has a lot of weaknesses and very limited customizability, but as long as you stick only to the UI, creating a mock-up of a simple proposed chart is quite easy.
 
 ### Vega-lite
-...
+Vega-Lite is the JSON-based counterpart to Altair and is the source of the grammar used through its various offshoots.
+While Vega-Altair was easy to navigate, managing a 100+ line JSON (~4000 with data included) became quite a headache.
+I much prefer the packaged versions of this tool and I think that Vega-Lite has been outclassed by more modern versions of the same technology.
+I wished this version of Vega had more customization but it sadly is 1-to-1 with its packaged implementations (which is great for all the plug-ins but makes handling a long JSON not worth it in the slightest).
+It definitely does not live up to the "Lite" part of its name.
 
 Other Requirements
 ---
