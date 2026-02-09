@@ -4,8 +4,6 @@
 # 02-DataVis-5ways
 ### Assignment 2 - Data Visualization, 5 Ways
 
-![](img/example.png)
-
 Libraries, Tools, Languages
 ---
 
@@ -16,7 +14,15 @@ Tools = `ggplot2, Google Sheets, D3, Altair, Vega-lite`
 ---
 
 ### Altair
-...
+![Vega-Altair Chart](img/altair.png)
+
+Vega-Altair is a declarative visualization library Python package that uses the Vega-Lite grammar in an easy-to-use environment.
+Setting up a chart was extremely simple, even a slightly more complicated chart with csv imports and four axis/scales took only 9 lines.
+I really enjoyed using this tool and its a great way to make really professional visualizations with minimal effort.
+While some customization was quite easy, some seemed a little unintuitive (such as setting up minor grid marks and labels).
+The documentation was easy to navigate and there were plenty of examples online to help with more granular customization.
+I really enjoyed the minimal amount of code to create such a powerful design.
+Overall, I can see this package being used to make quick, but still complex, visualizations from simple to understand templates.
 
 ### D3
 ![D3 Chart](img/d3.png)
