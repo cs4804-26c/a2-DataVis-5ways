@@ -2,147 +2,76 @@
 ![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
 
 # 02-DataVis-5ways
-
-Assignment 2 - Data Visualization, 5 Ways  
-===
-
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
-
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
-
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
-
-Your goal is to use 5 different tools to make the following chart:
-
-![](img/ggplot2.png)
-
-These features should be preserved as much as possible in your replication:
-
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
-
-Other features are not required. This includes:
-
-- The background grid.
-- The legends.
-
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
-
-Improvements are also welcome as part of Technical and Design achievements.
+### Assignment 2 - Data Visualization, 5 Ways
 
 Libraries, Tools, Languages
 ---
 
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
+Languages = `Python, R, Javascript`
 
-Otherwise, you should seek tools and libraries to fill out your 5.
+Tools = `ggplot2, Google Sheets, D3, Altair, Vega-lite`
 
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
-
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
-
-I have marked a few that are strongly suggested.
-
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
-
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
-
-Tips
 ---
 
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
+### Altair
+![Vega-Altair Chart](img/altair.png)
 
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
+Vega-Altair is a declarative visualization library Python package that uses the Vega-Lite grammar in an easy-to-use environment.
+Setting up a chart was extremely simple, even a slightly more complicated chart with csv imports and four axis/scales took only 9 lines.
+I really enjoyed using this tool and its a great way to make really professional visualizations with minimal effort.
+While some customization was quite easy, some seemed a little unintuitive (such as setting up minor grid marks and labels).
+The documentation was easy to navigate and there were plenty of examples online to help with more granular customization.
+I really enjoyed the minimal amount of code to create such a powerful design.
+Overall, I can see this package being used to make quick, but still complex, visualizations from simple to understand templates.
 
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
+### D3
+![D3 Chart](img/d3.png)
 
-Readme Requirements
----
+D3 is an open-source JavaScript library used for visualizing data.
+Setting up D3 was a little hard as documentation varies for the different versions, but manipulating the various SVG elements proved quite intuitive.
+D3 is a great resource for making much more complex and freeform graphs as you are drawing a majority of the structure yourself.
+While this can be a lot more freeing, it can also prove to be a bit of a hassle when you just want to make a basic visualization.
 
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
+### ggplot2
+![ggplot2 + R Chart](img/ggplot.png)
 
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
+R is a language primarily focused on statistical computing, and ggplot2 is a popular library for charting in R.
+ggplot2 was very easy to manipulate, reading in data was extremely simple, and changing the output to fit the needs of the project was trivial.
+R seems like a great resource to filter and display large quantities of data in beautiful graphs with minimum effort.
+
+### Google Sheets
+![Google Sheets Chart](img/google-sheets.png)
+
+Google Sheets is a free, cloud-based spreadsheet application that is a part of the Google Workspace suite.
+It uses a JavaScript based API to access and modify spreadsheet data and charts.
+
+
+Overall, the Google Sheets API (and Google Workspace APIs in general) are sorely lacking.
+Google has managed to create a system in which fine-tuning requires using the API, but making standard changes (such as copying / duplicating a chart, setting minimum step distances between labels, and copying charts from "Chart Only Window"s) is impossible.
+I initially only used the API to control the maximum and minimum sizes of the bubbles in the bubble chart, but soon discovered that if I wished to display my chart in a "Chart Only Window", I would need to regenerate the chart every single time I wished to make a modification.
+This is because Google treats the chart as an object upon being converted to a "Chart Only Window" and afterwards supplies zero functionality to modify the chart any further, including moving or copying it to a new spreadsheet.
+Google Sheets has a lot of weaknesses and very limited customizability, but as long as you stick only to the UI, creating a mock-up of a simple proposed chart is quite easy.
+
+### Vega-lite
+Vega-Lite is the JSON-based counterpart to Altair and is the source of the grammar used through its various offshoots.
+While Vega-Altair was easy to navigate, managing a 100+ line JSON (~4000 with data included) became quite a headache.
+I much prefer the packaged versions of this tool and I think that Vega-Lite has been outclassed by more modern versions of the same technology.
+I wished this version of Vega had more customization but it sadly is 1-to-1 with its packaged implementations (which is great for all the plug-ins but makes handling a long JSON not worth it in the slightest).
+It definitely does not live up to the "Lite" part of its name.
 
 Other Requirements
 ---
 
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
+All files can be found in the `./tools` folder
 
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
+### Technical Achievements
+- Used Google Sheets' Scripting API to fully create a chart that can regenerate and cleanup after itself from a single button press.
+The Google suite API is notoriously hard to work with as it is unintuitive, has constantly out-of-date documentation, and few examples — especially when dealing with chart manipulation.
 
-GitHub Details
----
-
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
-
-
-## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
 
 ### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+- Consistent color and design themes
+	- Use of the same color pallette for Species markers and plot background
+	- Use of Ariel font and similar font sizes
+	- Use of the same / similar circle sizes
+	- Use of both legends (where possible)
