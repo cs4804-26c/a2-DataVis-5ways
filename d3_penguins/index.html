@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>D3 Penglings Skyler Lin</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+<h2>Penguins Body Mass vs Penguins Flipper Length</h2>
+
+<svg width="750" height="500"></svg>
+
+<script>
+const width = 750;
+const height = 500;
+
+const margin = {
+  top: 50,
+  right: 220,
+  bottom: 60,
+  left: 80
+};
+
+const svg = d3.select("svg");
+
+d3.csv("penglings.csv").then(data => {
+
+  data.forEach(d => {
+    d.flipper_length_mm = +d.flipper_length_mm;
+    d.body_mass_g = +d.body_mass_g;
+    d.bill_length_mm = +d.bill_length_mm;
+  });
+
+  const xScale = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.flipper_length_mm))
+    .range([margin.left, width - margin.right]);
+
+  const yScale = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.body_mass_g))
+    .range([height - margin.bottom, margin.top]);
+
+  const sizeScale = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.bill_length_mm))
+    .range([40, 50]);
+
+
+  const colorScale = d3.scaleOrdinal()
+    .domain([...new Set(data.map(d => d.species))])
+    .range(["#0040ff", "#11ff00", "#ff0033"]); 
+
+  svg.append("g")
+    .attr("transform", `translate(0, ${height - margin.bottom})`)
+    .call(
+      d3.axisBottom(xScale)
+        .tickValues([170, 180, 190, 200, 210, 220, 230])
+    );
+
+  svg.append("g")
+    .attr("transform", `translate(${margin.left}, 0)`)
+    .call(d3.axisLeft(yScale).ticks(8));
+
+  svg.append("text")
+    .attr("x", width / 2 - margin.right / 2)
+    .attr("y", height - 15)
+    .attr("text-anchor", "middle")
+    .text("Flipper Length (mm)");
+
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", 25)
+    .attr("text-anchor", "middle")
+    .text("Body Mass (g)");
+
+
+  svg.selectAll("circle.data")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("class", "data")
+    .attr("cx", d => xScale(d.flipper_length_mm))
+    .attr("cy", d => yScale(d.body_mass_g))
+    .attr("r", d => Math.sqrt(sizeScale(d.bill_length_mm)))
+    .attr("fill", d => colorScale(d.species))
+    .attr("opacity", 0.8);
+
+
+  const legendX = width - margin.right + 40;
+  const legendY = 80;
+
+  const speciesLegend = svg.append("g")
+    .attr("transform", `translate(${legendX}, ${legendY})`);
+
+  speciesLegend.append("text")
+    .text("Species")
+    .style("font-weight", "bold")
+    .style("font-size", "13px")
+    .attr("y", -15);
+
+  const species = [...new Set(data.map(d => d.species))];
+
+  species.forEach((s, i) => {
+    const row = speciesLegend.append("g")
+      .attr("transform", `translate(0, ${i * 25})`);
+
+    row.append("circle")
+      .attr("r", 7)
+      .attr("fill", colorScale(s));
+
+    row.append("text")
+      .attr("x", 18)
+      .attr("y", 5)
+      .text(s)
+      .style("font-size", "12px");
+  });
+
+
+  const sizeLegend = svg.append("g")
+    .attr("transform", `translate(${legendX}, ${legendY + 120})`);
+
+  sizeLegend.append("text")
+    .text("Bill Length (mm)")
+    .style("font-weight", "bold")
+    .style("font-size", "13px")
+    .attr("y", -15);
+
+  [40, 50].forEach((value, i) => {
+    const row = sizeLegend.append("g")
+      .attr("transform", `translate(0, ${i * 35})`);
+
+    row.append("circle")
+      .attr("r", Math.sqrt(sizeScale(value)))
+      .attr("fill", "#cfcfcf")
+      .attr("opacity", 0.9);
+
+    row.append("text")
+      .attr("x", 28)
+      .attr("y", 5)
+      .text(value)
+      .style("font-size", "12px");
+  });
+
+});
+</script>
+
+</body>
+</html>

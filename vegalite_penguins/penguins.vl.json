@@ -1,0 +1,61 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Penguins Body Mass vs Penguins Flipper Length",
+
+  
+  "width": 750,
+  "height": 500,
+
+
+  "data": {
+    "url": "penglings.csv"
+  },
+  "mark": {
+    "type": "point",
+    "filled": true,
+    "opacity": 0.8
+  },
+  "encoding": {
+    "x": {
+      "field": "flipper_length_mm",
+      "type": "quantitative",
+      "title": "Flipper Length (mm)",
+      "scale": {
+        "domain": [170, 240]
+      },
+      "axis": {
+        "values": [170, 180, 190, 200, 210, 220, 230, 240]
+      }
+    },
+    "y": {
+      "field": "body_mass_g",
+      "type": "quantitative",
+      "title": "Body Mass (g)"
+    },
+    "color": {
+      "field": "species",
+      "type": "nominal",
+      "legend": {
+        "title": "Species"
+      }
+    },
+"size": {
+  "field": "bill_length_mm",
+  "type": "quantitative",
+  "scale": {
+    "domain": [40, 50],
+    "range": [50, 500]
+  },
+  "legend": {
+    "title": "Bill Length (mm)"
+  }
+},
+    "tooltip": [
+      { "field": "species", "type": "nominal" },
+      { "field": "flipper_length_mm", "type": "quantitative" },
+      { "field": "body_mass_g", "type": "quantitative" },
+      { "field": "bill_length_mm", "type": "quantitative" }
+    ]
+  },
+  "title": "Penguins Body Mass vs Penguins Flipper Length"
+}
