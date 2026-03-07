@@ -6,7 +6,6 @@ const width = 800;
 const height = 600;
 const margin = { top: 40, right: 40, bottom: 60, left: 80 };
 
-// Optional but helpful: force svg size
 svg.attr("width", width).attr("height", height);
 
 d3.csv("../penglings.csv")

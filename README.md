@@ -1,10 +1,63 @@
 
 ![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
 
-# 02-DataVis-5ways
+# 02-DataVis-5Ways
 
-Assignment 2 - Data Visualization, 5 Ways  
+Assignment 2 – Data Visualization, 5 Ways  
 ===
+
+# D3
+
+I used the D3 library to create the first replica graph. I relied on tutorials while building it, and the biggest challenge was configuring and running the local webserver correctly. Debugging those setup issues took some time. Compared to other libraries like ggplot and HoloViews, D3 required significantly more manual construction since every element—scales, axes, and marks—must be built explicitly. However, I appreciated the level of control D3 provides, especially when fine tuning visual details.
+
+![D3 Graph](img/d3graph.png)
+
+---
+
+# HoloViews
+
+I really enjoyed working with HoloViews. It is very straightforward and makes creating scatterplots simple with built in functionality for interactivity. The hover tools and zoom behavior were easy to implement, which made the visualization feel polished with minimal configuration. I also experimented further and created a button that switches all the data points into small penguin icons, which allowed me to explore the flexibility of the library.
+
+![HoloViews Graph](img/HVpenguingraph.png)  
+![HoloViews Penguin Mode](img/HVpenguinbutton.png)
+
+---
+
+# R – ggplot2
+
+ggplot2 felt very natural to use since I am most familiar with R as a data science major. Although I encountered some setup issues initially, once resolved the process was smooth. The grammar-of-graphics structure makes mapping aesthetics like color and size very intuitive, and it produces clean, publication-quality visualizations efficiently.
+
+![ggplot Graph](img/ggplotGraph.png)
+
+---
+
+# Flourish
+
+Flourish was a solid tool for building basic visualizations quickly. While it was generally straightforward, I had some difficulty configuring legends and advanced settings. I found certain customizations less flexible compared to coding-based tools, but it is useful for fast graph making and browser based visualization creation.
+
+![Flourish Graph](img/FlourishGraph.png)
+
+---
+
+# RAWGraphs
+
+RAWGraphs was one of my favorite non coding tools. I appreciated its step by step interface, which made mapping variables clear and organized. Unlike Flourish, it allowed more flexibility with legends and customization. The workflow felt intuitive and efficient for building structured visualizations.
+
+![RAWGraphs Graph](img/RawGraphs.png)
+
+---
+
+# Technical Achievements
+
+The most significant technical achievements for me were implementing D3 and experimenting with HoloViews. Both required learning new libraries and debugging setup issues independently. Successfully configuring the local webserver for D3 and implementing interactive features in HoloViews strengthened my understanding of how visualization libraries function behind the scenes.
+
+---
+
+# Design Achievements
+
+I was particularly proud of the interactive penguin feature created with HoloViews. While playful, it allowed me to explore the boundaries of the library and experiment with creativity. 
+
+
 
 Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
 
