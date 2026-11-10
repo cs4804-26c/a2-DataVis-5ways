@@ -1,3 +1,8 @@
-1: D3
+d3
 ===
-https://d3-graph-gallery.com/graph/bubble_template.html
+d3 was a pretty straightforward method to make this graph. I was able to match it to the original very closely. I found a template for bubble plots [here](https://d3-graph-gallery.com/graph/bubble_template.html), which I copied and modified for my data. This template featured some interactivity—hovering over each of the colors/species in the legend reduces the opacity of the other two in the plot, making each respecive species much more visible. I likely would not have added this if it wasn't already in the template, but it was a very nice touch that didn't seem all that difficult to implement. I would say d3 was the easiest to use, but I also already have experience with it.
+
+MATLAB
+===
+I'm pretty familiar with MATLAB and I've used it to visualize data in the past, so I figured I'd give it a go with this. I relied mainly on Google searches and some guidance from the built-in MATLAB Copilot to construct this graph. MATLAB documentation isn't always all that great, and functions aren't the most straightforward, but I thought it was really cool that there is essentially a single function that generates a graph with all the data. MATLAB has some built-in ordinal color set, but I really wanted to use my own, hance the for loop in the code. matplotlib also doesn't allow you to do much to customize the legend, at least not in a straightforward way, so I managed to get the species in the legend but there was no way I could easily find to do this for bill length. The tooltip is not much help either. It shows x, y, size, and color, not the raw data, and I'm not sure if I can change it because matplotlib is designed for visualizing equations, not necessarily this kind of data the way we want to.
+
