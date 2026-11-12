@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>A2: D3</title>
+  <link href="https://fonts.cdnfonts.com/css/bauhaus-93" rel="stylesheet">
+</head>
+<body>
+  <div id="container"></div>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script>
+
+    // set the dimensions and margins of the graph
+    const margin = {top: 40, right: 150, bottom: 60, left: 95},
+        width = 645 - margin.left - margin.right,
+        height = 420 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    const chartSvg = d3.select("#container")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("font-family", "Arial, sans-serif");
+    chartSvg.append("rect")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("fill", "#ffffff");
+    const svg = chartSvg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    //Read the data
+    d3.csv("penglings.csv").then( function(data) {
+
+      // ---------------------------//
+      //       AXIS  AND SCALE      //
+      // ---------------------------//
+
+      // Add X axis
+      const x = d3.scaleLinear()
+        .domain([168, 235])
+        .range([ 0, width ]);
+      const xTickValues = d3.range(170, 235, 10);
+      svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x).tickValues(xTickValues).tickSizeOuter(0));
+
+      // Add X axis label:
+      svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("x", width / 2)
+        .attr("y", height + 40)
+        .text("Flipper Length (mm)");
+
+      // Add Y axis
+      const y = d3.scaleLinear()
+        .domain([2500, 6500])
+        .range([ height, 0]);
+      svg.append("g")
+        .call(d3.axisLeft(y).ticks(3).tickSizeOuter(0));
+
+      // Add Y axis label:
+      svg.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("x", -height / 2)
+          .attr("y", -45)
+          .attr("text-anchor", "middle")
+          .text("Body Mass (g)")
+
+      // Set graph background color
+      svg.append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("fill", "#f0f0f0");
+
+      // Add grid lines
+      svg.append("g")
+        .attr("class", "grid")
+        .call(d3.axisLeft(y).ticks(3).tickSize(-width).tickSizeOuter(0).tickFormat(""))
+        .style("color", "#ffffff")
+        .style("stroke-width", "1px");
+      svg.append("g")
+        .attr("class", "grid")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x).tickValues(xTickValues).tickSize(-height).tickSizeOuter(0).tickFormat(""))
+        .style("color", "#ffffff")
+        .style("stroke-width", "1px");
+
+      // Add minor grid lines
+      svg.append("g")
+        .attr("class", "grid")
+        .call(d3.axisLeft(y).ticks(6).tickSize(-width).tickSizeOuter(0).tickFormat(""))
+        .style("color", "#ffffff")
+        .style("stroke-width", "0.5px")
+      svg.append("g")
+        .attr("class", "grid")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x).ticks(10).tickSize(-height).tickSizeOuter(0).tickFormat(""))
+        .style("color", "#ffffff")
+        .style("stroke-width", "0.5px");
+
+      // Add a scale for bubble size
+      const z = d3.scaleSqrt()
+        .domain([40, 50])
+        .range([4, 6]);
+
+      // Add a scale for bubble color
+      const myColor = d3.scaleOrdinal()
+        .domain(["Adelie", "Chinstrap", "Gentoo"])
+        .range(["orange", "purple", "darkcyan"]);
+
+
+      // ---------------------------//
+      //      TOOLTIP               //
+      // ---------------------------//
+
+      // -1- Create a tooltip div that is hidden by default:
+      const tooltip = d3.select("#container")
+        .append("div")
+          .style("opacity", 0)
+          .attr("class", "tooltip")
+          .style("background-color", "black")
+          .style("border-radius", "5px")
+          .style("padding", "10px")
+          .style("color", "white")
+
+      // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
+      const showTooltip = function(event,d) {
+        tooltip
+          .transition()
+          .duration(200)
+        tooltip
+          .style("opacity", 1)
+          .html("Species: " + d.species)
+          .style("left", (event.x)/2 + "px")
+          .style("top", (event.y)/2-50 + "px")
+      }
+      const moveTooltip = function(event, d) {
+        tooltip
+          .style("left", (event.x)/2 + "px")
+          .style("top", (event.y)/2-50 + "px")
+      }
+      const hideTooltip = function(event, d) {
+        tooltip
+          .transition()
+          .duration(200)
+          .style("opacity", 0)
+      }
+
+
+      // ---------------------------//
+      //       HIGHLIGHT GROUP      //
+      // ---------------------------//
+
+      // What to do when one group is hovered
+      const highlight = function(event, d){
+        // reduce opacity of all groups
+        d3.selectAll(".bubbles").style("opacity", .05)
+        // expect the one that is hovered
+        d3.selectAll("."+d).style("opacity", 0.8)
+      }
+
+      // And when it is not hovered anymore
+      const noHighlight = function(event, d){
+        d3.selectAll(".bubbles").style("opacity", 0.8)
+      }
+
+
+      // ---------------------------//
+      //       CIRCLES              //
+      // ---------------------------//
+
+      // Add dots
+      svg.append('g')
+        .selectAll("dot")
+        .data(data)
+        .join("circle")
+          .attr("class", function(d) { return "bubbles " + d.species })
+          .attr("cx", d => x(d.flipper_length_mm))
+          .attr("cy", d => y(d.body_mass_g))
+          .attr("r", d => z(d.bill_length_mm))
+          .style("fill", d => myColor(d.species))
+          .style("opacity", 0.8)
+        // -3- Trigger the functions for hover
+        .on("mouseover", showTooltip )
+        .on("mousemove", moveTooltip )
+        .on("mouseleave", hideTooltip )
+
+
+
+        // ---------------------------//
+        //       LEGEND              //
+        // ---------------------------//
+
+        // Add legend: size
+        svg.append("text")
+          .attr("x", 420)
+          .attr("y", 100)
+          .text("Bill Length (mm)")
+          .attr("text-anchor", "left")
+
+        svg.append("rect")
+          .attr("x", 422)
+          .attr("y", 107)
+          .attr("width", 25)
+          .attr("height", 50)
+          .style("fill", "#f0f0f0")
+
+        svg.append("circle")
+          .attr("cx", 435)
+          .attr("cy", 120)
+          .attr("r", z(40))
+          .style("fill", "#3f3f3f")
+          .style("opacity", 0.8)
+
+        svg.append("text")
+          .attr("x", 455)
+          .attr("y", 125)
+          .text("40")
+          .attr("text-anchor", "left")
+
+        svg.append("circle")
+          .attr("cx", 435)
+          .attr("cy", 145)
+          .attr("r", z(50))
+          .style("fill", "#3f3f3f")
+          .style("opacity", 0.8)
+
+        svg.append("text")
+          .attr("x", 455)
+          .attr("y", 150)
+          .text("50")
+          .attr("text-anchor", "left")
+
+        // Add legend: color
+        svg.append("text")
+          .attr("x", 420)
+          .attr("y", 200)
+          .text("Species")
+          .attr("text-anchor", "left")
+
+        const size = 20
+        const allgroups = ["Adelie", "Chinstrap", "Gentoo"]
+        svg.append("rect")
+          .attr("x", 422)
+          .attr("y", 207)
+          .attr("width", 25)
+          .attr("height", 75)
+          .style("fill", "#f0f0f0")
+
+        svg.selectAll("myrect")
+          .data(allgroups)
+          .join("circle")
+            .attr("cx", 435)
+            .attr("cy", (d,i) => 220 + i*(size+5)) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("r", 3)
+            .style("fill", d =>  myColor(d))
+            .style("opacity", 0.8)
+            .on("mouseover", highlight)
+            .on("mouseleave", noHighlight)
+
+        // Add labels beside legend dots
+        svg.selectAll("mylabels")
+          .data(allgroups)
+          .enter()
+          .append("text")
+            .attr("x", 455)
+            .attr("y", (d,i) => 210 + i * (size + 5) + (size/2)) // 100 is where the first dot appears. 25 is the distance between dots
+            .text(d => d)
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
+            .on("mouseover", highlight)
+            .on("mouseleave", noHighlight)
+      })
+
+      d3.select("body").append("button")
+        .attr("type", "button")
+        .attr("class", "downloadBtn")
+        .text("Download Chart")
+        .on("click", function() {
+          const svgElement = document.querySelector("svg");
+          const serializer = new XMLSerializer();
+          const svgString = serializer.serializeToString(svgElement);
+          const blob = new Blob([svgString], {type: "image/svg+xml"});
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "chart.svg";
+          a.click();
+          URL.revokeObjectURL(url);
+        });
+
+    </script>
+</body>
+</html>

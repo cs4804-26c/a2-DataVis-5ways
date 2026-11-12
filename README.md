@@ -1,148 +1,39 @@
-
-![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
-
-# 02-DataVis-5ways
-
-Assignment 2 - Data Visualization, 5 Ways  
+d3
 ===
+d3 was a pretty straightforward method to make this graph. I was able to match it to the original very closely. I found a template for bubble plots [here](https://d3-graph-gallery.com/graph/bubble_template.html), which I copied and modified for my data. This template featured some interactivity—hovering over each of the colors/species in the legend reduces the opacity of the other two in the plot, making each respecive species much more visible. I likely would not have added this if it wasn't already in the template, but it was a very nice touch that didn't seem all that difficult to implement. I would say d3 fairly easy to use, but I also already have experience with it. One complaint I have about d3, and it could have just been the way that I did it, is that I had to manually place labels and the legend. It would have been nice if this could have been handled automatically. I like being assured that everything is aligned "correctly". d3 is definitely a very useful library for people with lots of web development experience who want control of every little detail on the graph. I would like to see options that take less code.
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
+![D3 bubble plot](img/1-d3.svg)
 
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
+MATLAB
+===
+I'm pretty familiar with MATLAB and I've used it to visualize data in the past, so I figured I'd give it a go with this. I relied mainly on Google searches and some guidance from the built-in MATLAB Copilot to construct this graph. MATLAB documentation isn't always all that great, and functions aren't the most straightforward, but I thought it was really cool that there is essentially a single function that generates a graph with all the data. MATLAB has some built-in ordinal color set, but I really wanted to use my own, hence the for loop in the code. I also needed to have a way to check if the point is "valid" and only display those, as some of them have "NA" as their value, which was quickly revealed to me. MATLAB also doesn't allow you to do much to customize the legend, at least not in a straightforward way, so I managed to get the species in the legend but there was no way I could easily find to do this for the size dimension, bill length. The tooltip is not much help either. It shows x, y, size, and color, not the raw data, and I'm not sure if I can change it because MATLAB is designed for visualizing equations, not necessarily this kind of data the way we want to. The size value is the size of the point, which is different than the original dataset because I had to scale it so that the data was easier to read and better matched the original. I'm glad I did it, but I would not recommend this method for typical data visualization. It wasn't overly difficult, but there's not much customization we can do. Definitely a better tool for mathemetitians than anyone else.
 
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
+![MATLAB bubble plot](img/2-MATLAB.png)
 
-Your goal is to use 5 different tools to make the following chart:
+R + ggplot
+===
+Wow, that did not take much code at all. I can tell ggplot is designed for this application, and I know R in general is focued on statistical computing. This was my first time ever using R, and even still, the hardest part about all of this was installing it. I found the basics for bubble plots in ggplot [here](https://ggplot2.tidyverse.org/). Once I did this, could tell instantly that the reference graph on the assignment README was made with ggplot. I couldn't figure out how to match the color palette though. I assumed it was one of the built-in ones, but I ended up just figuring out how to make a custom palette. Still super easy overall. I did not need to use an R Markdown file like what is mentioned in the example README, so this may be worth exploring in the future. This is a great option for people with R experience. I however, have none, so I would prefer something in another language such as Python, which I am much more familiar with, even if it requires a bit more code.
 
-![](img/ggplot2.png)
+![ggplot bubble plot](img/3-ggplot.png)
 
-These features should be preserved as much as possible in your replication:
+Tableau
+===
+This genuinely took no time at all. Tableau is designed for this sort of stuff. The hardest part genuinely was making an account. Afterwards it was incredibly straightforward. I like what you're able to customize, and the fact that it's no-code certainly helps make good data vis more accessible. I was able to add a tooltip as well. This is definitely a great option for those looking for a no-code option. The GUI made the software quite easy to figure out. I didn't require any external resources to help me, like I did for the other methods. I'm sure the lack of programming does limit what you're able to do in terms of little details, but it was so incredibly painless to use, so it's definitely a good "lazy" option that still produces really solid results.
 
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
+![Tableau bubble plot](img/4-Tableau.png)
 
-Other features are not required. This includes:
+You can view the project [here](https://public.tableau.com/views/4-Tableau_17945165089990/Sheet1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link).
 
-- The background grid.
-- The legends.
+Altair
+===
+Altair was also very nice and easy to use. It took a bit more code than ggplot, but I think it makes a bit more sense. This is also likely because I'm very familiar with Python. I was able to add a tooltip quite easily which was really nice. I started with [this example code](https://altair-viz.github.io/gallery/bubble_plot.html) and went from there. The hardest part of this was figuring out what to Google to get what I wanted, but now that I'm familiar with the concept of it all and where to look, I could see myself using this again. I think this is a great option for programmers of any level since the code is very easy.
 
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
+![Altair bubble plot](img/5-altair.png)
 
-Improvements are also welcome as part of Technical and Design achievements.
-
-Libraries, Tools, Languages
----
-
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
-
-Otherwise, you should seek tools and libraries to fill out your 5.
-
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
-
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
-
-I have marked a few that are strongly suggested.
-
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
-
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
-
-Tips
----
-
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
-
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
-
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
-
-Readme Requirements
----
-
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
-
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
-
-Other Requirements
----
-
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
-
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
-
-GitHub Details
----
-
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
-
-Grading
----
-
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
-
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
-
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
-
-
+Achievements
+===
 ## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
+This assignment introduced me to a plethora of data visualization resources. It was also my first time using R, so I can kind of say I know a new programming language now. While exploring these different options, I was able to allow users to interact with data in a few different ways, mainly through implementing tooltips, which allow the user to hover over points to see the specific values for each axis. This is very helpful for the size channel, as it's fairly difficult to compare bill length data by looking at the size of the bubble alone. For all of these as well, I made sure to use more human-readable labels for each of the dimensions, not the headers in the CSV, and I was able to do that without modifying the CSV at all, which was nice. In the d3 plot, hovering over the species on the legend brought the opacity of points of other species down to 0.2, making it easier to view data for that specific species. Understanding the capabilities of each of these ways to visualize data will prove handy when it comes to future projects in this course and likely beyond.
 
-### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+## Design Achievements
+In all of the different methods I explored, I tried my best to replicate the original graph as close as reasonably possible. For all of the plots, this involved a custom nominal color palette, as the original provided good contrast, as well as some tinkering with the size of each of the dots. I tried my best to make sure the size contrast was the same if not a bit greater than the original. For some of the plots, I also had to specify the range of the X and Y axes and the tick interval. I found that the size dimension, although the only dimension still available on a bubble plot, is not really the most effective way to communicate bill length, as it is difficult to compare since they do not share a reference point, and many of the points overlap. As a design choice, it suggests to me that out of the other pieces of quantitative (ratio) data displayed, bill length is the least relevant. Having an understanding of how different design channels affect the ability to percieve data will prove useful for ensuring the effectiveness of future data visualizations.
