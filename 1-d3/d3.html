@@ -21,11 +21,16 @@
         height = 420 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
-    const svg = d3.select("#container")
+    const chartSvg = d3.select("#container")
       .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
-      .append("g")
+        .attr("font-family", "Arial, sans-serif");
+    chartSvg.append("rect")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("fill", "#ffffff");
+    const svg = chartSvg.append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
     //Read the data
@@ -106,7 +111,7 @@
       // Add a scale for bubble color
       const myColor = d3.scaleOrdinal()
         .domain(["Adelie", "Chinstrap", "Gentoo"])
-        .range(["#faac00", "#8f06ff", "#27a8a6"]);
+        .range(["orange", "purple", "darkcyan"]);
 
 
       // ---------------------------//
@@ -271,6 +276,23 @@
             .on("mouseover", highlight)
             .on("mouseleave", noHighlight)
       })
+
+      d3.select("body").append("button")
+        .attr("type", "button")
+        .attr("class", "downloadBtn")
+        .text("Download Chart")
+        .on("click", function() {
+          const svgElement = document.querySelector("svg");
+          const serializer = new XMLSerializer();
+          const svgString = serializer.serializeToString(svgElement);
+          const blob = new Blob([svgString], {type: "image/svg+xml"});
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "chart.svg";
+          a.click();
+          URL.revokeObjectURL(url);
+        });
 
     </script>
 </body>
