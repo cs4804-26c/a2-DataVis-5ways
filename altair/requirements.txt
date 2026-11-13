@@ -1,0 +1,2 @@
+altair>=5,<7
+pandas>=2
