@@ -33,16 +33,14 @@ d3.csv("../penglings.csv").then( function(data) {
   const x = d3.scaleLinear()
     .domain([170, 235])
     .range([ 0, width ]);
-  const xAxis = svg.append("g")   
+    svg.append("g")   
     .attr("transform", `translate(0, ${height})`)
     .call(d3.axisBottom(x));
-
 
   const y = d3.scaleLinear()
     .domain([2500, 6500])
     .range([height, 0]);
-
-  const yAxis = svg.append("g")    
+    svg.append("g")    
     .call(d3.axisLeft(y));
 
   const z = d3.scaleSqrt()
@@ -52,14 +50,15 @@ d3.csv("../penglings.csv").then( function(data) {
     .domain(["Adelie", "Chinstrap", "Gentoo"])
     .range(["#FF8C00", "#A032D2", "#008B8B"]);
 
-  const circles = svg.append('g')    .selectAll("dot")
+  const circles = svg.append('g')
+    .selectAll("circle")
     .data(data)
     .join("circle")
       .attr("cx", d => x(+d.flipper_length_mm))
       .attr("cy", d => y(+d.body_mass_g))
       .attr("r", d => z(+d.bill_length_mm))
       .style("fill", d => color(d.species))
-      .style("opacity", 0.8)
+      .style("opacity", 0.8);
   svg.append("text")
     .attr("x", width / 2)
     .attr("y", height + 45)
@@ -107,8 +106,7 @@ d3.csv("../penglings.csv").then( function(data) {
   legend.on("mouseleave", function() {
     circles.style("opacity", 0.8);
   });
-})
-
+});
 
 const chart = d3.select("#my_dataviz");
 const drawing = chart.select("svg");
@@ -135,7 +133,6 @@ drawing
       `translate(${moveX}px, ${moveY}px) scale(2)`
     );
   });
-
 d3.select("#reset-zoom").on("click", function() {
   drawing.style("transform", null);
 });

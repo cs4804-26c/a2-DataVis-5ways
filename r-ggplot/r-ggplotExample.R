@@ -12,8 +12,7 @@ p <- ggplot(
   aes(
     x = flipper_length_mm,
     y = body_mass_g,
-    color = species,
-    group = species
+    color = species
   )
 ) +
   geom_point_interactive(
