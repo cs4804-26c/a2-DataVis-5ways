@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<script src="https://d3js.org/d3.v6.js"></script>
+
+<button id="reset-zoom">Reset</button>
+<div id="my_dataviz"></div>
+
+
+<script>
+
+const margin = {top: 10, right: 150, bottom: 55, left: 65},
+    width = 650 - margin.left - margin.right,
+    height = 420 - margin.top - margin.bottom;
+
+const svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+d3.csv("../penglings.csv").then( function(data) {
+  data = data.filter(d => 
+    d.flipper_length_mm !== "" &&
+    d.body_mass_g !== "" &&
+    d.bill_length_mm !== "" &&
+    Number.isFinite(+d.flipper_length_mm) &&
+    Number.isFinite(+d.body_mass_g) &&
+    Number.isFinite(+d.bill_length_mm)
+  );
+
+  const x = d3.scaleLinear()
+    .domain([170, 235])
+    .range([ 0, width ]);
+    svg.append("g")   
+    .attr("transform", `translate(0, ${height})`)
+    .call(d3.axisBottom(x));
+
+  const y = d3.scaleLinear()
+    .domain([2500, 6500])
+    .range([height, 0]);
+    svg.append("g")    
+    .call(d3.axisLeft(y));
+
+  const z = d3.scaleSqrt()
+    .domain([0, 60])
+    .range([0, 10]);
+  const color = d3.scaleOrdinal()
+    .domain(["Adelie", "Chinstrap", "Gentoo"])
+    .range(["#FF8C00", "#A032D2", "#008B8B"]);
+
+  const circles = svg.append('g')
+    .selectAll("circle")
+    .data(data)
+    .join("circle")
+      .attr("cx", d => x(+d.flipper_length_mm))
+      .attr("cy", d => y(+d.body_mass_g))
+      .attr("r", d => z(+d.bill_length_mm))
+      .style("fill", d => color(d.species))
+      .style("opacity", 0.8);
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", height + 45)
+    .attr("text-anchor", "middle")
+    .text("Flipper Length (mm)");
+
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", -50)
+    .attr("text-anchor", "middle")
+    .text("Body Mass (g)");
+
+
+  const legend = svg.append("g")
+    .selectAll("g")
+    .data(color.domain())
+    .join("g")
+      .attr("transform", (species, i) =>
+        `translate(${width + 20}, ${20 + i * 30})`
+      );
+
+  legend.append("rect")
+    .attr("x", -10)
+    .attr("y", -12)
+    .attr("width", 120)
+    .attr("height", 26)
+    .attr("fill", "transparent");
+
+  legend.append("circle")
+    .attr("r", 6)
+    .attr("fill", species => color(species));
+
+  legend.append("text")
+    .attr("x", 14)
+    .attr("y", 5)
+    .text(species => species);
+
+  legend.on("mouseenter", function(event, species) {
+    circles.style("opacity", d =>
+      d.species === species ? 0.8 : 0.1
+    );
+  });
+
+  legend.on("mouseleave", function() {
+    circles.style("opacity", 0.8);
+  });
+});
+
+const chart = d3.select("#my_dataviz");
+const drawing = chart.select("svg");
+
+const viewWidth = +drawing.attr("width");
+const viewHeight = +drawing.attr("height");
+
+chart
+  .style("width", viewWidth + "px")
+  .style("height", viewHeight + "px")
+  .style("overflow", "hidden");
+
+drawing
+  .style("transform-origin", "0 0")
+  .style("cursor", "zoom-in")
+  .on("click", function(event) {
+    const [clickX, clickY] = d3.pointer(event, this);
+
+    const moveX = viewWidth / 2 - clickX * 2;
+    const moveY = viewHeight / 2 - clickY * 2;
+
+    drawing.style(
+      "transform",
+      `translate(${moveX}px, ${moveY}px) scale(2)`
+    );
+  });
+d3.select("#reset-zoom").on("click", function() {
+  drawing.style("transform", null);
+});
+
+</script>
