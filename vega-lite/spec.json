@@ -1,0 +1,75 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 600,
+  "height": 400,
+  "data": {
+    "url": "../penglings.csv"
+  },
+  "mark": {
+    "type": "circle",
+    "opacity": 0.8
+  },
+  "encoding": {
+    "x": {
+      "field": "flipper_length_mm",
+      "type": "quantitative",
+      "title": "Flipper Length (mm)",
+      "scale": {
+        "zero": false
+      },
+      "axis": {
+        "tickMinStep": 10
+      }
+    },
+    "y": {
+      "field": "body_mass_g",
+      "type": "quantitative",
+      "title": "Body Mass (g)",
+      "scale": {
+        "zero": false
+      }
+    },
+    "color": {
+      "field": "species",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Adelie",
+          "Chinstrap",
+          "Gentoo"
+        ],
+        "range": [
+          "#ff8c00",
+          "#a020f0",
+          "#008b8b"
+        ]
+      }
+    },
+    "size": {
+      "field": "bill_length_mm",
+      "type": "quantitative",
+      "title": "bill_length_mm",
+      "scale": {
+        "zero": false,
+        "range": [
+          20,
+          250
+        ]
+      }
+    },
+    "tooltip": [
+      {
+        "field": "species"
+      },
+      {
+        "field": "bill_length_mm"
+      },
+      {
+        "field": "flipper_length_mm"
+      },
+      {
+        "field": "body_mass_g"
+      }
+    ]
+  }
+}
