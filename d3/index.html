@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Penguin Body Mass vs. Flipper Length</title>
+  <style>
+    :root { font-family: Georgia, 'Times New Roman', serif; color: #222; background: #eeeeee; }
+    body { margin: 0; padding: 20px 12px; }
+    main { max-width: 1100px; margin: auto; }
+    h1 { margin: 0 0 16px; font-size: 28px; }
+    #chart svg { width: 100%; height: auto; display: block; }
+    .axis text { font-family: Georgia, 'Times New Roman', serif; font-size: 13px; }
+    .axis path, .axis line { stroke: #777; }
+    .grid line { stroke: #d5d5d5; }
+    .grid path { display: none; }
+    .point { cursor: default; }
+    .axis-label { font-size: 17px; }
+    .legends { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 30px; margin: 5px 0 0 80px; }
+    .legend-label { font-size: 15px; font-weight: bold; margin-bottom: 6px; }
+    #species-legend { display: flex; flex-wrap: wrap; gap: 8px; }
+    .species-button { display: inline-flex; align-items: center; gap: 7px; padding: 5px 9px; font: inherit; background: transparent; border: 1px solid transparent; border-radius: 5px; cursor: pointer; }
+    .species-button:focus-visible { outline: 2px solid #222; outline-offset: 2px; }
+    .species-button.selected { border-color: #888; }
+    .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 1px solid #777; }
+    #size-legend svg { overflow: visible; }
+    .tooltip { position: fixed; opacity: 0; pointer-events: none; background: #fff; color: #222; border: 1px solid #aaa; border-radius: 5px; padding: 9px 11px; line-height: 1.5; font-size: 14px; z-index: 5; box-shadow: 0 3px 8px #0002; }
+    #error { color: #8b0000; }
+    @media (max-width: 600px) {
+      body { padding: 12px 6px; }
+      h1 { font-size: 22px; }
+      .legends { margin-left: 12px; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Penguin Body Mass vs. Flipper Length</h1>
+    <div id="chart" role="img" aria-label="Scatterplot of penguin flipper length against body mass, colored by species with size representing bill length"></div>
+    <div class="legends">
+      <section aria-label="Species filter">
+        <div class="legend-label">Species (click to filter)</div>
+        <div id="species-legend"></div>
+      </section>
+      <section aria-label="Bill length circle size legend">
+        <div class="legend-label">Bill Length (mm)</div>
+        <div id="size-legend"></div>
+      </section>
+    </div>
+    <p id="error" role="status"></p>
+    <div id="tooltip" class="tooltip"></div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

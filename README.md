@@ -1,148 +1,88 @@
+# Assignment 2 – Data Visualization, 5 Ways
 
-![penguins](https://github.com/cs4804-24c/a2-DataVis-5Ways/assets/412089/accc5680-3c77-4d29-9502-d3ff8cd922af)
+**Charles Davis | CS4804**
 
-# 02-DataVis-5ways
+# 1. D3.js
 
-Assignment 2 - Data Visualization, 5 Ways  
-===
+![D3 visualization](img/d3.png)
 
-Now that you have successfully made a "visualization" of shapes and lines using d3, your next assignment is to successfully make a *actual visualization*... 5 times. 
+D3.js uses JavaScript to create and modify scalable vector graphics (SVG), which include shapes, animations, and structures. Something I learned was how to load CSV files, use numerical scales, and set up tooltips, legends, and filters.
 
-The goal of this project is to gain experience with as many data visualization libraries, languages, and tools as possible.
+# 2. Altair
 
-I have provided a small dataset about penguins, `penglings.csv`.
-Each row contains a penguin observation and several variables about it, including bill length, flipper length, and more.
+![Altair visualization](img/altair.png)
 
-Your goal is to use 5 different tools to make the following chart:
+Altair uses a Python visualization library. Some of the features used were data encoding, numerical scales, interactive legends, hover tooltips, and HTML output. Altair requires less code than D3.js because it uses Python library commands, but it offers less control over chart design and customization compared with D3.js.
 
-![](img/ggplot2.png)
+# 3. Vega-Lite
 
-These features should be preserved as much as possible in your replication:
+![Vega-Lite visualization](img/vega-lite.png)
 
-- Data positioning: it should be a upward-trending scatterplot as shown.  Flipper Length should be on the x-axis and Body Mass on the y-axis.
-- Scales: Note the scales do not start at 0.
-- Axis ticks and labels: both axes are labeled and there are tick marks at a reasonable interval, e.g 10, 20, 30, etc.
-- Color mapping to species.
-- Size mapping to Bill Length.
-- Opacity of circles set to 0.8 or similar for a semi-transparent effect.
+Vega-Lite functions as a declarative visualization library using JSON. Its features include scatterplot data mappings, custom scales, tooltips, and interactive filtering. This requires relatively little coding, but its main distinguishing feature is that it uses a JSON structure. It offers high customizability, but not as much as D3.js. I used `index.html` to load and display the chart.
 
-Other features are not required. This includes:
+# 4. Datawrapper
 
-- The background grid.
-- The legends.
+![Datawrapper visualization](img/datawrapper.png)
 
-Note that some software packages will make it **impossible** to perfectly preserve the above requirements. 
-Be sure to note where these deviate as you reflect on what a tool is good for.
+[Interactive Chart](https://datawrapper.dwcdn.net/WYAWR/3/)
 
-Improvements are also welcome as part of Technical and Design achievements.
+The easy part of Datawrapper was that I could upload the CSV to a website and visualize the data without writing code. The main challenge was learning and understanding the UI. I liked how I could manually choose everything and see the changes in real time instead of coding, running it, and then having to go back and make changes.
 
-Libraries, Tools, Languages
----
+# 5. Flourish
 
-You are required to use 5 different tools or libraries.
-Of the 5 tools, you must use at least 3 libraries (libraries require code of some kind).
-This could be `Python, R, Javascript`, or `Java, Javascript, Matlab` or any other combination.
-Dedicated tools (i.e. Excel) do not count towards the language requirement.
+![Flourish visualization](img/flourish.png)
 
-Otherwise, you should seek tools and libraries to fill out your 5.
+[Interactive Chart](https://public.flourish.studio/visualisation/30912723/)
 
-Below are a few ideas. Do not limit yourself to this list!
-There are new tools coming out every year and we may not have an exhaustive list of the latest and greatest.
+Flourish is also a visual tool that uses a graphical interface to make the chart. Flourish took the most time but also offers greater accessibility to non-programmers.
 
-Some may be difficult choices, like Matlab or SPSS, which require large installations, licenses, and occasionally difficult UIs.
+# Technical Achievements
 
-I have marked a few that are strongly suggested.
+I added hover functionality to display penguin species, body mass, flipper length, and bill length when the cursor is over a circle. I also implemented a clickable legend and filter that lets users see each penguin species. On top of this, each transition has a short fade animation in D3 when filtering species. Finally, I learned to use multiple technologies to create this visualization, such as JavaScript, Python, JSON, and two in-browser tools.
 
-- R + ggplot2 `<- definitely worth trying`
-- Excel
-- d3 `<- since the rest of the class uses this, we're requiring it`
-- Altair `<- hugely popular python library. highly recommended `
-- three.js `<- well, it's a 3d library. not really recommended, but could be interesting and fun`
-- p5js `<- good for playing around. not really a chart lib`
-- Tableau
-- PowerBI
-- Vega-lite <- `<- very interesting formal visualization model; might be the future of the field`
-- Flourish <- `<- popular in recent years`
-- DataWrapper <- `<- popular in recent years`
-- GNUplot `<- the former CS department head uses this all the time :)`
-- SAS/SPSS/Matlab
+# Design Achievements
 
-You may write everything from scratch, or start with demo programs from books or the web. 
-If you do start with code that you found, please identify the source of the code in your README and, most importantly, make non-trivial changes to the code to make it your own so you really learn what you're doing. 
+For the design, I changed the colors to red, blue, and seafoam green to show the different species. I attempted to keep as much of the same formatting across all platforms as possible. I included legends for species and bill length.
 
-Tips
----
+# How to Run
 
-- If you're using d3, key to this assignment is knowing how to load data.
-You will likely use the [`d3.json` or `d3.csv` functions](https://d3js.org/d3-dsv) to load the data you found.
+### 1. D3.js
 
-**Beware that these functions are *asynchronous*, meaning it's possible to "build" an empty visualization before the data actually loads. Figuring out how to do this properly can be a major hiccup if you haven't used async functions before. If this means you, start part of this project early so you don't end up in a rush!**
+1. Download or clone the GitHub repository.
+2. Open Terminal in the main repository folder.
+3. Run `python3 -m http.server 8000`.
+4. Open `http://localhost:8000/d3/` in a browser.
 
-- *For web languages like d3* Don't forget to run a local webserver when you're debugging.
-See my a1 video or online tutorials for how to do this.
-Being able to host a local webserver is an essential web development skill and very common in visualization design as well.
+### 2. Python + Altair
 
-Readme Requirements
----
+1. Open Terminal in the main repository folder.
+2. Install dependencies using `python3 -m pip install -r altair/requirements.txt`.
+3. Run `python3 altair/chart.py`.
+4. Open the generated `altair/altair_penguins.html` file in a browser.
 
-A good readme with screenshots and structured documentation is required for this project. 
-It should be possible to scroll through your readme to get an overview of all the tools and visualizations you produced.
+### 3. Vega-Lite
 
-- Each visualization should start with a top-level heading (e.g. `# d3`)
-- Each visualization should include a screenshot. Put these in an `img` folder and link through the readme (markdown command: `![caption](img/<imgname>)`.
-- Write a paragraph for each visualization tool you use. What was easy? Difficult? Where could you see the tool being useful in the future? Did you have to use any hacks or data manipulation to get the right chart?
+1. Open Terminal in the main repository folder.
+2. Run `python3 -m http.server 8000`.
+3. Open `http://localhost:8000/vega-lite/` in a browser.
+4. The visualization loads using `index.html` and `chart.json`.
 
-Other Requirements
----
+### 4. Datawrapper
 
-0. Your code should be forked from the GitHub repo.
-1. Place all code, Excel sheets, etcetera in a named folder. For example, `r-ggplot, matlab, mathematica, excel` and so on.
-2. Your writeup (readme.md in the repo) should also contain the following:
+View the published visualization:
 
-- Description of the Technical achievements you attempted with this visualization.
-  - Some ideas include interaction, such as mousing over to see more detail about the point selected.
-- Description of the Design achievements you attempted with this visualization.
-  - Some ideas include consistent color choice, font choice, element size (e.g. the size of the circles).
+https://datawrapper.dwcdn.net/WYAWR/3/
 
-GitHub Details
----
+### 5. Flourish
 
-- Fork the GitHub Repository. You now have a copy associated with your username.
-- Make changes to fulfill the project requirements. 
-- To submit, make a [Pull Request](https://help.github.com/articles/using-pull-requests/) on the original repository.
+View the published visualization:
 
-Grading
----
+https://public.flourish.studio/visualisation/30912723/
 
-Grades on a 120 point scale. 
-24 points will be based on your Technical and Design achievements, as explained in your readme. 
+# AI Usage
 
-Make sure you include the files necessary to reproduce your plots.
-You should structure these in folders if helpful.
-We will choose some at random to run and test.
+ChatGPT was used to assist with programming for this assignment, generating code for D3.js, Altair, and Vega-Lite.
 
-**NOTE: THE BELOW IS A SAMPLE ENTRY TO GET YOU STARTED ON YOUR README. YOU MAY DELETE THE ABOVE.**
-
-# R + ggplot2 + R Markdown
-
-R is a language primarily focused on statistical computing.
-ggplot2 is a popular library for charting in R.
-R Markdown is a document format that compiles to HTML or PDF and allows you to include the output of R code directly in the document.
-
-To visualized the cars dataset, I made use of ggplot2's `geom_point()` layer, with aesthetics functions for the color and size.
-
-While it takes time to find the correct documentation, these functions made the effort creating this chart minimal.
-
-![ggplot2](img/ggplot2.png)
-
-# d3...
-
-(And so on...)
-
-
-## Technical Achievements
-- **Proved P=NP**: Using a combination of...
-- **Solved AI Forever**: ...
-
-### Design Achievements
-- **Re-vamped Apple's Design Philosophy**: As demonstrated in my colorscheme...
+- **D3.js:** ChatGPT helped generate the initial scatterplot code, load CSV data, create axes and scales, implement hover tooltips, and add interactive species filtering.
+- **Altair:** ChatGPT helped generate the Python code, configure data mappings and interactions, and set up the Python environment.
+- **Vega-Lite:** ChatGPT helped generate the JSON visualization specification and HTML file.
