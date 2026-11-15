@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Penguin Body Mass vs. Flipper Length — Vega-Lite</title>
+  <style>
+    body { margin: 0; padding: 12px; background: #eeeeee; font-family: Georgia, serif; }
+    #vis { width: 100%; overflow-x: auto; }
+    #error { color: #902020; }
+  </style>
+</head>
+<body>
+  <div id="vis" aria-label="Penguin body mass and flipper length scatterplot"></div>
+  <p id="error" role="alert"></p>
+  <script src="https://cdn.jsdelivr.net/npm/vega@6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@7"></script>
+  <script>
+    // I used ChatGPT to help write the Vega-Lite specification, data loading,
+    // axes, tooltip, and species legend selection. I chose the design myself.
+    fetch('chart.json')
+      .then(response => {
+        if (!response.ok) throw new Error('Could not load chart.json');
+        return response.json();
+      })
+      .then(spec => vegaEmbed('#vis', spec, { actions: false, renderer: 'svg' }))
+      .catch(error => {
+        document.querySelector('#error').textContent =
+          'Could not load the visualization. Run a local web server from the repository root. ' + error.message;
+        console.error(error);
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Penguin body mass vs. flipper length. AI programming assistance is acknowledged in index.html.",
+  "data": { "url": "../penglings.csv", "format": {"type": "csv"} },
+  "transform": [
+    { "filter": "isValid(datum.flipper_length_mm) && isValid(datum.body_mass_g) && isValid(datum.bill_length_mm) && datum.flipper_length_mm != null && datum.body_mass_g != null && datum.bill_length_mm != null" }
+  ],
+  "params": [
+    { "name": "selectedSpecies", "select": {"type": "point", "fields": ["species"], "on": "click", "toggle": true}, "bind": "legend" }
+  ],
+  "mark": { "type": "circle", "filled": true },
+  "encoding": {
+    "x": {
+      "field": "flipper_length_mm", "type": "quantitative", "title": "Flipper Length (mm)",
+      "scale": { "domain": [170, 235], "zero": false },
+      "axis": {"values": [170, 180, 190, 200, 210, 220, 230], "grid": true}
+    },
+    "y": {
+      "field": "body_mass_g", "type": "quantitative", "title": "Body Mass (g)",
+      "scale": { "domain": [2500, 6500], "zero": false },
+      "axis": {"values": [2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500], "grid": true, "format": ",.0f"}
+    },
+    "color": {
+      "field": "species", "type": "nominal", "title": "Species (click to filter)",
+      "scale": {"domain": ["Adelie", "Chinstrap", "Gentoo"], "range": ["#ff0000", "#0000ff", "#93e9be"]},
+      "legend": {"orient": "bottom"}
+    },
+    "size": {
+      "field": "bill_length_mm", "type": "quantitative", "title": "Bill Length (mm)",
+      "scale": {"domain": [30, 60], "range": [30, 315], "zero": false},
+      "legend": {"values": [35, 45, 55], "orient": "bottom"}
+    },
+    "opacity": { "condition": {"param": "selectedSpecies", "value": 0.8}, "value": 0.06 },
+    "tooltip": [
+      {"field": "species", "type": "nominal", "title": "Species"},
+      {"field": "flipper_length_mm", "type": "quantitative", "title": "Flipper length (mm)"},
+      {"field": "body_mass_g", "type": "quantitative", "title": "Body mass (g)", "format": ",.0f"},
+      {"field": "bill_length_mm", "type": "quantitative", "title": "Bill length (mm)"}
+    ]
+  },
+  "title": "Penguin Body Mass vs. Flipper Length",
+  "width": 820,
+  "height": 470,
+  "background": "#eeeeee",
+  "config": {
+    "view": {"stroke": null},
+    "axis": {"labelFont": "Georgia", "titleFont": "Georgia", "gridColor": "#d8d8d8"},
+    "title": {"font": "Georgia", "fontSize": 24},
+    "legend": {"labelFont": "Georgia", "titleFont": "Georgia"}
+  }
+}
