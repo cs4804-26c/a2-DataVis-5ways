@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Penguin Scatterplot</title>
+</head>
+<body>
+  <div id="container"></div>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script>
+    const width = 900;
+    const height = 600;
+
+    const svg = d3.select("#container")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    d3.csv("penglings.csv").then(function(data) {
+      data.forEach(function(d) {
+        d.flipper_length_mm = +d.flipper_length_mm;
+        d.body_mass_g = +d.body_mass_g;
+        d.bill_length_mm = +d.bill_length_mm;
+      });
+
+      data = data.filter(function(d) {
+        return d.flipper_length_mm > 0 && d.body_mass_g > 0 && d.bill_length_mm > 0;
+      });
+
+      const x = d3.scaleLinear().domain([170, 235]).range([80, 780]);
+      const y = d3.scaleLinear().domain([2500, 6500]).range([510, 30]);
+      const size = d3.scaleLinear().domain([30, 60]).range([3, 13]);
+
+      const colors = {
+        Adelie: "orange",
+        Chinstrap: "purple",
+        Gentoo: "teal"
+      };
+
+      svg.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) { return x(d.flipper_length_mm); })
+        .attr("cy", function(d) { return y(d.body_mass_g); })
+        .attr("r", function(d) { return size(d.bill_length_mm); })
+        .attr("fill", function(d) { return colors[d.species]; })
+        .attr("opacity", 0.8)
+        .append("title")
+        .text(function(d) {
+          return d.species + ", " + d.flipper_length_mm + " mm, " +
+                 d.body_mass_g + " g, bill " + d.bill_length_mm + " mm";
+        });
+
+      svg.append("g")
+        .attr("transform", "translate(0,510)")
+        .call(d3.axisBottom(x).ticks(7));
+
+      svg.append("g")
+        .attr("transform", "translate(80,0)")
+        .call(d3.axisLeft(y).ticks(5));
+
+      svg.append("text")
+        .attr("x", 430)
+        .attr("y", 570)
+        .attr("text-anchor", "middle")
+        .attr("font-size", 22)
+        .text("Flipper Length (mm)");
+
+      svg.append("text")
+        .attr("transform", "translate(25,270) rotate(-90)")
+        .attr("text-anchor", "middle")
+        .attr("font-size", 22)
+        .text("Body Mass (g)");
+    });
+  </script>
+</body>
+</html>
