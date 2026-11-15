@@ -6,7 +6,7 @@ D3 was probably the most complicated of the five, taking up the most amount of w
 
 ![d3](img/d3.png)
 
-#altair + python
+# altair + python
 
 Altair was much easier to use than D3. Most of the visualization was created using .encode(), which let me assign different measurements to the axes, colors, and circle sizes. I also used learned to display information when hovering over individual penguins using tooltip. 
 ![altair](img/altair.png)
